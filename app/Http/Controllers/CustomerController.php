@@ -35,6 +35,24 @@ class CustomerController extends Controller
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
 
+
+    public function payrequest(Request $request)
+    {
+
+        die('sdfg');
+        $sort_search = null;
+        $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $users->where(function ($q) use ($sort_search){
+                $q->where('name', 'like', '%'.$sort_search.'%')->orWhere('email', 'like', '%'.$sort_search.'%');
+            });
+        }
+        $users = $users->paginate(15);
+        return view('backend.customer.customers.payrequest', compact('users', 'sort_search'));
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
