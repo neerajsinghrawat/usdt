@@ -22,36 +22,24 @@
         </div>
 
         <!-- Recharge Wallet -->
+        
         <div class="col-md-4 mx-auto mb-4">
-            <div class="p-4 mb-3 c-pointer text-center bg-light has-transition border h-100 hov-bg-soft-light"
-                onclick="show_wallet_modal()">
-                <span
-                    class="size-60px rounded-circle mx-auto bg-dark d-flex align-items-center justify-content-center mb-3">
-                    <i class="las la-plus la-3x text-white"></i>
-                </span>
-                <div class="fs-14 fw-600 text-dark">{{ translate('Recharge Wallet') }}</div>
+            <div class="bg-light text-dark overflow-hidden text-center p-4 h-100">
+                <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
+                <div class="py-2">
+                    <div class="fs-14 fw-400 text-center">{{ translate('Pending USDT') }}</div>
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->balance) }}</div>
+                </div>
             </div>
         </div>
 
-        <!-- Offline Recharge Wallet -->
-        @if (addon_is_activated('offline_payment'))
-            <div class="col-md-4 mx-auto mb-4">
-                <div class="p-4 mb-3 c-pointer text-center bg-light has-transition border h-100 hov-bg-soft-light"
-                    onclick="show_make_wallet_recharge_modal()">
-                    <span
-                        class="size-60px rounded-circle mx-auto bg-dark d-flex align-items-center justify-content-center mb-3">
-                        <i class="las la-plus la-3x text-white"></i>
-                    </span>
-                    <div class="fs-14 fw-600 text-dark">{{ translate('Offline Recharge Wallet') }}</div>
-                </div>
-            </div>
-        @endif
+        
     </div>
 
     <!-- Wallet Recharge History -->
     <div class="card rounded-0 shadow-none border">
         <div class="card-header border-bottom-0">
-            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('Wallet recharge history') }}</h5>
+            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('History (Wallet/Pending)') }}</h5>
         </div>
         <div class="card-body py-0">
             <table class="table aiz-table mb-4">

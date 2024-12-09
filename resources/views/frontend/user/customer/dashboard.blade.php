@@ -2,109 +2,91 @@
 
 @section('panel_content')
 
-    @php
-        $welcomeCoupon = ifUserHasWelcomeCouponAndNotUsed();
-    @endphp
-    @if($welcomeCoupon)
-        <div class="alert alert-primary align-items-center border d-flex flex-wrap justify-content-between" style="border-color: #3490F3 !important;">
-            @php
-                $discount = $welcomeCoupon->discount_type == 'amount' ? single_price($welcomeCoupon->discount) : $welcomeCoupon->discount.'%';
-            @endphp
-            <div class="fw-400 fs-14" style="color: #3490F3 !important;">
-                {{ translate('Welcome Coupon') }} <strong>{{ $discount }}</strong> {{ translate('Discount on your Purchase Within') }} <strong>{{ $welcomeCoupon->validation_days }}</strong> {{ translate('days of Registration') }}
-            </div>
-            <button class="btn btn-sm mt-3 mt-lg-0 rounded-4" onclick="copyCouponCode('{{ $welcomeCoupon->coupon_code }}')" style="background-color: #3490F3; color: white;" >{{ translate('Copy coupon Code') }}</button>
-        </div>
-    @endif
+   
 
     <div class="row gutters-16">
-        <!-- Wallet summary -->
-        @if (get_setting('wallet_system') == 1)
         <div class="col-xl-8 col-md-6 mb-4">
             <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
                 <div class="p-4 h-100 w-100 w-xl-50">
                     <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
                     <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->balance) }}</h1>
                     <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
-                    @php
-                        $last_recharge = get_user_last_wallet_recharge();
-                    @endphp
-                    <p class="fs-14 fw-400 text-gray mb-1">{{ translate('Last Recharge') }} <strong>{{ $last_recharge ? date('d.m.Y', strtotime($last_recharge->created_at)) : '' }}</strong></p>
-                    <h3 class="fs-20 fw-700 text-white ">{{ $last_recharge ? single_price($last_recharge->amount) : 0 }}</h3>
-                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-5 py-3" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
-                        <i class="la la-plus fs-18 fw-700 mr-2"></i>
-                        {{ translate('Recharge Wallet') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <div class="col mb-4">
-            <div class="h-100">
-                <div class="row h-100 @if(get_setting('wallet_system') != 1 && addon_is_activated('club_point')) row-cols-md-2 @endif row-cols-1">
-                    <!-- Expenditure summary -->
-                    <div class="col">
-                        <div class="p-4 bg-primary @if(!addon_is_activated('club_point')) h-100 @endif" style="margin-bottom: 2rem;">
-                            <div class="d-flex align-items-center pb-4 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+                    
+                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
                                     <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
                                     <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
                                     <g id="Group_24786" data-name="Group 24786" transform="translate(701.466 93)">
                                         <path id="Path_32311" data-name="Path 32311" d="M122.052,10V8.55a.727.727,0,1,0-1.455,0V10a2.909,2.909,0,0,0-2.909,2.909v.727A2.909,2.909,0,0,0,120.6,16.55h1.455A1.454,1.454,0,0,1,123.506,18v.727a1.454,1.454,0,0,1-1.455,1.455H120.6a1.454,1.454,0,0,1-1.455-1.455.727.727,0,1,0-1.455,0,2.909,2.909,0,0,0,2.909,2.909V23.1a.727.727,0,1,0,1.455,0V21.641a2.909,2.909,0,0,0,2.909-2.909V18a2.909,2.909,0,0,0-2.909-2.909H120.6a1.454,1.454,0,0,1-1.455-1.455v-.727a1.454,1.454,0,0,1,1.455-1.455h1.455a1.454,1.454,0,0,1,1.455,1.455.727.727,0,0,0,1.455,0A2.909,2.909,0,0,0,122.052,10" transform="translate(127.209 529.177)" fill="#fff"/>
                                     </g>
                                     </g>
-                                </svg>
-                                <div class="ml-3 d-flex flex-column justify-content-between">
-                                    <span class="fs-14 fw-400 text-white mb-1">{{ translate('Total Expenditure') }}</span>
-                                    <span class="fs-20 fw-700 text-white">{{ single_price(get_user_total_expenditure()) }}</span>
-                                </div>
-                            </div>
-                            <a href="{{ route('purchase_history.index') }}" class="fs-12 text-white">
-                                {{ translate('View Order History') }}
-                                <i class="las la-angle-right fs-14"></i>
-                            </a>
-                        </div>
-                    </div>
+                                </svg> 
+                        {{ translate('Withdrawal') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+       
 
-                    <!-- Club Point summary -->
-                    @if (addon_is_activated('club_point'))
-                    <div class="col">
-                        <div class="p-4 bg-secondary-base">
-                            <div class="d-flex align-items-center pb-4 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-                                    <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
-                                    <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
-                                    <g id="Group_24786" data-name="Group 24786" transform="translate(701.466 93)">
-                                        <path id="Path_2961" data-name="Path 2961" d="M221.069,0a8,8,0,1,0,8,8,8,8,0,0,0-8-8m0,15a7,7,0,1,1,7-7,7,7,0,0,1-7,7" transform="translate(27.466 537)" fill="#fff"/>
-                                        <path id="Union_11" data-name="Union 11" d="M16425.393,420.226l-3.777-5.039a.42.42,0,0,1-.012-.482l1.662-2.515a.416.416,0,0,1,.313-.186l0,0h4.26a.41.41,0,0,1,.346.19l1.674,2.515a.414.414,0,0,1-.012.482l-3.777,5.039a.413.413,0,0,1-.338.169A.419.419,0,0,1,16425.393,420.226Zm-2.775-5.245,3.113,4.148,3.109-4.148-1.32-1.983h-3.592Z" transform="translate(-16177.195 129)" fill="#fff"/>
-                                    </g>
-                                    </g>
-                                </svg>
-                                <div class="ml-3 d-flex flex-column justify-content-between">
-                                    <span class="fs-14 fw-400 text-white mb-1">{{ translate('Total Club Points') }}</span>
-                                    <span class="fs-20 fw-700 text-white">{{ get_user_total_club_point() }}</span>
-                                </div>
-                            </div>
-                            <a href="{{ route('earnng_point_for_user') }}" class="fs-12 text-white">
-                                {{ translate('Convert Club Points') }}
-                                <i class="las la-angle-right fs-14"></i>
-                            </a>
-                        </div>
-                    </div>
-                    @endif
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
+                <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
+                <div class="py-2">
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->balance) }}</div>
 
+                    <div class="fs-14 fw-400 text-center">{{ translate('Package Activated') }}</div>
                 </div>
             </div>
         </div>
     </div>
+<!-- Wallet Recharge History -->
+    <div class="card rounded-0 shadow-none border">
+        <div class="card-header border-bottom-0">
+            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('Withdrawal History') }}</h5>
+        </div>
+        <div class="card-body py-0">
+            <?php /*<table class="table aiz-table mb-4">
+                <thead class="text-gray fs-12">
+                    <tr>
+                        <th class="pl-0">#</th>
+                        <th data-breakpoints="lg">{{ translate('Date') }}</th>
+                        <th>{{ translate('Amount') }}</th>
+                        <th data-breakpoints="lg">{{ translate('Payment Method') }}</th>
+                        <th class="text-right pr-0">{{ translate('Status') }}</th>
+                    </tr>
+                </thead>
+                <tbody class="fs-14">
+                    @foreach ($wallets as $key => $wallet)
+                        <tr>
+                            <td class="pl-0">{{ sprintf('%02d', ($key+1)) }}</td>
+                            <td>{{ date('d-m-Y', strtotime($wallet->created_at)) }}</td>
+                            <td class="fw-700">{{ single_price($wallet->amount) }}</td>
+                            <td>{{ ucfirst(str_replace('_', ' ', $wallet->payment_method)) }}</td>
+                            <td class="text-right pr-0">
+                                @if ($wallet->offline_payment)
+                                    @if ($wallet->approval)
+                                        <span class="badge badge-inline badge-success p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Approved') }}</span>
+                                    @else
+                                        <span class="badge badge-inline badge-info p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Pending') }}</span>
+                                    @endif
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
 
-    <div class="row gutters-16 mt-2">
+                </tbody>
+            </table>
+            <div class="aiz-pagination mb-4">
+                {{ $wallets->links() }}
+            </div>*/ ?>
+        </div>
+    </div>
+    <!-- <div class="row gutters-16 mt-2">
 
-        <!-- count summary -->
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="px-4 bg-white border h-100">
-                <!-- Cart summary -->
                 <div class="d-flex align-items-center py-4 border-bottom">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                         <g id="Group_25000" data-name="Group 25000" transform="translate(-1367 -427)">
@@ -127,7 +109,6 @@
                     </div>
                 </div>
 
-                <!-- Wishlist summary -->
                 <div class="d-flex align-items-center py-4 border-bottom">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                         <g id="Group_25000" data-name="Group 25000" transform="translate(-1367 -499)">
@@ -146,7 +127,6 @@
                     </div>
                 </div>
 
-                <!-- Order summary -->
                 <div class="d-flex align-items-center py-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                         <g id="Group_25000" data-name="Group 25000" transform="translate(-1367 -576)">
@@ -165,120 +145,9 @@
 
             </div>
         </div>
+    </div> -->
 
-        <!-- Purchased Package -->
-        @if (get_setting('classified_product'))
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="p-4 border h-100">
-                <h6 class="fw-700 mb-3 text-dark">{{ translate('Purchased Package') }}</h6>
-                @php
-                    $customer_package = get_single_customer_package(Auth::user()->customer_package_id);
-                @endphp
-                @if($customer_package != null)
-                    <img src="{{ uploaded_asset($customer_package->logo) }}" class="img-fluid mb-4 h-70px"
-                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                    <p class="fs-14 fw-700 mb-3 text-primary">{{ translate('Current Package') }}: {{ $customer_package->getTranslation('name') }}</p>
-                    <p class="mb-2 d-flex justify-content-between">
-                        <span class="text-secondary">{{ translate('Product Upload') }}</span>
-                        <span class="fw-700">{{ $customer_package->product_upload }} {{ translate('Times')}}</span>
-                    </p>
-                    <p class="mb-3 d-flex justify-content-between">
-                        <span class="text-secondary">{{ translate('Product Upload Remains') }}</span>
-                        <span class="fw-700">{{ Auth::user()->remaining_uploads }} {{ translate('Times')}}</span>
-                    </p>
-                @else
-                    <span class="fs-14 fw-700 mb-4 text-primary">{{translate('Package Not Found')}}</span>
-                @endif
-                <a href="{{ route('customer_packages_list_show') }}" class="btn btn-primary btn-block fs-14 fw-500" style="border-radius: 25px;">{{ translate('Upgrade Package') }}</a>
-            </div>
-        </div>
-        @endif
-
-        <!-- Default Shipping Address -->
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="p-4 border h-100">
-                <h6 class="fw-700 mb-3 text-dark">{{ translate('Default Shipping Address') }}</h6>
-                @if(Auth::user()->addresses != null)
-                    @php
-                        $address = Auth::user()->addresses->where('set_default', 1)->first();
-                    @endphp
-                    @if($address != null)
-                        <ul class="list-unstyled mb-5">
-                            <li class="fs-14 fw-400 text-derk pb-1"><span>{{ $address->address }},</span></li>
-                            <li class="fs-14 fw-400 text-derk pb-1"><span>{{ $address->postal_code }} - {{ $address->city->name }},</span></li>
-                            <li class="fs-14 fw-400 text-derk pb-1"><span>{{ $address->state->name }},</span></li>
-                            <li class="fs-14 fw-400 text-derk pb-1"><span>{{ $address->country->name }}.</span></li>
-                            <li class="fs-14 fw-400 text-derk pb-1"><span>{{ $address->phone }}</span></li>
-                        </ul>
-                    @endif
-                @endif
-                <button class="btn btn-dark btn-block fs-14 fw-500" onclick="add_new_address()" style="border-radius: 25px;">
-                    <i class="la la-plus fs-18 fw-700 mr-2"></i>
-                    {{ translate('Add New Address') }}
-                </button>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row align-items-center mb-2 mt-1">
-        <div class="col-6">
-            <h3 class=" mb-0 fs-14 fs-md-16 fw-700 text-dark">{{ translate('My Wishlist')}}</h3>
-        </div>
-        <div class="col-6 text-right">
-            <a class="text-blue fs-10 fs-md-12 fw-700 hov-text-primary animate-underline-primary" href="{{ route('wishlists.index') }}">{{ translate('View All') }}</a>
-        </div>
-    </div>
-    @php
-        $wishlists = get_user_wishlist();
-    @endphp
-    @if (count($wishlists) > 0)
-        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-2 gutters-16 border-top border-left mx-1 mx-md-0 mb-4">
-            @foreach($wishlists->take(5) as $key => $wishlist)
-                @if ($wishlist->product != null)
-                    <div class="aiz-card-box col py-3 text-center border-right border-bottom has-transition hov-shadow-out z-1" id="wishlist_{{ $wishlist->id }}">
-                        <div class="position-relative h-140px h-md-200px img-fit overflow-hidden mb-3">
-                            <!-- Image -->
-                            <a href="{{ route('product', $wishlist->product->slug) }}" class="d-block h-100">
-                                <img src="{{ uploaded_asset($wishlist->product->thumbnail_img) }}" class="lazyload mx-auto img-fit"
-                                    title="{{ $wishlist->product->getTranslation('name') }}">
-                            </a>
-                            <!-- Remove from wishlisht -->
-                            <div class="absolute-top-right aiz-p-hov-icon">
-                                <a href="javascript:void(0)" onclick="removeFromWishlist({{ $wishlist->id }})" data-toggle="tooltip" data-title="{{ translate('Remove from wishlist') }}" data-placement="left">
-                                    <i class="la la-trash"></i>
-                                </a>
-                            </div>
-                            <!-- add to cart -->
-                            <a class="cart-btn absolute-bottom-left w-100 h-35px aiz-p-hov-icon text-white fs-13 fw-700 d-flex justify-content-center align-items-center"
-                                href="javascript:void(0)" onclick="showAddToCartModal({{ $wishlist->product->id }})">{{ translate('Add to Cart') }}</a>
-                        </div>
-                        <!-- Product Name -->
-                        <h5 class="fs-14 mb-0 lh-1-5 fw-400 text-truncate-2 mb-3">
-                            <a href="{{ route('product', $wishlist->product->slug) }}" class="text-reset hov-text-primary"
-                                title="{{ $wishlist->product->getTranslation('name') }}">{{ $wishlist->product->getTranslation('name') }}</a>
-                        </h5>
-                        <!-- Price -->
-                        <div class="fs-14">
-                            <span class="fw-600 text-primary">{{ home_discounted_base_price($wishlist->product) }}</span>
-                            @if(home_base_price($wishlist->product) != home_discounted_base_price($wishlist->product))
-                                <del class="opacity-60 ml-1">{{ home_base_price($wishlist->product) }}</del>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-            @endforeach
-        </div>
-    @else
-        <div class="row">
-            <div class="col">
-                <div class="text-center bg-white p-4 border">
-                    <img class="mw-100 h-200px" src="{{ static_asset('assets/img/nothing.svg') }}" alt="Image">
-                    <h5 class="mb-0 h5 mt-3">{{ translate("There isn't anything added yet")}}</h5>
-                </div>
-            </div>
-        </div>
-    @endif
+    
 @endsection
 
 @section('modal')

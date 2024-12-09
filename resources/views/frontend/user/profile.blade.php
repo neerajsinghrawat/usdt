@@ -69,7 +69,7 @@
     </div>
 
     <!-- Address -->
-    <div class="card rounded-0 shadow-none border">
+    <!-- <div class="card rounded-0 shadow-none border">
         <div class="card-header pt-4 border-bottom-0">
             <h5 class="mb-0 fs-18 fw-700 text-dark">{{ translate('Address')}}</h5>
         </div>
@@ -123,7 +123,6 @@
                     </div>
                 </div>
             @endforeach
-            <!-- Add New Address -->
             <div class="" onclick="add_new_address()">
                 <div class="border p-3 mb-3 c-pointer text-center bg-light has-transition hov-bg-soft-light">
                     <i class="la la-plus la-2x"></i>
@@ -131,11 +130,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
     <!-- Change Email -->
-    <form action="{{ route('user.change.email') }}" method="POST">
+    <!-- <form action="{{ route('user.change.email') }}" method="POST">
         @csrf
         <div class="card rounded-0 shadow-none border">
           <div class="card-header pt-4 border-bottom-0">
@@ -165,7 +164,7 @@
               </div>
           </div>
         </div>
-    </form>
+    </form> -->
 
 @endsection
 

@@ -10,7 +10,21 @@
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @endif
 
+<!-- Mirrored from themewagon.github.io/Freshen/home.html') }} by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 09 Dec 2024 08:33:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
+
+
+    <!-- Include JavaScript for color modes -->
+    <script src="{{ static_asset('assets/usdt/assets/js/color-modes.js') }}"></script>
+
+  
+
+    <!-- Update the 'content' attribute to reflect the actual content description -->
+   
+
+    <meta name="author" content="tigmatemplate">
+    <meta name="generator" content="Bootstrap">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
@@ -25,38 +39,58 @@
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords'))">
 
     @yield('meta')
+    <!-- 
+        Set the website's favicon and Apple touch icon using the files in the assets/usdt/assets/logo folder. You can change these files to your own icons by replacing them with the same names and sizes.
 
-    @if (!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
+        Be careful if you change the site.webmanifest file, as you need to update the src attribute of the icons array to match the new path of your icon files. Otherwise, your icons may not display correctly on some devices. 
+    -->
         @php
-            $meta_image = uploaded_asset(get_setting('meta_image'));
-        @endphp
-        <!-- Schema.org markup for Google+ -->
-        <meta itemprop="name" content="{{ get_setting('meta_title') }}">
-        <meta itemprop="description" content="{{ get_setting('meta_description') }}">
-        <meta itemprop="image" content="{{ $meta_image }}">
-
-        <!-- Twitter Card data -->
-        <meta name="twitter:card" content="product">
-        <meta name="twitter:site" content="@publisher_handle">
-        <meta name="twitter:title" content="{{ get_setting('meta_title') }}">
-        <meta name="twitter:description" content="{{ get_setting('meta_description') }}">
-        <meta name="twitter:creator" content="@author_handle">
-        <meta name="twitter:image" content="{{ $meta_image }}">
-
-        <!-- Open Graph data -->
-        <meta property="og:title" content="{{ get_setting('meta_title') }}" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ route('home') }}" />
-        <meta property="og:image" content="{{ $meta_image }}" />
-        <meta property="og:description" content="{{ get_setting('meta_description') }}" />
-        <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
-        <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
-    @endif
-
-    <!-- Favicon -->
-    @php
         $site_icon = uploaded_asset(get_setting('site_icon'));
     @endphp
+    <link rel="icon" href="{{ $site_icon }}">
+    <link rel="apple-touch-icon" href="{{ $site_icon }}">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ static_asset('assets/usdt/assets/logo/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ static_asset('assets/usdt/assets/logo/favicon-16x16.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ static_asset('assets/usdt/assets/logo/favicon.ico') }}">
+    <link rel="manifest" href="{{ static_asset('assets/usdt/assets/logo/site.webmanifest') }}">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/glide/css/glide.core.min.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/aos/aos.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/main.min.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/style.css') }}">
+
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <!-- Update the 'title' and 'description' content below to enhance social sharing -->
+    <meta property="og:title" content="your_title_goes_here">
+    <meta property="og:description" content="your_description_goes_here">
+    <!-- Update with actual absolute image URL like: https://example.com/main.jpg -->
+    <meta property="og:image" content="your_absolute_image_url_goes_here">
+    <!-- Update with the absolute URL of the content like: https://example.com/index.html') }} -->
+    <meta property="og:url" content="your_absolute_content_url_goes_here">
+    <!-- Update with the type of object you’re sharing. (e.g., article, website, etc.) -->
+    <meta property="og:type" content="website">
+    <!-- Defines the content language -->
+    <meta property="og:locale" content="en_US">
+
+    
+    <!-- X/Twitter Card Meta Tags for Social Sharing -->
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Update with your X/Twitter handle -->
+    <meta name="twitter:site" content="@yourtwitterhandle"> 
+    <!-- Update the 'title' and 'description' content below to enhance social sharing -->
+    <meta name="twitter:title" content="your_title_goes_here"> 
+    <meta name="twitter:description" content="your_description_goes_here">
+    <!-- Update with actual absolute image URL like: https://example.com/main.jpg -->
+    <meta name="twitter:image" content="your_absolute_image_url_goes_here"> 
+    
+    <!-- 
+        The following line specifies the canonical URL for this page.
+        Replace your_canonical_url_goes_here with the actual canonical URL if needed like: https://example.com/index.html') }}
+        Or just remove it!!!!
+    -->
+    <link rel="canonical" href="your_canonical_url_goes_here.html">
     <link rel="icon" href="{{ $site_icon }}">
     <link rel="apple-touch-icon" href="{{ $site_icon }}">
 
@@ -216,721 +250,55 @@
 
 </head>
 <body>
-    <!-- aiz-main-wrapper -->
-    <div class="aiz-main-wrapper d-flex flex-column bg-white">
-        @php
-            $user = auth()->user();
-            $user_avatar = null;
-            $carts = [];
-            if ($user && $user->avatar_original != null) {
-                $user_avatar = uploaded_asset($user->avatar_original);
-            }
-
-            $system_language = get_system_language();
-        @endphp
-        <!-- Header -->
-        @include('frontend.inc.nav')
-
-        @yield('content')
-
-        <!-- footer -->
-        @include('frontend.inc.footer')
-
-    </div>
-
-    <!-- Floating Buttons -->
-    @include('frontend.inc.floating_buttons')
-
-    <div class="aiz-refresh">
-        <div class="aiz-refresh-content"><div></div><div></div><div></div></div>
-    </div>
 
 
-    @if (env("DEMO_MODE") == "On")
-        <!-- demo nav -->
-        @include('frontend.inc.demo_nav')
-    @endif
-
-    <!-- cookies agreement -->
-    @php
-        $alert_location = get_setting('custom_alert_location');
-        $order = in_array($alert_location, ['top-left', 'top-right']) ? 'asc' : 'desc';
-        $custom_alerts = App\Models\CustomAlert::where('status', 1)->orderBy('id', $order)->get();
-    @endphp
-
-    <div class="aiz-custom-alert {{ get_setting('custom_alert_location') }}">
-        @foreach ($custom_alerts as $custom_alert)
-            @if($custom_alert->id == 1)
-                <div class="aiz-cookie-alert mb-3" style="box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.24);">
-                    <div class="p-3 px-lg-2rem rounded-0" style="background: {{ $custom_alert->background_color }};">
-                        <div class="text-{{ $custom_alert->text_color }} mb-3">
-                            {!! $custom_alert->description !!}
-                        </div>
-                        <button class="btn btn-block btn-primary rounded-0 aiz-cookie-accept">
-                            {{ translate('Ok. I Understood') }}
-                        </button>
-                    </div>
-                </div>
-            @else
-                <div class="mb-3 custom-alert-box removable-session d-none" data-key="custom-alert-box-{{ $custom_alert->id }}" data-value="removed" style="box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.24);">
-                    <div class="rounded-0 position-relative" style="background: {{ $custom_alert->background_color }};">
-                        <a href="{{ $custom_alert->link }}" class="d-block h-100 w-100">
-                            <div class="@if ($custom_alert->type == 'small') d-flex @endif">
-                                <img class="@if ($custom_alert->type == 'small') h-140px w-120px img-fit @else w-100 @endif" src="{{ uploaded_asset($custom_alert->banner) }}" alt="custom_alert">
-                                <div class="text-{{ $custom_alert->text_color }} p-2rem">
-                                    {!! $custom_alert->description !!}
-                                </div>
-                            </div>
-                        </a>
-                        <button class="absolute-top-right bg-transparent btn btn-circle btn-icon d-flex align-items-center justify-content-center text-{{ $custom_alert->text_color }} hov-text-primary set-session" data-key="custom-alert-box-{{ $custom_alert->id }}" data-value="removed" data-toggle="remove-parent" data-parent=".custom-alert-box">
-                            <i class="la la-close fs-20"></i>
-                        </button>
-                    </div>
-                </div>
-            @endif
-        @endforeach
-    </div>
-
-    <!-- website popup -->
-    @php
-        $dynamic_popups = App\Models\DynamicPopup::where('status', 1)->orderBy('id', 'asc')->get();
-    @endphp
-    @foreach ($dynamic_popups as $key => $dynamic_popup)
-        @if($dynamic_popup->id == 1)
-            <div class="modal website-popup removable-session d-none" data-key="website-popup" data-value="removed">
-                <div class="absolute-full bg-black opacity-60"></div>
-                <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md mx-4 mx-md-auto">
-                    <div class="modal-content position-relative border-0 rounded-0">
-                        <div class="aiz-editor-data">
-                            <div class="d-block">
-                                <img class="w-100" src="{{ uploaded_asset($dynamic_popup->banner) }}" alt="dynamic_popup">
-                            </div>
-                        </div>
-                        <div class="pb-5 pt-4 px-3 px-md-2rem">
-                            <h1 class="fs-30 fw-700 text-dark">{{ $dynamic_popup->title }}</h1>
-                            <p class="fs-14 fw-400 mt-3 mb-4">{{ $dynamic_popup->summary }}</p>
-                            @if ($dynamic_popup->show_subscribe_form == 'on')
-                                <form class="" method="POST" action="{{ route('subscribers.store') }}">
-                                    @csrf
-                                    <div class="form-group mb-0">
-                                        <input type="email" class="form-control" placeholder="{{ translate('Your Email Address') }}" name="email" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-block mt-3 rounded-0 text-{{ $dynamic_popup->btn_text_color }}" style="background: {{ $dynamic_popup->btn_background_color }};">
-                                        {{ $dynamic_popup->btn_text }}
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                        <button class="absolute-top-right bg-white shadow-lg btn btn-circle btn-icon mr-n3 mt-n3 set-session" data-key="website-popup" data-value="removed" data-toggle="remove-parent" data-parent=".website-popup">
-                            <i class="la la-close fs-20"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="modal website-popup removable-session d-none" data-key="website-popup-{{ $dynamic_popup->id }}" data-value="removed">
-                <div class="absolute-full bg-black opacity-60"></div>
-                <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md mx-4 mx-md-auto">
-                    <div class="modal-content position-relative border-0 rounded-0">
-                        <div class="aiz-editor-data">
-                            <div class="d-block">
-                                <img class="w-100" src="{{ uploaded_asset($dynamic_popup->banner) }}" alt="dynamic_popup">
-                            </div>
-                        </div>
-                        <div class="pb-5 pt-4 px-3 px-md-2rem">
-                            <h1 class="fs-30 fw-700 text-dark">{{ $dynamic_popup->title }}</h1>
-                            <p class="fs-14 fw-400 mt-3 mb-4">{{ $dynamic_popup->summary }}</p>
-                            <a href="{{ $dynamic_popup->btn_link }}" class="btn btn-block mt-3 rounded-0 text-{{ $dynamic_popup->btn_text_color }}" style="background: {{ $dynamic_popup->btn_background_color }};">
-                                {{ $dynamic_popup->btn_text }}
-                            </a>
-                        </div>
-                        <button class="absolute-top-right bg-white shadow-lg btn btn-circle btn-icon mr-n3 mt-n3 set-session" data-key="website-popup-{{ $dynamic_popup->id }}" data-value="removed" data-toggle="remove-parent" data-parent=".website-popup">
-                            <i class="la la-close fs-20"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @endif
-    @endforeach
-
-    @include('frontend.partials.modal')
-
-    @include('frontend.partials.account_delete_modal')
-
-    <div class="modal fade" id="addToCart">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
-            <div class="modal-content position-relative">
-                <div class="c-preloader text-center p-3">
-                    <i class="las la-spinner la-spin la-3x"></i>
-                </div>
-                <button type="button" class="close absolute-top-right btn-icon close z-1 btn-circle bg-gray mr-2 mt-2 d-flex justify-content-center align-items-center" data-dismiss="modal" aria-label="Close" style="background: #ededf2; width: calc(2rem + 2px); height: calc(2rem + 2px);">
-                    <span aria-hidden="true" class="fs-24 fw-700" style="margin-left: 2px;">&times;</span>
-                </button>
-                <div id="addToCart-modal-body">
-
-                </div>
-            </div>
+    <!-- loader-wrapper -->
+    <div class="loader-wrapper">
+        <div class="spinner-border text-primary p-5" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 
-    @yield('modal')
-
-    <!-- SCRIPTS -->
-    <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
-    <script src="{{ static_asset('assets/js/aiz-core.js?v=') }}{{ rand(1000, 9999) }}"></script>
-
-
-
-    @if (get_setting('facebook_chat') == 1)
-        <script type="text/javascript">
-            window.fbAsyncInit = function() {
-                FB.init({
-                  xfbml            : true,
-                  version          : 'v3.3'
-                });
-              };
-
-              (function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>
-        <div id="fb-root"></div>
-        <!-- Your customer chat code -->
-        <div class="fb-customerchat"
-          attribution=setup_tool
-          page_id="{{ env('FACEBOOK_PAGE_ID') }}">
-        </div>
-    @endif
-
-    <script>
-        @foreach (session('flash_notification', collect())->toArray() as $message)
-            AIZ.plugins.notify('{{ $message['level'] }}', '{{ $message['message'] }}');
-        @endforeach
-    </script>
-
-    <script>
-        @if (Route::currentRouteName() == 'home' || Route::currentRouteName() == '/')
-
-            $.post('{{ route('home.section.featured') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#section_featured').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-            $.post('{{ route('home.section.todays_deal') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#todays_deal').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-            $.post('{{ route('home.section.best_selling') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#section_best_selling').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-            $.post('{{ route('home.section.newest_products') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#section_newest').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-            $.post('{{ route('home.section.auction_products') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#auction_products').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-            $.post('{{ route('home.section.home_categories') }}', {
-                _token: '{{ csrf_token() }}'
-            }, function(data) {
-                $('#section_home_categories').html(data);
-                AIZ.plugins.slickCarousel();
-            });
-
-        @endif
-
-        $(document).ready(function() {
-            $('.category-nav-element').each(function(i, el) {
-
-                $(el).on('mouseover', function(){
-                    if(!$(el).find('.sub-cat-menu').hasClass('loaded')){
-                        $.post('{{ route('category.elements') }}', {
-                            _token: AIZ.data.csrf,
-                            id:$(el).data('id'
-                            )}, function(data){
-                            $(el).find('.sub-cat-menu').addClass('loaded').html(data);
-                        });
-                    }
-                });
-            });
-
-            if ($('#lang-change').length > 0) {
-                $('#lang-change .dropdown-menu a').each(function() {
-                    $(this).on('click', function(e){
-                        e.preventDefault();
-                        var $this = $(this);
-                        var locale = $this.data('flag');
-                        $.post('{{ route('language.change') }}',{_token: AIZ.data.csrf, locale:locale}, function(data){
-                            location.reload();
-                        });
-
-                    });
-                });
-            }
-
-            if ($('#currency-change').length > 0) {
-                $('#currency-change .dropdown-menu a').each(function() {
-                    $(this).on('click', function(e){
-                        e.preventDefault();
-                        var $this = $(this);
-                        var currency_code = $this.data('currency');
-                        $.post('{{ route('currency.change') }}',{_token: AIZ.data.csrf, currency_code:currency_code}, function(data){
-                            location.reload();
-                        });
-
-                    });
-                });
-            }
-        });
-
-        $('#search').on('keyup', function(){
-            search();
-        });
-
-        $('#search').on('focus', function(){
-            search();
-        });
-
-        function search(){
-            var searchKey = $('#search').val();
-            if(searchKey.length > 0){
-                $('body').addClass("typed-search-box-shown");
-
-                $('.typed-search-box').removeClass('d-none');
-                $('.search-preloader').removeClass('d-none');
-                $.post('{{ route('search.ajax') }}', { _token: AIZ.data.csrf, search:searchKey}, function(data){
-                    if(data == '0'){
-                        // $('.typed-search-box').addClass('d-none');
-                        $('#search-content').html(null);
-                        $('.typed-search-box .search-nothing').removeClass('d-none').html('{{ translate('Sorry, nothing found for') }} <strong>"'+searchKey+'"</strong>');
-                        $('.search-preloader').addClass('d-none');
-
-                    }
-                    else{
-                        $('.typed-search-box .search-nothing').addClass('d-none').html(null);
-                        $('#search-content').html(data);
-                        $('.search-preloader').addClass('d-none');
-                    }
-                });
-            }
-            else {
-                $('.typed-search-box').addClass('d-none');
-                $('body').removeClass("typed-search-box-shown");
-            }
-        }
-
-        $(".aiz-user-top-menu").on("mouseover", function (event) {
-            $(".hover-user-top-menu").addClass('active');
-        })
-        .on("mouseout", function (event) {
-            $(".hover-user-top-menu").removeClass('active');
-        });
-
-        $(document).on("click", function(event){
-            var $trigger = $("#category-menu-bar");
-            if($trigger !== event.target && !$trigger.has(event.target).length){
-                $("#click-category-menu").slideUp("fast");;
-                $("#category-menu-bar-icon").removeClass('show');
-            }
-        });
-
-        function updateNavCart(view,count){
-            $('.cart-count').html(count);
-            $('#cart_items').html(view);
-        }
-
-        function removeFromCart(key){
-            $.post('{{ route('cart.removeFromCart') }}', {
-                _token  : AIZ.data.csrf,
-                id      :  key
-            }, function(data){
-                updateNavCart(data.nav_cart_view,data.cart_count);
-                $('#cart-details').html(data.cart_view);
-                AIZ.plugins.notify('success', "{{ translate('Item has been removed from cart') }}");
-                $('#cart_items_sidenav').html(parseInt($('#cart_items_sidenav').html())-1);
-            });
-        }
-
-        function showLoginModal() {
-            $('#login_modal').modal();
-        }
-
-        function addToCompare(id){
-            $.post('{{ route('compare.addToCompare') }}', {_token: AIZ.data.csrf, id:id}, function(data){
-                $('#compare').html(data);
-                AIZ.plugins.notify('success', "{{ translate('Item has been added to compare list') }}");
-                $('#compare_items_sidenav').html(parseInt($('#compare_items_sidenav').html())+1);
-            });
-        }
-
-        function addToWishList(id){
-            @if (Auth::check() && Auth::user()->user_type == 'customer')
-                $.post('{{ route('wishlists.store') }}', {_token: AIZ.data.csrf, id:id}, function(data){
-                    if(data != 0){
-                        $('#wishlist').html(data);
-                        AIZ.plugins.notify('success', "{{ translate('Item has been added to wishlist') }}");
-                    }
-                    else{
-                        AIZ.plugins.notify('warning', "{{ translate('Please login first') }}");
-                    }
-                });
-            @elseif(Auth::check() && Auth::user()->user_type != 'customer')
-                AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the WishList.') }}");
-            @else
-                AIZ.plugins.notify('warning', "{{ translate('Please login first') }}");
-            @endif
-        }
-
-        function showAddToCartModal(id){
-            if(!$('#modal-size').hasClass('modal-lg')){
-                $('#modal-size').addClass('modal-lg');
-            }
-            $('#addToCart-modal-body').html(null);
-            $('#addToCart').modal();
-            $('.c-preloader').show();
-            $.post('{{ route('cart.showCartModal') }}', {_token: AIZ.data.csrf, id:id}, function(data){
-                $('.c-preloader').hide();
-                $('#addToCart-modal-body').html(data);
-                AIZ.plugins.slickCarousel();
-                AIZ.plugins.zoom();
-                AIZ.extra.plusMinus();
-                getVariantPrice();
-            });
-        }
-
-        $('#option-choice-form input').on('change', function(){
-            getVariantPrice();
-        });
-
-        function getVariantPrice(){
-            if($('#option-choice-form input[name=quantity]').val() > 0 && checkAddToCartValidity()){
-                $.ajax({
-                    type:"POST",
-                    url: '{{ route('products.variant_price') }}',
-                    data: $('#option-choice-form').serializeArray(),
-                    success: function(data){
-                        $('.product-gallery-thumb .carousel-box').each(function (i) {
-                            if($(this).data('variation') && data.variation == $(this).data('variation')){
-                                $('.product-gallery-thumb').slick('slickGoTo', i);
-                            }
-                        })
-
-                        $('#option-choice-form #chosen_price_div').removeClass('d-none');
-                        $('#option-choice-form #chosen_price_div #chosen_price').html(data.price);
-                        $('#available-quantity').html(data.quantity);
-                        $('.input-number').prop('max', data.max_limit);
-                        if(parseInt(data.in_stock) == 0 && data.digital  == 0){
-                           $('.buy-now').addClass('d-none');
-                           $('.add-to-cart').addClass('d-none');
-                           $('.out-of-stock').removeClass('d-none');
-                        }
-                        else{
-                           $('.buy-now').removeClass('d-none');
-                           $('.add-to-cart').removeClass('d-none');
-                           $('.out-of-stock').addClass('d-none');
-                        }
-
-                        AIZ.extra.plusMinus();
-                    }
-                });
-            }
-        }
-
-        function checkAddToCartValidity(){
-            var names = {};
-            $('#option-choice-form input:radio').each(function() { // find unique names
-                names[$(this).attr('name')] = true;
-            });
-            var count = 0;
-            $.each(names, function() { // then count them
-                count++;
-            });
-
-            if($('#option-choice-form input:radio:checked').length == count){
-                return true;
-            }
-
-            return false;
-        }
-
-        function addToCart(){
-            @if (Auth::check() && Auth::user()->user_type != 'customer')
-                AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
-                return false;
-            @endif
-
-            if(checkAddToCartValidity()) {
-                $('#addToCart').modal();
-                $('.c-preloader').show();
-                $.ajax({
-                    type:"POST",
-                    url: '{{ route('cart.addToCart') }}',
-                    data: $('#option-choice-form').serializeArray(),
-                    success: function(data){
-                       $('#addToCart-modal-body').html(null);
-                       $('.c-preloader').hide();
-                       $('#modal-size').removeClass('modal-lg');
-                       $('#addToCart-modal-body').html(data.modal_view);
-                       AIZ.extra.plusMinus();
-                       AIZ.plugins.slickCarousel();
-                       updateNavCart(data.nav_cart_view,data.cart_count);
-                    }
-                });
-
-                if ("{{ get_setting('facebook_pixel') }}" == 1){
-                    // Facebook Pixel AddToCart Event
-                    fbq('track', 'AddToCart', {content_type: 'product'});
-                    // Facebook Pixel AddToCart Event
-                }
-            }
-            else{
-                AIZ.plugins.notify('warning', "{{ translate('Please choose all the options') }}");
-            }
-        }
-
-        function buyNow(){
-            @if (Auth::check() && Auth::user()->user_type != 'customer')
-                AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
-                return false;
-            @endif
-
-            if(checkAddToCartValidity()) {
-                $('#addToCart-modal-body').html(null);
-                $('#addToCart').modal();
-                $('.c-preloader').show();
-                $.ajax({
-                    type:"POST",
-                    url: '{{ route('cart.addToCart') }}',
-                    data: $('#option-choice-form').serializeArray(),
-                    success: function(data){
-                        if(data.status == 1){
-                            $('#addToCart-modal-body').html(data.modal_view);
-                            updateNavCart(data.nav_cart_view,data.cart_count);
-                            window.location.replace("{{ route('cart') }}");
-                        }
-                        else{
-                            $('#addToCart-modal-body').html(null);
-                            $('.c-preloader').hide();
-                            $('#modal-size').removeClass('modal-lg');
-                            $('#addToCart-modal-body').html(data.modal_view);
-                        }
-                    }
-               });
-            }
-            else{
-                AIZ.plugins.notify('warning', "{{ translate('Please choose all the options') }}");
-            }
-        }
-
-        function bid_single_modal(bid_product_id, min_bid_amount){
-            @if (Auth::check() && (isCustomer() || isSeller()))
-                var min_bid_amount_text = "({{ translate('Min Bid Amount: ') }}"+min_bid_amount+")";
-                $('#min_bid_amount').text(min_bid_amount_text);
-                $('#bid_product_id').val(bid_product_id);
-                $('#bid_amount').attr('min', min_bid_amount);
-                $('#bid_for_product').modal('show');
-            @elseif (Auth::check() && isAdmin())
-                AIZ.plugins.notify('warning', '{{ translate('Sorry, Only customers & Sellers can Bid.') }}');
-            @else
-                $('#login_modal').modal('show');
-            @endif
-        }
-
-        function clickToSlide(btn,id){
-            $('#'+id+' .aiz-carousel').find('.'+btn).trigger('click');
-            $('#'+id+' .slide-arrow').removeClass('link-disable');
-            var arrow = btn=='slick-prev' ? 'arrow-prev' : 'arrow-next';
-            if ($('#'+id+' .aiz-carousel').find('.'+btn).hasClass('slick-disabled')) {
-                $('#'+id).find('.'+arrow).addClass('link-disable');
-            }
-        }
-
-        function goToView(params) {
-            document.getElementById(params).scrollIntoView({behavior: "smooth", block: "center"});
-        }
-
-        function copyCouponCode(code){
-            navigator.clipboard.writeText(code);
-            AIZ.plugins.notify('success', "{{ translate('Coupon Code Copied') }}");
-        }
-
-        $(document).ready(function(){
-            $('.cart-animate').animate({margin : 0}, "slow");
-
-            $({deg: 0}).animate({deg: 360}, {
-                duration: 2000,
-                step: function(now) {
-                    $('.cart-rotate').css({
-                        transform: 'rotate(' + now + 'deg)'
-                    });
-                }
-            });
-
-            setTimeout(function(){
-                $('.cart-ok').css({ fill: '#d43533' });
-            }, 2000);
-
-        });
-
-        function nonLinkableNotificationRead(){
-            $.get('{{ route('non-linkable-notification-read') }}',function(data){
-                $('.unread-notification-count').html(data);
-            });
-        }
-    </script>
-
-
-    <script type="text/javascript">
-        if ($('input[name=country_code]').length > 0){
-            // Country Code
-            var isPhoneShown = true,
-                countryData = window.intlTelInputGlobals.getCountryData(),
-                input = document.querySelector("#phone-code");
-
-            for (var i = 0; i < countryData.length; i++) {
-                var country = countryData[i];
-                if (country.iso2 == 'bd') {
-                    country.dialCode = '88';
-                }
-            }
-
-            var iti = intlTelInput(input, {
-                separateDialCode: true,
-                utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
-                onlyCountries: @php echo get_active_countries()->pluck('code') @endphp,
-                customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
-                    if (selectedCountryData.iso2 == 'bd') {
-                        return "01xxxxxxxxx";
-                    }
-                    return selectedCountryPlaceholder;
-                }
-            });
-
-            var country = iti.getSelectedCountryData();
-            $('input[name=country_code]').val(country.dialCode);
-
-            input.addEventListener("countrychange", function(e) {
-                // var currentMask = e.currentTarget.placeholder;
-                var country = iti.getSelectedCountryData();
-                $('input[name=country_code]').val(country.dialCode);
-
-            });
-
-            function toggleEmailPhone(el) {
-                if (isPhoneShown) {
-                    $('.phone-form-group').addClass('d-none');
-                    $('.email-form-group').removeClass('d-none');
-                    $('input[name=phone]').val(null);
-                    isPhoneShown = false;
-                    $(el).html('*{{ translate('Use Phone Number Instead') }}');
-                } else {
-                    $('.phone-form-group').removeClass('d-none');
-                    $('.email-form-group').addClass('d-none');
-                    $('input[name=email]').val(null);
-                    isPhoneShown = true;
-                    $(el).html('<i>*{{ translate('Use Email Instead') }}</i>');
-                }
-            }
-        }
-    </script>
-
-    <script>
-        var acc = document.getElementsByClassName("aiz-accordion-heading");
-        var i;
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var panel = this.nextElementSibling;
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                } else {
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                }
-            });
-        }
-    </script>
-
-    <script>
-        function showFloatingButtons() {
-            document.querySelector('.floating-buttons-section').classList.toggle('show');;
-        }
-    </script>
-
-    @if (env("DEMO_MODE") == "On")
-        <script>
-            var demoNav = document.querySelector('.aiz-demo-nav');
-            var menuBtn = document.querySelector('.aiz-demo-nav-toggler');
-            var lineOne = document.querySelector('.aiz-demo-nav-toggler .aiz-demo-nav-btn .line--1');
-            var lineTwo = document.querySelector('.aiz-demo-nav-toggler .aiz-demo-nav-btn .line--2');
-            var lineThree = document.querySelector('.aiz-demo-nav-toggler .aiz-demo-nav-btn .line--3');
-            menuBtn.addEventListener('click', () => {
-                toggleDemoNav();
-            });
-
-            function toggleDemoNav() {
-                // demoNav.classList.toggle('show');
-                demoNav.classList.toggle('shadow-none');
-                lineOne.classList.toggle('line-cross');
-                lineTwo.classList.toggle('line-fade-out');
-                lineThree.classList.toggle('line-cross');
-                if ($('.aiz-demo-nav-toggler').hasClass('show')) {
-                    $('.aiz-demo-nav-toggler').removeClass('show');
-                    demoHideOverlay();
-                }else{
-                    $('.aiz-demo-nav-toggler').addClass('show');
-                    demoShowOverlay();
-                }
-            }
-
-            $('.aiz-demos').click(function(e){
-                if (!e.target.closest('.aiz-demos .aiz-demo-content')) {
-                    toggleDemoNav();
-                }
-            });
-
-            function demoShowOverlay(){
-                $('.top-banner').removeClass('z-1035').addClass('z-1');
-                $('.top-navbar').removeClass('z-1035').addClass('z-1');
-                $('header').removeClass('z-1020').addClass('z-1');
-                $('.aiz-demos').addClass('show');
-            }
-
-            function demoHideOverlay(cls=null){
-                if($('.aiz-demos').hasClass('show')){
-                    $('.aiz-demos').removeClass('show');
-                    $('.top-banner').delay(800).removeClass('z-1').addClass('z-1035');
-                    $('.top-navbar').delay(800).removeClass('z-1').addClass('z-1035');
-                    $('header').delay(800).removeClass('z-1').addClass('z-1020');
-                }
-            }
-        </script>
-    @endif
-
-    @yield('script')
-
     @php
-        echo get_setting('footer_script');
+        $user = auth()->user();
+        $user_avatar = null;
+        $carts = [];
+        if ($user && $user->avatar_original != null) {
+            $user_avatar = uploaded_asset($user->avatar_original);
+        }
+
+        $system_language = get_system_language();
     @endphp
+    <!-- Header -->
+    @include('frontend.inc.nav')
+
+    @yield('content')
+
+    <!-- footer -->
+    @include('frontend.inc.footer')
+
+
+
+
+
+
+    <!-- Back to top button -->
+    <button type="button" class="btn btn-primary btn-back-to-top rounded-circle justify-content-center align-items-center p-2 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16"> <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/> </svg>
+    </button>
+
+
+
+    <!-- Bootstrap JavaScript: Bundle with Popper -->
+    <script src="{{ static_asset('assets/usdt/assets/libraries/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ static_asset('assets/usdt/assets/libraries/glide/glide.min.js') }}"></script>
+    <script src="{{ static_asset('assets/usdt/assets/libraries/aos/aos.js') }}"></script>
+    <script src="{{ static_asset('assets/usdt/assets/js/scripts.js') }}"></script>
+    <script src="{{ static_asset('assets/usdt/assets/php/contact/script.js') }}"></script>
+
+
 
 </body>
+
+<!-- Mirrored from themewagon.github.io/Freshen/home.html') }} by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 09 Dec 2024 08:33:40 GMT -->
 </html>
