@@ -552,7 +552,7 @@
                                     <a href="{{ route('customers.index') }}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{ translate('Users list') }}</span>
                                     </a>
-                                </li>
+                                </li> 
                             @endcan
                             @can('view_all_payrequest')
                             <li class="aiz-side-nav-item">

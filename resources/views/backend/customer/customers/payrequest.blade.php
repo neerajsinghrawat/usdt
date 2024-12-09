@@ -7,7 +7,7 @@
         <h1 class="h3">{{translate('All users')}}</h1>
     </div>
 </div>
-
+  
 
 <div class="card">
     <form class="" id="sort_customers" action="" method="GET">
