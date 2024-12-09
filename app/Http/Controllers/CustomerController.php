@@ -36,10 +36,9 @@ class CustomerController extends Controller
     }
 
 
-    public function payrequest(Request $request)
+    public function pay_request(Request $request)
     {
-
-        die('sdfgsdfg'); 
+         
         $sort_search = null;
         $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
         if ($request->has('search')){

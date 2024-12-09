@@ -190,12 +190,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
     // Customer
     Route::resource('customers', CustomerController::class);
     Route::controller(CustomerController::class)->group(function () {
+        Route::get('/pay-request', 'pay_request')->name('pay-request');
         Route::get('customers_ban/{customer}', 'ban')->name('customers.ban');
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
         Route::get('/customers/destroy/{id}', 'destroy')->name('customers.destroy');
         Route::post('/bulk-customer-delete', 'bulk_customer_delete')->name('bulk-customer-delete');
         Route::post('/customers/published', 'updatePublished')->name('customers.published');
-        Route::get('/customers/payrequest', 'payrequest')->name('customers.payrequest');
+        
     });
 
     // Newsletter

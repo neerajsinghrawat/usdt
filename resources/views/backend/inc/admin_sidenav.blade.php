@@ -556,7 +556,7 @@
                             @endcan
                             @can('view_all_payrequest')
                             <li class="aiz-side-nav-item">
-                                <a href="{{ route('customers.payrequest') }}" class="aiz-side-nav-link">
+                                <a href="{{ route('pay-request') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('request payment list') }}</span>
                                 </a>
                             </li>
