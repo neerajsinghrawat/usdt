@@ -4,16 +4,16 @@
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="align-items-center">
-        <h1 class="h3">{{translate('All users')}}</h1>
+        <h1 class="h3">{{translate('All Requests ROI')}}</h1>
     </div>
 </div>
-  
+
 
 <div class="card">
-    <form class="" id="sort_customers" action="" method="GET">
-        <div class="card-header row gutters-5">
+    {{-- <form class="" id="sort_customers" action="" method="GET"> --}}
+        {{-- <div class="card-header row gutters-5">
             <div class="col">
-                <h5 class="mb-0 h6">{{translate('users')}}</h5>
+                <h5 class="mb-0 h6">{{translate('Requests')}}</h5>
             </div>
 
             <div class="dropdown mb-2 mb-md-0">
@@ -30,87 +30,132 @@
                     <input type="text" class="form-control" id="search" name="search"@isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type email or name & Enter') }}">
                 </div>
             </div>
+
+            
+        </div> --}}
+
+        <form class="" id="filter_form" action="{{ route('pay-request') }}" method="GET">
+            <div class="card-header row gutters-5  text-right" >
+                <div class="col">
+                    <h5 class="mb-0 h6">{{translate('Requests')}}</h5>
+                </div>
+        
+                <div class="col-md-2">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control" id="search" name="search" @isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type email or name & Enter') }}">
+                    </div>
+                </div>
+        
+                <div class="col-md-1">
+                    <div class="form-group mb-0">
+                        <input type="number" class="form-control" name="requested_usdt" value="{{ request('requested_usdt') }}" placeholder="{{ translate('USDT') }}">
+                    </div>
+                </div>
+        
+                <div class="col-md-2">
+                    <div class="form-group mb-0">
+                        <select name="approval" class="form-control">
+                            <option value="">{{ translate('Select Approval Status') }}</option>
+                            <option value="approved" {{ request('approval') == 'approved' ? 'selected' : '' }}>{{ translate('Approved') }}</option>
+                            <option value="pending" {{ request('approval') == 'pending' ? 'selected' : '' }}>{{ translate('Pending') }}</option>
+                        </select>
+                    </div>
+                </div>
+                
+        
+                <!-- Start Date Filter -->
+                <div class="col-md-2">
+                    <div class="form-group mb-0">
+                        <input type="date" class="form-control" name="start_date" value="{{ request('start_date') }}" placeholder="{{ translate('Start Date') }}">
+                    </div>
+                </div>
+                 <!-- End Date Filter -->
+                 <div class="col-md-2">
+                    <div class="form-group mb-0">
+                        <input type="date" class="form-control" name="end_date" value="{{ request('end_date') }}" placeholder="{{ translate('End Date') }}">
+                    </div>
+                </div>
+        
+          <!-- Filter Button -->
+          <div class="col-md-2 ">
+            <div class="form-group mb-0">
+                <button type="submit" class="btn btn-primary">{{ translate('Filter') }}</button>
+            </div>
         </div>
+                
+        
+              
+            </div>
+        </form>
+        
+        
+        
 
         <div class="card-body">
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
-                        <!--<th data-breakpoints="lg">#</th>-->
-                        <th>
-                            <div class="form-group">
-                                <div class="aiz-checkbox-inline">
-                                    <label class="aiz-checkbox">
-                                        <input type="checkbox" class="check-all">
-                                        <span class="aiz-square-check"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </th>
+                       
+                        <th>{{translate('SR No.')}}</th> <!-- SR No. Column -->
                         <th>{{translate('Name')}}</th>
                         <th data-breakpoints="lg">{{translate('Email Address')}}</th>
                         <th data-breakpoints="lg">{{translate('Phone')}}</th>
+                        <th data-breakpoints="lg">{{translate('referral Code')}}</th>
                         <th data-breakpoints="lg">{{translate('Package')}}</th>
                         <th data-breakpoints="lg">{{translate('Wallet Balance')}}</th>
-                        <th data-breakpoints="lg">{{translate('Active')}}</th>
-                        <th class="text-right">{{translate('Options')}}</th>
+                        <th>{{ translate('Requested USDT') }}</th>
+                        <th>{{ translate('Start Date') }}</th>
+                        <th>{{ translate('Approved Date') }}</th>
+                        <th data-breakpoints="lg">{{translate('Approval')}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($users as $key => $user)
                         @if ($user != null)
                             <tr>
-                                <!--<td>{{ ($key+1) + ($users->currentPage() - 1)*$users->perPage() }}</td>-->
-                                <td>
-                                    <div class="form-group">
-                                        <div class="aiz-checkbox-inline">
-                                            <label class="aiz-checkbox">
-                                                <input type="checkbox" class="check-one" name="id[]" value="{{$user->id}}">
-                                                <span class="aiz-square-check"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td>{{ ($key + 1) + ($users->currentPage() - 1) * $users->perPage() }}</td>
+                                
                                 <td>@if($user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif {{$user->name}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->phone}}</td>
-                                <td>
-                                    @if ($user->customer_package != null)
-                                    {{$user->customer_package->getTranslation('name')}}
-                                    @endif
-                                </td>
-                                <td>{{single_price($user->balance)}}</td>
-                                
-                                
+                                <td>{{$user->referral_code}}</td>
+                                <td>{{single_price($user->package_amount)}}</td>
+                                <td>{{single_price($user->wallet_usdt)}}</td>
+                                                
+                        
+
+                        <td>
+                            @php
+                                $requestedCoins = $user->userCoinAudit
+                                    ->where('type', 'roi') // Filter only 'roi' type records
+                                    ->sum('coins_added'); // Sum the 'coins_added' for 'roi'
+                            @endphp
+                            {{single_price( $requestedCoins) }}
+                        </td>
+                      
+                        
+                        <td>
+                            @foreach ($user->userCoinAudit as $audit)
+                                {{ $audit->created_at->format('d-m-Y h:i A') }}<br>
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($user->userCoinAudit as $audit)
+                                {{ $audit->updated_at->format('d-m-Y h:i A') }}<br>
+                            @endforeach
+                        </td>
+                        
+
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_published(this)" value="{{ $user->id }}" type="checkbox" <?php if ($user->status == 1) echo "checked"; ?> >
+                                <input onchange="updateTrnStatus(this)" value="{{ $audit->id }}" type="checkbox" 
+                                       @if ($audit->trn_status === 'approved') checked @endif>
                                 <span class="slider round"></span>
                             </label>
                         </td>
-                                <td class="text-right">
-                                    @can('login_as_customer')
-                                        <a href="{{route('customers.login', encrypt($user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this Customer') }}">
-                                            <i class="las la-edit"></i>
-                                        </a>
-                                    @endcan
-                                    @can('ban_customer')
-                                        @if($user->banned != 1)
-                                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="confirm_ban('{{route('customers.ban', encrypt($user->id))}}');" title="{{ translate('Ban this Customer') }}">
-                                                <i class="las la-user-slash"></i>
-                                            </a>
-                                            @else
-                                            <a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm" onclick="confirm_unban('{{route('customers.ban', encrypt($user->id))}}');" title="{{ translate('Unban this Customer') }}">
-                                                <i class="las la-user-check"></i>
-                                            </a>
-                                        @endif
-                                    @endcan
-                                    @can('delete_customer')
-                                        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('customers.destroy', $user->id)}}" title="{{ translate('Delete') }}">
-                                            <i class="las la-trash"></i>
-                                        </a>
-                                    @endcan
-                                </td>
+                        
+                        
+                             
                             </tr>
                         @endif
                     @endforeach
@@ -231,28 +276,34 @@
         }
 
 
-            function update_published(el){
+            function updateTrnStatus(el) {
+    if ('{{env('DEMO_MODE')}}' == 'On') {
+        AIZ.plugins.notify('info', '{{ translate('Data cannot change in demo mode.') }}');
+        return;
+    }
 
-                if('{{env('DEMO_MODE')}}' == 'On'){
-                    AIZ.plugins.notify('info', '{{ translate('Data can not change in demo mode.') }}');
-                    return;
-                }
+    let status = el.checked ? 'approved' : 'Pending';
 
-                if(el.checked){
-                    var status = 1;
-                }
-                else{
-                    var status = 0;
-                }
-                $.post('{{ route('customers.published') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
-                    if(data == 1){
-                        AIZ.plugins.notify('success', '{{ translate('Published User updated successfully') }}');
-                    }
-                    else{
-                        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                    }
-                });
-                }
+    $.post('{{ route('customers.updateTrnStatus') }}', 
+        {
+            _token: '{{ csrf_token() }}',
+            id: el.value,
+            trn_status: status
+        }, 
+        function(data) {
+            if (data.success) {
+                AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
+                // Optional: Update the display status dynamically
+                $(el).closest('tr').find('.status-text').text(status);
+            } else {
+                AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+            }
+        }
+    );
+}
+
+
+
     </script>
 @endsection
 

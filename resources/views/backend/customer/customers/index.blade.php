@@ -50,6 +50,7 @@
                         <th>{{translate('Name')}}</th>
                         <th data-breakpoints="lg">{{translate('Email Address')}}</th>
                         <th data-breakpoints="lg">{{translate('Phone')}}</th>
+                        <th data-breakpoints="lg">{{translate('referral Code')}}</th>
                         <th data-breakpoints="lg">{{translate('Package')}}</th>
                         <th data-breakpoints="lg">{{translate('Wallet Balance')}}</th>
                         <th data-breakpoints="lg">{{translate('Active')}}</th>
@@ -74,11 +75,9 @@
                                 <td>@if($user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif {{$user->name}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->phone}}</td>
-                                <td>
-                                    @if ($user->customer_package != null)
-                                    {{$user->customer_package->getTranslation('name')}}
-                                    @endif
-                                </td>
+                                <td>{{$user->referral_code}}</td>
+                                <td>{{$user->package_amount}}</td>
+
                                 <td>{{single_price($user->balance)}}</td>
                                 
                                 

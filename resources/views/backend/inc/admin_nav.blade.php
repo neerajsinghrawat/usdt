@@ -79,13 +79,13 @@
             <div class="d-flex justify-content-around align-items-center align-items-stretch">
                 <div class="aiz-topbar-item d-none d-sm-block">
                     <div class="d-flex align-items-center h-100 dropdown">
-                        <a class="dropdown-toggle no-arrow h-100" data-toggle="dropdown" href="javascript:void(0);"
+                        {{-- <a class="dropdown-toggle no-arrow h-100" data-toggle="dropdown" href="javascript:void(0);"
                             role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="btn btn-soft-blue btn-sm d-flex align-items-center rounded-2 hov-svg-white">
                                 <span class="fw-500 mx-2 mr-0 d-none d-md-block">{{ translate('Add New') }}</span>
                                 <i class="las fs-18 la-plus"></i>
                             </span>
-                        </a>
+                        </a> --}}
 
                         <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated dropdown-menu-md" style="top: 15px !important;">
                             @can('add_new_product')
@@ -114,7 +114,7 @@
         </div>
         <div class="d-flex justify-content-around align-items-center align-items-stretch">
             <!-- Notifications -->
-            @can('view_notifications')
+            {{-- @can('view_notifications')
                 <div class="aiz-topbar-item mr-3">
                     <div class="align-items-stretch d-flex dropdown">
                         <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button"
@@ -172,10 +172,10 @@
                         </div>
                     </div>
                 </div>
-            @endcan
+            @endcan --}}
 
             <!-- language -->
-            @php
+            {{-- @php
                 if (Session::has('locale')) {
                     $locale = Session::get('locale', Config::get('app.locale'));
                 } else {
@@ -204,7 +204,7 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
+            </div> --}}
             <!-- User -->
             <div class="aiz-topbar-item">
                 <div class="align-items-stretch d-flex dropdown">

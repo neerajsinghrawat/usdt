@@ -15,7 +15,11 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens, HasRoles;
 
-
+    public function userCoinAudit()
+    {
+        return $this->hasMany(UserCoinAudit::class, 'user_id');
+    }
+    
     public function sendEmailVerificationNotification()
     {
         $this->notify(new EmailVerificationNotification());
@@ -27,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code' ,'parent_id' , 'status', 'referral_code', 'referred_by','id_document','document_image','package_no'
+        'name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code' ,'parent_id' , 'status', 'referral_code', 'referred_by','id_document','document_image','package_no','package_amount','pending_usdt'
     ];
 
    
