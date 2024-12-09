@@ -407,7 +407,9 @@ class RegisterController extends Controller
     //         // Insert an entry in the coin audit table for the total coin allocation
     //         \DB::table('user_coin_audit')->insert($coinAuditData);
     //     }
+
     // }
+    // sadfgsd
 
 
 
