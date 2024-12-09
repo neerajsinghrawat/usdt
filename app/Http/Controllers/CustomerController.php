@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\UserCoinAudit;
+use App\Models\WithdrawalRequest;
 
 class CustomerController extends Controller
 {
@@ -223,6 +224,63 @@ class CustomerController extends Controller
 }
 
 
+
+public function Withdrawal_request(Request $request)
+{
+    $sort_search = null;
+    $usersQuery = User::where('user_type', 'customer')
+        ->whereNotNull('email_verified_at')
+        ->orderBy('created_at', 'desc');
+
+    // Search filter if present
+    if ($request->has('search')) {
+        $sort_search = $request->search;
+        $usersQuery->where(function ($query) use ($sort_search) {
+            $query->where('name', 'like', '%' . $sort_search . '%')
+                  ->orWhere('email', 'like', '%' . $sort_search . '%');
+        });
+    }
+
+    // Eager load the related withdrawal requests along with selected fields
+    $users = $usersQuery->with(['withdrawalRequests' => function ($query) {
+        $query->select(
+            'user_id',
+            'type',
+            'comments',
+            'start_date',
+            'approved_date',
+            'transaction_type',
+            'action',
+            'amount'
+        );
+    }])->paginate(15);
+
+    return view('backend.customer.customers.Withdrawal', compact('users', 'sort_search'));
+}
+        public function updateWithStatus(Request $request)
+        {
+            \Log::info('Request data:', $request->all()); // Log incoming data
+
+            $request->validate([
+                'id' => 'required|exists:withdrawal_requests,id',
+                'trn_status' => 'required|string|in:approved,rejected,pending',
+            ]);
+
+            $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
+            $withdrawalRequest->action = $request->trn_status;
+
+            if ($request->trn_status === 'approved') {
+                $withdrawalRequest->approved_date = now();
+            } else {
+                $withdrawalRequest->approved_date = null;
+            }
+
+            if ($withdrawalRequest->save()) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Failed to update the status.']);
+            }
+        }
 
 
 

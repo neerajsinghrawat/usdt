@@ -4,40 +4,17 @@
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="align-items-center">
-        <h1 class="h3">{{translate('All Requests ROI')}}</h1>
+        <h1 class="h3">{{translate('All Withdrawal Request')}}</h1>
     </div>
 </div>
 
 
 <div class="card">
-    {{-- <form class="" id="sort_customers" action="" method="GET"> --}}
-        {{-- <div class="card-header row gutters-5">
-            <div class="col">
-                <h5 class="mb-0 h6">{{translate('Requests')}}</h5>
-            </div>
-
-            <div class="dropdown mb-2 mb-md-0">
-                <button class="btn border dropdown-toggle" type="button" data-toggle="dropdown">
-                    {{translate('Bulk Action')}}
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item confirm-alert" href="javascript:void(0)"  data-target="#bulk-delete-modal">{{translate('Delete selection')}}</a>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group mb-0">
-                    <input type="text" class="form-control" id="search" name="search"@isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type email or name & Enter') }}">
-                </div>
-            </div>
-
-            
-        </div> --}}
 
         <form class="" id="filter_form" action="{{ route('pay-request') }}" method="GET">
             <div class="card-header row gutters-5  text-right" >
                 <div class="col">
-                    <h5 class="mb-0 h6">{{translate('Requests')}}</h5>
+                    <h5 class="mb-0 h6">{{translate('Withdrawal Request')}}</h5>
                 </div>
         
                 <div class="col-md-2">
@@ -82,75 +59,77 @@
                 <button type="submit" class="btn btn-primary">{{ translate('Filter') }}</button>
             </div>
         </div>
-                
-        
+
               
             </div>
         </form>
-        
-        
-        
 
         <div class="card-body">
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
-                        <th>{{ translate('SR No.') }}</th>
-                        <th>{{ translate('Name') }}</th>
-                        <th>{{ translate('Email Address') }}</th>
-                        <th>{{ translate('Wallet USDT') }}</th>
-                        <th>{{ translate('Package Amount') }}</th>
-                        <th>{{ translate('Type') }}</th>
-                        <th>{{ translate('Comments') }}</th>
-                        <th>{{ translate('Start Date') }}</th>
-                        <th>{{ translate('Approved Date') }}</th>
-                        <th>{{ translate('Transaction Type') }}</th>
-                        <th>{{ translate('Action') }}</th>
-                        <th>{{ translate('Amount') }}</th>
-                        <th>{{ translate('Approval') }}</th>
+                        <th>{{translate('SR No.')}}</th>
+                        <th>{{translate('Name')}}</th>
+                        <th>{{translate('Email Address')}}</th>
+                        <th>{{translate('Wallet USDT')}}</th>
+                        <th>{{translate('Package Amount')}}</th>
+                        
+                        <th>{{translate('Type')}}</th>
+                        <th>{{translate('Comments')}}</th>
+                        <th>{{translate('Start Date')}}</th>
+                        <th>{{translate('Approved Date')}}</th>
+                        <th>{{translate('Transaction Type')}}</th>
+                        <th>{{translate('Action')}}</th>
+                        <th>{{translate('Amount')}}</th>
+                        <th>{{translate('Approval')}}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $key => $user)
-                        @if ($user != null)
-                            <tr>
-                                <td>{{ ($key + 1) + ($users->currentPage() - 1) * $users->perPage() }}</td>
-                                <td>{{ $user->name }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->email }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->wallet_usdt }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->package_amount }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->type }}</td> <!-- Fixed from $request->type to $user->type -->
-                                <td>{{ $user->comments }}</td> <!-- Fixed from $request->comments to $user->comments -->
-                                <td>{{ $user->start_date }}</td> <!-- Fixed from $request->start_date to $user->start_date -->
-                                <td>{{ $user->approved_date }}</td> <!-- Fixed from $request->approved_date to $user->approved_date -->
-                                <td>{{ $user->transaction_type }}</td> <!-- Fixed from $request->transaction_type to $user->transaction_type -->
-                                <td>{{ $user->action }}</td> <!-- Fixed from $request->action to $user->action -->
-                                <td>{{ $user->amount }}</td> <!-- Fixed from $request->amount to $user->amount -->
-                                {{-- <td class="status-text">{{ $user->status }}</td> <!-- Display the status --> --}}
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'approved')">
-                                                <i class="fas fa-check"></i> Approve
-                                            </a>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'rejected')">
-                                                <i class="fas fa-times"></i> Reject
-                                            </a>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'pending')">
-                                                <i class="fas fa-clock"></i> Pending
-                                            </a>
-                                        </div>
+                    @foreach($users as $user)
+                    @if ($user->withdrawalRequests)
+                        @foreach($user->withdrawalRequests as $request)
+                        <tr data-id="{{ $request->id }}">
+                            <td>{{ $loop->parent->iteration + $loop->index + ($users->currentPage() - 1) * $users->perPage() }}</td>
+
+                            <td>{{ $request->user->name }}</td>
+                            <td>{{ $request->user->email }}</td>
+                            <td>{{ $request->user->wallet_usdt }}</td>
+                            <td>{{ $request->user->package_amount }}</td>
+                           
+                            <td>{{ $request->type }}</td>
+                            <td>{{ $request->comments }}</td>
+                            <td>{{ $request->start_date }}</td>
+                            <td>{{ $request->approved_date }}</td>
+                            <td>{{ $request->transaction_type }}</td>
+                            <td>{{ $request->action }}</td>
+                            <td>{{ $request->amount }}</td>
+                           
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'approved')">
+                                            <i class="fas fa-check"></i> Approve
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'rejected')">
+                                            <i class="fas fa-times"></i> Reject
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'pending')">
+                                            <i class="fas fa-clock"></i> Pending
+                                        </a>
                                     </div>
-                                </td>
-                            </tr>
-                        @endif
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        @endforeach
+                    @endif
                     @endforeach
                 </tbody>
+                
             </table>
-            
             <div class="aiz-pagination">
                 {{ $users->appends(request()->input())->links() }}
             </div>
@@ -265,33 +244,38 @@
             });
         }
 
+        function updateWithStatus(el, status) {
+    console.log('updateWithStatus called with status:', status);
 
-            function updateTrnStatus(el) {
-    if ('{{env('DEMO_MODE')}}' == 'On') {
+    if ('{{ env('DEMO_MODE') }}' === 'On') {
         AIZ.plugins.notify('info', '{{ translate('Data cannot change in demo mode.') }}');
         return;
     }
 
-    let status = el.checked ? 'approved' : 'Pending';
+    const requestId = el.closest('tr').dataset.id;
+    console.log('Request ID:', requestId);
 
-    $.post('{{ route('customers.updateTrnStatus') }}', 
+    $.post('{{ route('customers.updateWithStatus') }}', 
         {
             _token: '{{ csrf_token() }}',
-            id: el.value,
+            id: requestId,
             trn_status: status
-        }, 
+        },
         function(data) {
+            console.log('Response data:', data);
+
             if (data.success) {
                 AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
-                // Optional: Update the display status dynamically
-                $(el).closest('tr').find('.status-text').text(status);
+                $(el).closest('tr').find('.status-text').text(status.charAt(0).toUpperCase() + status.slice(1));
+                $(el).closest('tr').find('.action-text').text(status.charAt(0).toUpperCase() + status.slice(1));
             } else {
                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
             }
         }
-    );
+    ).fail(function(xhr) {
+        console.error('Request failed:', xhr.responseText);
+    });
 }
-
 
 
     </script>

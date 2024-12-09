@@ -191,12 +191,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
     Route::resource('customers', CustomerController::class);
     Route::controller(CustomerController::class)->group(function () {
         Route::get('/pay-request', 'pay_request')->name('pay-request');
+        Route::get('/Withdrawal-request', 'Withdrawal_request')->name('Withdrawal-request');
         Route::get('customers_ban/{customer}', 'ban')->name('customers.ban');
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
         Route::get('/customers/destroy/{id}', 'destroy')->name('customers.destroy');
         Route::post('/bulk-customer-delete', 'bulk_customer_delete')->name('bulk-customer-delete');
         Route::post('/customers/published', 'updatePublished')->name('customers.published');
-        Route::post('/customers/update-trn-status', 'updateTrnStatus')->name('customers.updateTrnStatus'); // New route
+        Route::post('/customers/update-trn-status', 'updateTrnStatus')->name('customers.updateTrnStatus');
+        Route::post('/customers/updateWithStatus', 'updateWithStatus')->name('customers.updateWithStatus');
+
         
     });
 

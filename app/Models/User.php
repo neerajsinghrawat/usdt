@@ -19,7 +19,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserCoinAudit::class, 'user_id');
     }
-    
+    public function withdrawalRequests()
+{
+    return $this->hasMany(WithdrawalRequest::class);
+}
     public function sendEmailVerificationNotification()
     {
         $this->notify(new EmailVerificationNotification());

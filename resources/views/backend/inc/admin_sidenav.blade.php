@@ -550,17 +550,24 @@
                             @can('view_all_customers')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('customers.index') }}" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">{{ translate('Users list') }}</span>
+                                        <span class="aiz-side-nav-text">{{('Users list') }}</span>
                                     </a>
                                 </li> 
                             @endcan
                             @can('view_all_payrequest')
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('pay-request') }}" class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{ translate('request payment list') }}</span>
+                                    <span class="aiz-side-nav-text">{{ ('All Requests ROI') }}</span>
                                 </a>
                             </li>
-                        @endcan
+                            @endcan
+                            @can('view_all_Withdrawal')
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('Withdrawal-request') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ ('All Withdrawal Requests') }}</span>
+                                </a>
+                            </li>
+                            @endcan
                             {{-- @can('view_all_customers')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('customers.index') }}" class="aiz-side-nav-link">
