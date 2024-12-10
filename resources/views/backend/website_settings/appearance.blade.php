@@ -107,7 +107,7 @@
             </div>
 
 			<!-- General Settings -->
-    		<div class="card">
+    		{{-- <div class="card">
     			<div class="card-header">
     				<h6 class="fw-600 mb-0">{{ translate('General Settings') }}</h6>
     			</div>
@@ -189,7 +189,7 @@
 						</div>
                     </form>
     			</div>
-    		</div>
+    		</div> --}}
 
 			<!-- Global SEO -->
     		<div class="card">
@@ -283,7 +283,7 @@
     		</div>
 
 			<!-- Website Popup -->
-            <div class="card">
+           {{--  <div class="card">
     			<div class="card-header">
     				<h6 class="fw-600 mb-0">{{ translate('Website Popup') }}</h6>
     			</div>
@@ -326,7 +326,7 @@
 						</div>
     				</form>
     			</div>
-    		</div>
+    		</div> --}}
 
 			<!-- Custom Script -->
             <div class="card">

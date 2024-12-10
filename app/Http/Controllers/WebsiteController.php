@@ -19,8 +19,9 @@ class WebsiteController extends Controller
     }
 
     public function header(Request $request)
-    {
-        return view('backend.website_settings.header');
+    {   
+        $lang = $request->lang;
+        return view('backend.website_settings.header', compact('lang'));
     }
     public function footer(Request $request)
     {

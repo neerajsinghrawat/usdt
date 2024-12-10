@@ -240,8 +240,8 @@
                                                     <span
                                                         class="user-top-menu-name has-transition ml-3">{{ translate('Support Ticket') }}</span>
                                                 </a>
-                                            </li>
-                                        @endif -->
+                                            </li>-->
+                                        @endif 
                                         <li class="d-none d-xl-block" style="color: var(--bs-tertiary-bg);">
                                             <a href="{{ route('logout') }}"
                                                 class="dropdown-item text-body-emphasis bg-body-secondary-hover py-2 text-base leading-6 fw-semibold">

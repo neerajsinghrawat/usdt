@@ -34,7 +34,7 @@
 						</div>
 	                </div>
 					<!-- Show Language Switcher -->
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
 						<label class="col-md-3 col-from-label">{{translate('Show Language Switcher?')}}</label>
 						<div class="col-md-8">
 							<label class="aiz-switch aiz-switch-success mb-0">
@@ -65,8 +65,8 @@
 								<span></span>
 							</label>
 						</div>
-					</div>
-					<div class="border-top pt-3">
+					</div> --}}
+					{{-- <div class="border-top pt-3">
 						<!-- Topbar Banner Large -->
 						<div class="form-group row">
 		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner Large') }}</label>
@@ -125,7 +125,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> --}}
                     <div class="border-top pt-3">
 						<!-- Help line number -->
                         <div class="form-group row">
@@ -140,7 +140,7 @@
                     </div>
 					<div class="border-top pt-3">
 						<!-- Header Nav Menu Text Color -->
-						<div class="form-group row">
+						<!-- <div class="form-group row">
 							<label class="col-md-3 col-from-label mb-md-0">{{translate('Header Nav Menu Text Color')}}</label>
 							<div class="col-md-8 d-flex">
 								<input type="hidden" name="types[]" value="header_nav_menu_text">
@@ -153,7 +153,7 @@
 									<label for="header_nav_menu_text_dark" class="mb-0 ml-2">{{translate('Dark')}}</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						<!-- Header Nav Menus -->
 						<label class="">{{translate('Header Nav Menu')}}</label>
 						<div class="header-nav-menu">
@@ -214,6 +214,94 @@
 			</div>
 		</div>
 	</div>
+
+
+				<!-- About Widget -->
+    			<div class="col-lg-6">
+    				<div class="card shadow-none bg-light">
+    					<div class="card-header">
+    						<h6 class="mb-0">{{ translate('About Widget') }}</h6>
+    					</div>
+    					<div class="card-body">
+    						<form action="{{ route('business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    							@csrf
+								<!-- Footer Logo -->
+    							<div class="form-group">
+    			                    <label class="form-label" for="signinSrEmail">{{ translate('Footer Logo') }}</label>
+    			                    <div class="input-group " data-toggle="aizuploader" data-type="image">
+    			                        <div class="input-group-prepend">
+    			                            <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+    			                        </div>
+    			                        <div class="form-control file-amount">{{ translate('Choose File') }}</div>
+    									<input type="hidden" name="types[]" value="footer_logo">
+    			                        <input type="hidden" name="footer_logo" class="selected-files" value="{{ get_setting('footer_logo') }}">
+    			                    </div>
+    								<div class="file-preview"></div>
+    			                </div>
+								<!-- About description -->
+    			                <div class="form-group">
+    								<label>{{ translate('About description') }} ({{ translate('Translatable') }})</label>
+    								<input type="hidden" name="types[][{{ $lang }}]" value="about_us_description">
+    								<textarea class="aiz-text-editor form-control" name="about_us_description" data-buttons='[["font", ["bold", "underline", "italic"]],["para", ["ul", "ol"]],["view", ["undo","redo"]]]' placeholder="Type.." data-min-height="150">
+                                        {!! get_setting('about_us_description',null,$lang); !!}
+                                    </textarea>
+    							</div>
+								<!-- Play Store Link -->
+                               <!--  <div class="form-group">
+                                    <label>{{ translate('Play Store Link') }}</label>
+                                    <input type="hidden" name="types[]" value="play_store_link">
+                                    <input type="text" class="form-control" placeholder="http://" name="play_store_link" value="{{ get_setting('play_store_link') }}">
+                                </div>
+								
+                                <div class="form-group">
+                                    <label>{{ translate('App Store Link') }}</label>
+                                    <input type="hidden" name="types[]" value="app_store_link">
+                                    <input type="text" class="form-control" placeholder="http://" name="app_store_link" value="{{ get_setting('app_store_link') }}">
+                                </div> -->
+								<!-- Update Button -->
+								<div class="mt-4 text-right">
+									<button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
+								</div>
+    						</form>
+    					</div>
+    				</div>
+    			</div>
+
+				<!-- Contact Info Widget -->
+    			<div class="col-lg-6">
+                    <div class="card shadow-none bg-light">
+    					<div class="card-header">
+    						<h6 class="mb-0">{{ translate('Contact Info Widget') }}</h6>
+    					</div>
+    					<div class="card-body">
+                            <form action="{{ route('business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    							@csrf
+								<!-- Contact address -->
+                                <div class="form-group">
+    								<label>{{ translate('Contact address') }} ({{ translate('Translatable') }})</label>
+    								<input type="hidden" name="types[][{{ $lang }}]" value="contact_address">
+    								<input type="text" class="form-control" placeholder="{{ translate('Address') }}" name="contact_address" value="{{ get_setting('contact_address',null,$lang) }}">
+    							</div>
+								<!-- Contact phone -->
+                                <div class="form-group">
+    								<label>{{ translate('Contact phone') }}</label>
+    								<input type="hidden" name="types[]" value="contact_phone">
+    								<input type="text" class="form-control" placeholder="{{ translate('Phone') }}" name="contact_phone" value="{{ get_setting('contact_phone') }}">
+    							</div>
+								<!-- Contact email -->
+                                <div class="form-group">
+    								<label>{{ translate('Contact email') }}</label>
+    								<input type="hidden" name="types[]" value="contact_email">
+    								<input type="text" class="form-control" placeholder="{{ translate('Email') }}" name="contact_email" value="{{ get_setting('contact_email') }}">
+    							</div>
+								<!-- Update Button -->
+								<div class="mt-4 text-right">
+									<button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
+								</div>
+    						</form>
+    					</div>
+    				</div>
+    			</div>
 </div>
 
 @endsection
