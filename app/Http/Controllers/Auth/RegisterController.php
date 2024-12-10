@@ -405,7 +405,7 @@ class RegisterController extends Controller
 
         // return $this->registered($request, $user)
         //     ?: redirect($this->redirectPath());
-        return redirect()->route('user.login_pay');
+        
         return redirect()->route('user.login_pay', ['id' => $user->id]);
     }
 

@@ -115,12 +115,8 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-    
-        // Optionally handle the user ID if provided
-        $user = $id ? User::find($id) : null;
-    print_r($user);
-    die();
-        return view('auth.' . get_setting('authentication_layout_select') . '.user_pay', compact('user'));
+
+        return view('auth.' . get_setting('authentication_layout_select') . '.user_pay', compact('id'));
     }
     
 
@@ -135,32 +131,29 @@ public function SaveTransactionRegister(Request $request)
         ]);
     
         try {
-            // Debugging the incoming data
-            // Uncomment this if you need to debug further
-            // dd($request->all());
-    
-            // Get the authenticated user
-            $user = Auth::user();
-            if (!$user) {
-                return redirect()->route('login')->with('error', 'Please log in to perform this action.');
-            }
-    
-            // Handle file upload
-            if ($request->hasFile('transaction_image')) {
-                $file = $request->file('transaction_image');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = 'uploads/transactions/';
-                
-                // Move the file to the desired location
-                $file->move(public_path($filePath), $filename);
-    
-                // Save transaction data to the user
-                $user->transaction_id = $request->transaction_id;
-                $user->transaction_image = $filePath . $filename;
-                $user->save();
-    
-                return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
-            }
+            if (isset($request->user_id) && !empty($request->user_id)) {
+                $user = User::find($request->user_id);
+                if (!$user) {
+                    return redirect()->route('login')->with('error', 'Please log in to perform this action.');
+                }
+
+                // Handle file upload
+                if ($request->hasFile('transaction_image')) {
+                    $file = $request->file('transaction_image');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filePath = 'uploads/transactions/';
+                    
+                    // Move the file to the desired location
+                    $file->move(public_path($filePath), $filename);
+
+                    // Save transaction data to the user
+                    $user->transaction_id = $request->transaction_id;
+                    $user->transaction_image = $filePath . $filename;
+                    $user->save();
+
+                    return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
+                }
+            }           
     
             return back()->with('error', 'Transaction image upload failed.');
         } catch (\Exception $e) {

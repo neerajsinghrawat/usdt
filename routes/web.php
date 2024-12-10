@@ -110,7 +110,7 @@ Route::controller(HomeController::class)->group(function () {
 
     Route::get('/users/login', 'login')->name('user.login')->middleware('handle-demo-login');
     // Route::get('/users/login_pay', 'login_pay')->name('user.login_pay');
-    Route::post('/save-transaction-register', 'SaveTransactionRegister')->name('save.transaction.register');
+    Route::post('/save-transaction-register', 'SaveTransactionRegister')->name('save.transaction_register');
     Route::get('/users/login_pay/{id?}', 'login_pay')->name('user.login_pay');
 
 

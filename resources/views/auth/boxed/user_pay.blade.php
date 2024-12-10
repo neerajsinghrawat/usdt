@@ -29,7 +29,7 @@
                                 <!-- Login form -->
                                 <div class="pt-3">
                                     <div class="">
-                                            <form class="form-default"  enctype="multipart/form-data" role="form" action="{{ route('save.transaction.register') }}" method="POST">
+                                            <form class="form-default"  enctype="multipart/form-data" role="form" action="{{ route('save.transaction_register') }}" method="POST">
                                             @csrf
                                             
                                                 <div class="form-group">
@@ -68,6 +68,7 @@
 
                                             <!-- Submit Button -->
                                             <div class="mb-4 mt-4">
+                                                <input type="hidden" name="user_id" value="{{ $id; }}">
                                                 <button type="submit" class="btn btn-primary btn-block fw-700 fs-14 rounded-0">Submit</button>
                                                 {{-- <button type="submit">Submit</button> --}}
                                             </div>
