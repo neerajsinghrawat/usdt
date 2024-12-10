@@ -279,7 +279,11 @@
 
 
 
+    
+    @include('frontend.partials.modal')
 
+    @include('frontend.partials.account_delete_modal')
+    @yield('modal')
 
 
     <!-- Back to top button -->
@@ -295,7 +299,13 @@
     <script src="{{ static_asset('assets/usdt/assets/libraries/aos/aos.js') }}"></script>
     <script src="{{ static_asset('assets/usdt/assets/js/scripts.js') }}"></script>
     <script src="{{ static_asset('assets/usdt/assets/php/contact/script.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    @yield('script')
 
+    @php
+        echo get_setting('footer_script');
+    @endphp
 
 
 </body>

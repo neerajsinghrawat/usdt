@@ -11,7 +11,7 @@ class WithdrawalRequest extends Model
     protected $table = 'withdrawal_requests'; // Specify table name
 
     protected $fillable = [
-        'user_id', 'type', 'comments', 'start_date', 'approved_date', 'transaction_type', 'action', 'amount'
+        'user_id', 'type', 'comments', 'start_date', 'approved_date', 'transaction_type', 'action', 'amount', 'wallet_url'
     ];
 
 

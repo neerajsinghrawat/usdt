@@ -315,6 +315,7 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function ()
     Route::controller(WalletController::class)->group(function () {
         Route::get('/wallet', 'index')->name('wallet.index');
         Route::post('/recharge', 'recharge')->name('wallet.recharge');
+        Route::post('/withdrawal', 'withdrawal')->name('wallet.withdrawal');
     });
 
     // Support Ticket

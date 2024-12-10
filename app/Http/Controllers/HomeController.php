@@ -22,6 +22,7 @@ use App\Models\ProductQuery;
 use Illuminate\Http\Request;
 use App\Models\AffiliateConfig;
 use App\Models\CustomerPackage;
+use App\Models\WithdrawalRequest;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
@@ -239,11 +240,13 @@ public function SaveTransactionRegister(Request $request)
         if (Auth::user()->user_type == 'seller') {
             return redirect()->route('seller.dashboard');
         } elseif (Auth::user()->user_type == 'customer') {
+
+            $wallets = WithdrawalRequest::where('user_id', Auth::user()->id)->latest()->paginate(10);
             $users_cart = Cart::where('user_id', auth()->user()->id)->first();
             if ($users_cart) {
                 flash(translate('You had placed your items in the shopping cart. Try to order before the product quantity runs out.'))->warning();
             }
-            return view('frontend.user.customer.dashboard');
+            return view('frontend.user.customer.dashboard', compact('wallets'));
         } elseif (Auth::user()->user_type == 'delivery_boy') {
             return view('delivery_boys.dashboard');
         } else {

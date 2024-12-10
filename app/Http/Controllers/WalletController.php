@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Wallet;
+use App\Models\WithdrawalRequest;
+use App\Models\userCoinAudit;
 use Auth;
 use Session;
 
@@ -17,7 +19,8 @@ class WalletController extends Controller
 
     public function index()
     {
-        $wallets = Wallet::where('user_id', Auth::user()->id)->latest()->paginate(10);
+        //$wallets = Wallet::where('user_id', Auth::user()->id)->latest()->paginate(10);
+        $wallets = userCoinAudit::where('user_id', Auth::user()->id)->whereIn('type', ['coins_distributed', 'roi'])->latest()->paginate(10);
         return view('frontend.user.wallet.index', compact('wallets'));
     }
 
@@ -33,6 +36,37 @@ class WalletController extends Controller
         if (class_exists($decorator)) {
             return (new $decorator)->pay($request);
         }
+    }
+
+
+    public function withdrawal(Request $request)
+    {
+
+        $data['wallet_url'] = $request->wallet_url;
+        $data['amount'] = $request->amount+3;
+        //echo "<pre>";print_r($data);die;
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if ($user->wallet_usdt > $request->amount){
+                $withdrawalRequest = WithdrawalRequest::create([
+                    'user_id' =>  $user->id,
+                    'comments' => 'Withdrawal request for manual transaction',
+                    'start_date' => now(),
+                    'status' => 'pending',
+                    'wallet_url' => $data['wallet_url'],
+                    'amount' => $data['amount'],
+
+                ]);
+                flash(translate('Withdrawal Request sent successfully'))->success();
+            }else{
+                flash(translate('Withdrawal Request failed. Insufficient wallet balance.'))->error();
+            }
+        }else{
+            flash(translate('Please Login First!'))->error();
+        }
+        return redirect()->route('dashboard');
+
     }
 
     public function wallet_payment_done($payment_data, $payment_details)

@@ -16,7 +16,7 @@
                 <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
                 <div class="py-2">
                     <div class="fs-14 fw-400 text-center">{{ translate('Wallet Balance') }}</div>
-                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->balance) }}</div>
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->wallet_usdt) }}</div>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
                 <div class="py-2">
                     <div class="fs-14 fw-400 text-center">{{ translate('Pending USDT') }}</div>
-                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->balance) }}</div>
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->pending_usdt) }}</div>
                 </div>
             </div>
         </div>
@@ -42,14 +42,15 @@
             <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('History (Wallet/Pending)') }}</h5>
         </div>
         <div class="card-body py-0">
-            <table class="table aiz-table mb-4">
+            <table class="table  mb-4">
                 <thead class="text-gray fs-12">
                     <tr>
                         <th class="pl-0">#</th>
                         <th data-breakpoints="lg">{{ translate('Date') }}</th>
+                        <th data-breakpoints="lg">{{ translate('Approved Date') }}</th>
+                        <th data-breakpoints="lg">{{ translate('Comment') }}</th>
                         <th>{{ translate('Amount') }}</th>
-                        <th data-breakpoints="lg">{{ translate('Payment Method') }}</th>
-                        <th class="text-right pr-0">{{ translate('Status') }}</th>
+                        <th class="text-center pr-0">{{ translate('Status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="fs-14">
@@ -57,18 +58,17 @@
                         <tr>
                             <td class="pl-0">{{ sprintf('%02d', ($key+1)) }}</td>
                             <td>{{ date('d-m-Y', strtotime($wallet->created_at)) }}</td>
-                            <td class="fw-700">{{ single_price($wallet->amount) }}</td>
-                            <td>{{ ucfirst(str_replace('_', ' ', $wallet->payment_method)) }}</td>
-                            <td class="text-right pr-0">
-                                @if ($wallet->offline_payment)
-                                    @if ($wallet->approval)
-                                        <span class="badge badge-inline badge-success p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Approved') }}</span>
-                                    @else
-                                        <span class="badge badge-inline badge-info p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Pending') }}</span>
-                                    @endif
+                            <td>{{ date('d-m-Y', strtotime($wallet->approved_date)) }}</td>
+                            <td>{{ $wallet->comments }}</td>
+                            <td class="fw-700">{{ single_price($wallet->coins_added) }}</td>
+                            <td class="text-center pr-0">
+                             
+                                @if ($wallet->trn_status == 'approved')
+                                    <span class="badge badge-inline badge-success p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Approved') }}</span>
                                 @else
-                                    N/A
+                                    <span class="badge badge-inline badge-info p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Pending') }}</span>
                                 @endif
+                                
                             </td>
                         </tr>
                     @endforeach

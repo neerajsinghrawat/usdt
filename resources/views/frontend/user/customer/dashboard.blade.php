@@ -9,7 +9,7 @@
             <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
                 <div class="p-4 h-100 w-100 w-xl-50">
                     <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
-                    <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->balance) }}</h1>
+                    <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->wallet_usdt) }}</h1>
                     <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
                     
                     <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
@@ -32,9 +32,9 @@
             <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
                 <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
                 <div class="py-2">
-                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->balance) }}</div>
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->package_amount) }}</div>
 
-                    <div class="fs-14 fw-400 text-center">{{ translate('Package Activated') }}</div>
+                    <div class="fs-14 fw-400 text-center">{{ translate('Package Activated IDs') }}</div>
                 </div>
             </div>
         </div>
@@ -45,14 +45,13 @@
             <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('Withdrawal History') }}</h5>
         </div>
         <div class="card-body py-0">
-            <?php /*<table class="table aiz-table mb-4">
+            <table class="table mb-4">
                 <thead class="text-gray fs-12">
                     <tr>
                         <th class="pl-0">#</th>
                         <th data-breakpoints="lg">{{ translate('Date') }}</th>
                         <th>{{ translate('Amount') }}</th>
-                        <th data-breakpoints="lg">{{ translate('Payment Method') }}</th>
-                        <th class="text-right pr-0">{{ translate('Status') }}</th>
+                        <th class="text-center pr-0">{{ translate('Status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="fs-14">
@@ -61,17 +60,14 @@
                             <td class="pl-0">{{ sprintf('%02d', ($key+1)) }}</td>
                             <td>{{ date('d-m-Y', strtotime($wallet->created_at)) }}</td>
                             <td class="fw-700">{{ single_price($wallet->amount) }}</td>
-                            <td>{{ ucfirst(str_replace('_', ' ', $wallet->payment_method)) }}</td>
-                            <td class="text-right pr-0">
-                                @if ($wallet->offline_payment)
-                                    @if ($wallet->approval)
-                                        <span class="badge badge-inline badge-success p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Approved') }}</span>
-                                    @else
-                                        <span class="badge badge-inline badge-info p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Pending') }}</span>
-                                    @endif
+                            <td class="text-center pr-0">
+                             
+                                @if ($wallet->status == 'approved')
+                                    <span class="badge badge-inline badge-success p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Approved') }}</span>
                                 @else
-                                    N/A
+                                    <span class="badge badge-inline badge-info p-3 fs-12" style="border-radius: 25px; min-width: 80px !important;">{{ translate('Pending') }}</span>
                                 @endif
+                                
                             </td>
                         </tr>
                     @endforeach
@@ -80,7 +76,7 @@
             </table>
             <div class="aiz-pagination mb-4">
                 {{ $wallets->links() }}
-            </div>*/ ?>
+            </div>
         </div>
     </div>
     <!-- <div class="row gutters-16 mt-2">
@@ -152,18 +148,59 @@
 
 @section('modal')
     <!-- Wallet Recharge Modal -->
-    @include('frontend.partials.wallet_modal')
-    <script type="text/javascript">
-        function show_wallet_modal() {
-            $('#wallet_modal').modal('show');
-        }
-    </script>
+<div class="modal fade" id="wallet_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ translate(' Withdrawal Wallet') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body gry-bg px-3 pt-3" style="overflow-y: inherit;">
+                <form class="" action="{{ route('wallet.withdrawal') }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>{{ translate('TRC20 USDT wallet URL') }} <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" lang="en" class="form-control mb-3 rounded-0" name="wallet_url"
+                                placeholder="{{ translate('URL') }}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>{{ translate('Amount') }} <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" lang="en" class="form-control mb-3 rounded-0" name="amount"
+                                placeholder="{{ translate('Amount') }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit"
+                            class="btn btn-sm btn-primary rounded-0 transition-3d-hover mr-1">{{ translate('Confirm') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
 
     <!-- Address modal Modal -->
     @include('frontend.partials.address.address_modal')
 @endsection
 
 @section('script')
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function show_wallet_modal(){
+            $('#wallet_modal').modal('show');
+        }
+    </script>
     @include('frontend.partials.address.address_js')
 
     @if (get_setting('google_map') == 1)
