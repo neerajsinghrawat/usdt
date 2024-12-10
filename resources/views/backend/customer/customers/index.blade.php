@@ -80,7 +80,7 @@
                                 <td>{{$user->package_amount}}</td>
                                 
                                 <td>{{single_price($user->balance)}}</td>
-                                {{-- <td>{{$user->transaction_image}}</td>
+                                {{-- <td>{{$userfsadf->transaction_image}}</td>
                                  --}}
                               
                                  <td>
@@ -95,7 +95,7 @@
                                         {{ translate('No image available') }}
                                     @endif
                                 </td>
-                                
+                                  
                                 
                                 
                                 
