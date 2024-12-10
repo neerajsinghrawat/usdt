@@ -95,19 +95,18 @@
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
-                        <th>{{ translate('SR No.') }}</th>
-                        <th>{{ translate('Name') }}</th>
-                        <th>{{ translate('Email Address') }}</th>
-                        <th>{{ translate('Wallet USDT') }}</th>
-                        <th>{{ translate('Package Amount') }}</th>
-                        <th>{{ translate('Type') }}</th>
-                        <th>{{ translate('Comments') }}</th>
+                       
+                        <th>{{translate('SR No.')}}</th> <!-- SR No. Column -->
+                        <th>{{translate('Name')}}</th>
+                        <th data-breakpoints="lg">{{translate('Email Address')}}</th>
+                        <th data-breakpoints="lg">{{translate('Phone')}}</th>
+                        <th data-breakpoints="lg">{{translate('referral Code')}}</th>
+                        <th data-breakpoints="lg">{{translate('Package')}}</th>
+                        <th data-breakpoints="lg">{{translate('Wallet Balance')}}</th>
+                        <th>{{ translate('Requested USDT') }}</th>
                         <th>{{ translate('Start Date') }}</th>
                         <th>{{ translate('Approved Date') }}</th>
-                        <th>{{ translate('Transaction Type') }}</th>
-                        <th>{{ translate('Action') }}</th>
-                        <th>{{ translate('Amount') }}</th>
-                        <th>{{ translate('Approval') }}</th>
+                        <th data-breakpoints="lg">{{translate('Approval')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,42 +114,53 @@
                         @if ($user != null)
                             <tr>
                                 <td>{{ ($key + 1) + ($users->currentPage() - 1) * $users->perPage() }}</td>
-                                <td>{{ $user->name }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->email }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->wallet_usdt }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->package_amount }}</td> <!-- Fixed from $request->user to $user -->
-                                <td>{{ $user->type }}</td> <!-- Fixed from $request->type to $user->type -->
-                                <td>{{ $user->comments }}</td> <!-- Fixed from $request->comments to $user->comments -->
-                                <td>{{ $user->start_date }}</td> <!-- Fixed from $request->start_date to $user->start_date -->
-                                <td>{{ $user->approved_date }}</td> <!-- Fixed from $request->approved_date to $user->approved_date -->
-                                <td>{{ $user->transaction_type }}</td> <!-- Fixed from $request->transaction_type to $user->transaction_type -->
-                                <td>{{ $user->action }}</td> <!-- Fixed from $request->action to $user->action -->
-                                <td>{{ $user->amount }}</td> <!-- Fixed from $request->amount to $user->amount -->
-                                {{-- <td class="status-text">{{ $user->status }}</td> <!-- Display the status --> --}}
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'approved')">
-                                                <i class="fas fa-check"></i> Approve
-                                            </a>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'rejected')">
-                                                <i class="fas fa-times"></i> Reject
-                                            </a>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="updateTrnStatus(this, 'pending')">
-                                                <i class="fas fa-clock"></i> Pending
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
+                                
+                                <td>@if($user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif {{$user->name}}</td>
+                                <td>{{$user->email}}</td>
+                                <td>{{$user->phone}}</td>
+                                <td>{{$user->referral_code}}</td>
+                                <td>{{single_price($user->package_amount)}}</td>
+                                <td>{{single_price($user->wallet_usdt)}}</td>
+                                                
+                        
+
+                        <td>
+                            @php
+                                $requestedCoins = $user->userCoinAudit
+                                    ->where('type', 'roi') // Filter only 'roi' type records
+                                    ->sum('coins_added'); // Sum the 'coins_added' for 'roi'
+                            @endphp
+                            {{single_price( $requestedCoins) }}
+                        </td>
+                      
+                        
+                        <td>
+                            @foreach ($user->userCoinAudit as $audit)
+                                {{ $audit->created_at->format('d-m-Y h:i A') }}<br>
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($user->userCoinAudit as $audit)
+                                {{ $audit->updated_at->format('d-m-Y h:i A') }}<br>
+                            @endforeach
+                        </td>
+                        
+
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="updateTrnStatus(this)" value="{{ $audit->id }}" type="checkbox" 
+                                       @if ($audit->trn_status === 'approved') checked @endif>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                        
+                        
+                             
                             </tr>
                         @endif
                     @endforeach
                 </tbody>
             </table>
-            
             <div class="aiz-pagination">
                 {{ $users->appends(request()->input())->links() }}
             </div>
