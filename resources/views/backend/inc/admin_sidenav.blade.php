@@ -1302,13 +1302,13 @@
                                     </a>
                                 </li>
                             @endcan
-                            {{-- @can('authentication_layout_settings')
+                            @can('authentication_layout_settings')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('website.authentication-layout-settings') }}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{translate('Authentication Layout & Settings')}}</span>
                                     </a>
                                 </li>
-                            @endcan --}}
+                            @endcan
                             @can('header_setup')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('website.header') }}" class="aiz-side-nav-link">

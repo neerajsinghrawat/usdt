@@ -10,7 +10,7 @@
                         <div class="row no-gutters">
                             <!-- Left Side Image-->
                             <div class="col-lg-6">
-                                <img src="{{ uploaded_asset(get_setting('customer_login_page_image')) }}" alt="{{ translate('Customer Login Page Image') }}" class="img-fit h-100">
+                                <img src="{{ uploaded_asset(get_setting('register_payment_image')) }}" alt="{{ translate('Customer Login Page Image') }}" class="img-fit h-100">
                             </div>
 
                             <!-- Right Side -->
@@ -23,7 +23,7 @@
                                 <!-- Titles -->
                                 <div class="text-center text-lg-left">
                                     <h1 class="fs-20 fs-md-24 fw-700 text-primary" style="text-transform: uppercase;">{{ translate('GO Payment !')}}</h1>
-                                    <h5 class="fs-14 fw-400 text-dark">{{ translate(' pay to your account')}}</h5>
+                                    <h5 class="fs-14 fw-400 text-dark">{{ translate(' Pay to your account')}}</h5>
                                 </div>
 
                                 <!-- Login form -->

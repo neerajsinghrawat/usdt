@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
+<!-- 
 <div class="aiz-titlebar text-left mt-2 mb-3 pb-2 border-bottom border-gray">
 	<div class="row align-items-center">
 		<div class="col">
@@ -17,7 +17,7 @@
 			@php $authentication_layout = get_setting('authentication_layout_select'); @endphp
 			<div class="row">
 
-				<!-- Boxed -->
+				//Boxed 
 				<div class="col-xxl-3 col-lg-4 col-sm-6 my-3">
 					<label class="aiz-megabox d-block mb-3">
 						<input value="boxed" type="radio" name="authentication_layout_select" @if(($authentication_layout == null) || ($authentication_layout == 'boxed')) checked @endif>
@@ -35,8 +35,6 @@
 						</span>
 					</div>
 				</div>
-
-				<!-- Free 2 -->
 				<div class="col-xxl-3 col-lg-4 col-sm-6 my-3">
 					<label class="aiz-megabox d-block mb-3">
 						<input value="free" type="radio" name="authentication_layout_select" @if($authentication_layout == 'free') checked @endif>
@@ -55,7 +53,6 @@
 					</div>
 				</div>
 
-				<!-- Focused -->
 				<div class="col-xxl-3 col-lg-4 col-sm-6 my-3">
 					<label class="aiz-megabox d-block mb-3">
 						<input value="focused" type="radio" name="authentication_layout_select" @if($authentication_layout == 'focused') checked @endif>
@@ -85,13 +82,13 @@
 					</div>
 				</div>
 				<div class="col-md-4 d-flex align-items-center justify-content-end">
-					<!-- Save Button -->
+					
 					<button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Save') }}</button>
 				</div>
 			</div>
 		</form>
 	</div>
-</div>
+</div> -->
 
 <!-- Authentication Page Images -->
 <div class="aiz-titlebar border-bottom border-gray mb-3 mt-2 mt-md-5 pb-2 text-left">
@@ -150,52 +147,23 @@
 					<div class="file-preview box"></div>
 				</div>
 
-				@if (get_setting('vendor_system_activation') == 1)
-					<!-- Seller Login page Image -->
-					<div class="form-group col-lg-6">
-						<label class="from-label fs-13">{{ translate('Seller Login Page Image') }}</label>
-						<div class="input-group " data-toggle="aizuploader" data-type="image">
-							<div class="input-group-prepend">
-								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
-							</div>
-							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
-							<input type="hidden" name="types[]" value="seller_login_page_image">
-							<input type="hidden" name="seller_login_page_image" value="{{ get_setting('seller_login_page_image') }}" class="selected-files">
-						</div>
-						<div class="file-preview box"></div>
-					</div>
-
-					<!-- Seller Register page Image -->
-					<div class="form-group col-lg-6">
-						<label class="from-label fs-13">{{ translate('Seller Register Page Image') }}</label>
-						<div class="input-group " data-toggle="aizuploader" data-type="image">
-							<div class="input-group-prepend">
-								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
-							</div>
-							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
-							<input type="hidden" name="types[]" value="seller_register_page_image">
-							<input type="hidden" name="seller_register_page_image" value="{{ get_setting('seller_register_page_image') }}" class="selected-files">
-						</div>
-						<div class="file-preview box"></div>
-					</div>
-				@endif
+				
 
 				
-				@if (addon_is_activated('delivery_boy'))
-					<!-- Delivery Boy Login page Background -->
-					<div class="form-group col-lg-6">
-						<label class="from-label fs-13">{{ translate('Delivery Boy Login Page Image') }}</label>
-						<div class="input-group " data-toggle="aizuploader" data-type="image">
-							<div class="input-group-prepend">
-								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
-							</div>
-							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
-							<input type="hidden" name="types[]" value="delivery_boy_login_page_image">
-							<input type="hidden" name="delivery_boy_login_page_image" value="{{ get_setting('delivery_boy_login_page_image') }}" class="selected-files">
+
+				<!-- Forgot Password Page Image -->
+				<div class="form-group col-lg-6">
+					<label class="from-label fs-13">{{ translate('Pay to your account') }}</label>
+					<div class="input-group " data-toggle="aizuploader" data-type="image">
+						<div class="input-group-prepend">
+							<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
 						</div>
-						<div class="file-preview box"></div>
+						<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+						<input type="hidden" name="types[]" value="register_payment_image">
+						<input type="hidden" name="register_payment_image" value="{{ get_setting('register_payment_image') }}" class="selected-files">
 					</div>
-				@endif
+					<div class="file-preview box"></div>
+				</div>
 
 				<!-- Forgot Password Page Image -->
 				<div class="form-group col-lg-6">
