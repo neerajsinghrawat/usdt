@@ -123,11 +123,12 @@
                                             </a>
                                         @endif
                                     @endcan
-                                    @can('delete_customer')
+                                    
+                                    {{-- @can('delete_customer')
                                         <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('customers.destroy', $user->id)}}" title="{{ translate('Delete') }}">
                                             <i class="las la-trash"></i>
                                         </a>
-                                    @endcan
+                                    @endcan --}}
                                 </td>
                             </tr>
                         @endif
@@ -294,15 +295,15 @@
                 }
 
                 function viewImage(imageUrl) {
-    // Log the URL for debugging
-    console.log(imageUrl);
+                // Log the URL for debugging
+                console.log(imageUrl);
 
-    // Set the modal image source
-    document.getElementById('modalImage').src = imageUrl;
+                // Set the modal image source
+                document.getElementById('modalImage').src = imageUrl;
 
-    // Display the modal
-    $('#imageModal').modal('show');
-}
+                // Display the modal
+                $('#imageModal').modal('show');
+                }
 
 
 

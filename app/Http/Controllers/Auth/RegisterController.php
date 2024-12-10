@@ -231,6 +231,7 @@ class RegisterController extends Controller
                         'created_at' => now(),
                         'parent_id' => $currentUser->parent_id, // Store the parent ID
                         'transaction_type' => 'credit', // Example transaction type
+                        'comments' => 'coins distributed',
                         'type' => 'coins_distributed',
                         'referral_code' => $referred_by, // Store referral code if available
                         'trn_status' => 'pending', // Add relevant comments
@@ -266,6 +267,7 @@ class RegisterController extends Controller
                         'created_at' => now(),
                         'parent_id' => $user->parent_id, // Store the parent ID
                         'transaction_type' => 'credit', // Example transaction type
+                        'comments' => 'Returns on Investment',
                         'type' => 'roi',
                         'trn_status' => 'pending',
                         'start_date' => date('Y-m-d H:m:s'),
@@ -308,7 +310,9 @@ class RegisterController extends Controller
                     'transaction_type' => 'credit',
                     'type' => 'registration_USDT',
                     'referral_code' => $referred_by,
+                    'trn_status' => 'pending',
                     'comments' => 'USDT registration',
+                    'start_date' => date('Y-m-d H:m:s'),
                 ];
 
                 if ($parent_id) {

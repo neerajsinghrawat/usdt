@@ -18,6 +18,9 @@ class UserCoinAudit extends Model
 		'amount', // Example field
 		'created_at',
 		'updated_at',
+		'comments',
+		'trn_status',
+		'start_date',
 	];
 
 	/**
