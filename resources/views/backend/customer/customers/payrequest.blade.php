@@ -139,19 +139,40 @@
                                 {{ $audit->created_at->format('d-m-Y h:i A') }}<br>
                             @endforeach
                         </td>
+                        {{-- <td>
+                            @foreach ($user->userCoinAudit as $audit)
+                                {{ $audit->approved_date->format('d-m-Y h:i A') }}<br>
+                            @endforeach
+                        </td> --}}
                         <td>
                             @foreach ($user->userCoinAudit as $audit)
-                                {{ $audit->updated_at->format('d-m-Y h:i A') }}<br>
+                                @if ($audit->approved_date)
+                                    {{ \Carbon\Carbon::parse($audit->approved_date)->format('d-m-Y h:i A') }}<br>
+                                @else
+                                    -- No Date Available --<br>
+                                @endif
                             @endforeach
                         </td>
                         
-
-                        <td>
+                        
+                        {{-- <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="updateTrnStatus(this)" value="{{ $audit->id }}" type="checkbox" 
                                        @if ($audit->trn_status === 'approved') checked @endif>
                                 <span class="slider round"></span>
                             </label>
+                        </td> --}}
+                        
+
+                        <td>
+                            <button 
+                                class="btn btn-sm {{ $audit->trn_status === 'approved' ? 'btn-success' : 'btn-primary' }}" 
+                                onclick="updateTrnStatus(this)" 
+                                data-id="{{ $audit->id }}" 
+                                data-status="{{ $audit->trn_status }}"
+                                style="{{ $audit->trn_status === 'approved' ? 'display: none;' : '' }}">
+                                {{ $audit->trn_status === 'approved' ? 'Approved' : 'Approve' }}
+                            </button>
                         </td>
                         
                         
@@ -276,30 +297,72 @@
         }
 
 
-            function updateTrnStatus(el) {
+//         function updateTrnStatus(el) {
+//     if ('{{env('DEMO_MODE')}}' == 'On') {
+//         AIZ.plugins.notify('info', '{{ translate('Data cannot change in demo mode.') }}');
+//         return;
+//     }
+
+//     let status = el.checked ? 'approved' : 'Pending';
+
+//     $.post('{{ route('customers.updateTrnStatus') }}', 
+//         {
+//             _token: '{{ csrf_token() }}',
+//             id: el.value,
+//             trn_status: status
+//         }, 
+//         function(data) {
+//             if (data.success) {
+//                 AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
+//                 // Optional: Update the display status dynamically
+//                 $(el).closest('tr').find('.status-text').text(status);
+//             } else {
+//                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+//             }
+//         }
+//     );
+// }
+
+
+
+function updateTrnStatus(el) {
     if ('{{env('DEMO_MODE')}}' == 'On') {
         AIZ.plugins.notify('info', '{{ translate('Data cannot change in demo mode.') }}');
         return;
     }
 
-    let status = el.checked ? 'approved' : 'Pending';
+    // Get the current status and toggle it
+    let currentStatus = $(el).data('status');
+    let newStatus = currentStatus === 'approved' ? 'Pending' : 'approved';
 
     $.post('{{ route('customers.updateTrnStatus') }}', 
         {
             _token: '{{ csrf_token() }}',
-            id: el.value,
-            trn_status: status
+            id: $(el).data('id'),
+            trn_status: newStatus
         }, 
         function(data) {
             if (data.success) {
+                if (newStatus === 'approved') {
+                    // Hide the button if the status is approved
+                    $(el).hide();
+                } else {
+                    // Update the button text and class dynamically
+                    $(el).text('Approve')
+                        .removeClass('btn-success')
+                        .addClass('btn-primary')
+                        .data('status', newStatus);
+                }
+
+                // Notify success
                 AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
-                // Optional: Update the display status dynamically
-                $(el).closest('tr').find('.status-text').text(status);
             } else {
                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
             }
         }
-    );
+    ).fail(function() {
+        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+    });
 }
 
 

@@ -208,7 +208,11 @@ class CustomerController extends Controller
 
             // Update the user's wallet_usdt field by adding the coins_added value
             $user->wallet_usdt += $audit->coins_added;
+
             $user->save();
+
+               // Update the approved_date field with the current timestamp
+               $audit->approved_date = now(); // or Carbon::now() if using Carbon
         }
 
         // Update the trn_status field
