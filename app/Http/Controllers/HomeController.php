@@ -109,6 +109,66 @@ class HomeController extends Controller
         return view('auth.' . get_setting('authentication_layout_select') . '.user_login');
     }
 
+   
+    public function login_pay($id = null)
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+    
+        // Optionally handle the user ID if provided
+        $user = $id ? User::find($id) : null;
+    print_r($user);
+    die();
+        return view('auth.' . get_setting('authentication_layout_select') . '.user_pay', compact('user'));
+    }
+    
+
+     
+
+public function SaveTransactionRegister(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'transaction_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
+            'transaction_id' => 'required|string|max:255', // Validate transaction ID
+        ]);
+    
+        try {
+            // Debugging the incoming data
+            // Uncomment this if you need to debug further
+            // dd($request->all());
+    
+            // Get the authenticated user
+            $user = Auth::user();
+            if (!$user) {
+                return redirect()->route('login')->with('error', 'Please log in to perform this action.');
+            }
+    
+            // Handle file upload
+            if ($request->hasFile('transaction_image')) {
+                $file = $request->file('transaction_image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = 'uploads/transactions/';
+                
+                // Move the file to the desired location
+                $file->move(public_path($filePath), $filename);
+    
+                // Save transaction data to the user
+                $user->transaction_id = $request->transaction_id;
+                $user->transaction_image = $filePath . $filename;
+                $user->save();
+    
+                return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
+            }
+    
+            return back()->with('error', 'Transaction image upload failed.');
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
     public function registration(Request $request)
     {
         if (Auth::check()) {

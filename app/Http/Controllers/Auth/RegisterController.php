@@ -88,7 +88,7 @@ class RegisterController extends Controller
     {
 
         $parentId = null;
-
+        
         if (isset($data['referral_by']) && !empty($data['referral_by'])) {
             $parentUser = User::where('referral_code', $data['referral_by'])->first();
             if ($parentUser) {
@@ -368,51 +368,6 @@ class RegisterController extends Controller
 
 
 
-    // public function coinpack($id, $parent_id, $referred_by, $package_no)
-    // {
-    //     // Base total coins for the registration process
-    //     $baseCoins = 1000;
-
-    //     // Multiply total coins by package_no (if applicable)
-    //     $totalCoins = $baseCoins * $package_no;
-
-    //     // Fetch the user who is receiving the coins (this will be the newly created user)
-    //     $user = User::find($id);
-
-    //     if ($user) {
-    //         // Step 1: Add the total coins to the newly registered user's total coins
-    //         $user->wallet_usdt = $user->wallet_usdt + $totalCoins;
-    //         $user->save();
-
-    //         // If no referral code is provided, set it to null or a default value
-    //         $referred_by = $referred_by ? $referred_by : null; // You can set a default string if needed
-
-    //         // Prepare the data for the coin audit table
-    //         $coinAuditData = [
-    //             'user_id' => $id,
-    //             'coins_added' => $totalCoins,
-    //             'action' => 'User Registration Coin Allocation',
-    //             'created_at' => now(),
-    //             'transaction_type' => 'credit',
-    //             'type' => 'registration_USDT',
-    //             'referral_code' => $referred_by,
-    //             'comments' => 'USDT registration',
-    //         ];
-
-    //         // If parent_id is provided, include it in the data
-    //         if ($parent_id) {
-    //             $coinAuditData['parent_id'] = $parent_id;
-    //         }
-
-    //         // Insert an entry in the coin audit table for the total coin allocation
-    //         \DB::table('user_coin_audit')->insert($coinAuditData);
-    //     }
-
-    // }
-    // sadfgsdsadfas
-
-
-
     public function register(Request $request)
     {
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
@@ -448,8 +403,10 @@ class RegisterController extends Controller
             }
         }
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        // return $this->registered($request, $user)
+        //     ?: redirect($this->redirectPath());
+        return redirect()->route('user.login_pay');
+        return redirect()->route('user.login_pay', ['id' => $user->id]);
     }
 
     protected function registered(Request $request, $user)
