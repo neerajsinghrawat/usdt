@@ -86,48 +86,36 @@
                 </thead>
                 <tbody>
                     @foreach($users as $user)
-                    @if ($user->withdrawalRequests)
-                        @foreach($user->withdrawalRequests as $request)
-                        <tr data-id="{{ $request->id }}">
-                            <td>{{ $loop->parent->iteration + $loop->index + ($users->currentPage() - 1) * $users->perPage() }}</td>
-
-                            <td>{{ $request->user->name }}</td>
-                            <td>{{ $request->user->email }}</td>
-                            <td>{{ $request->user->wallet_usdt }}</td>
-                            <td>{{ $request->user->package_amount }}</td>
-                           
-                            <td>{{ $request->type }}</td>
-                            <td>{{ $request->comments }}</td>
-                            <td>{{ $request->start_date }}</td>
-                            <td>{{ $request->approved_date }}</td>
-                            <td>{{ $request->transaction_type }}</td>
-                            <td>{{ $request->action }}</td>
-                            <td>{{ $request->amount }}</td>
-                           
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'approved')">
-                                            <i class="fas fa-check"></i> Approve
-                                        </a>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'rejected')">
-                                            <i class="fas fa-times"></i> Reject
-                                        </a>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="updateWithStatus(this, 'pending')">
-                                            <i class="fas fa-clock"></i> Pending
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                            
-                        </tr>
-                        @endforeach
-                    @endif
+                        @if ($user->withdrawalRequests)
+                            @foreach($user->withdrawalRequests as $request)
+                                <tr data-id="{{ $request->id }}">
+                                    <td>{{ $loop->parent->iteration + $loop->index + ($users->currentPage() - 1) * $users->perPage() }}</td>
+                                    <td>{{ $request->user->name }}</td>
+                                    <td>{{ $request->user->email }}</td>
+                                    <td>{{ $request->user->wallet_usdt }}</td>
+                                    <td>{{ $request->user->package_amount }}</td>
+                                    <td>{{ $request->type }}</td>
+                                    <td>{{ $request->comments }}</td>
+                                    <td>{{ $request->start_date }}</td>
+                                    <td>{{ $request->approved_date }}</td>
+                                    <td>{{ $request->transaction_type }}</td>
+                                    <td class="action-text">{{ ucfirst($request->action) }}</td>
+                                    <td>{{ $request->amount }}</td>
+                                    <td>
+                                        <select class="form-control form-control-sm status-dropdown" onchange="updateWithStatus(this, this.value)">
+                                            <option value="">Select Action</option>
+                                            <option value="approved" {{ $request->action == 'approved' ? 'selected' : '' }}>Approve</option>
+                                            <option value="rejected" {{ $request->action == 'rejected' ? 'selected' : '' }}>Reject</option>
+                                            <option value="pending" {{ $request->action == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        </select>
+                                    </td>
+                                    
+                                </tr>
+                            @endforeach
+                        @endif
                     @endforeach
                 </tbody>
+                
                 
             </table>
             <div class="aiz-pagination">
@@ -243,39 +231,62 @@
                 }
             });
         }
-
         function updateWithStatus(el, status) {
-    console.log('updateWithStatus called with status:', status);
-
-    if ('{{ env('DEMO_MODE') }}' === 'On') {
-        AIZ.plugins.notify('info', '{{ translate('Data cannot change in demo mode.') }}');
+    if (!status) {
+        console.warn('No status selected.');
         return;
     }
 
-    const requestId = el.closest('tr').dataset.id;
-    console.log('Request ID:', requestId);
+    console.log('Update called with status:', status);
 
-    $.post('{{ route('customers.updateWithStatus') }}', 
-        {
+    const requestId = $(el).closest('tr').data('id');
+    if (!requestId) {
+        console.error('Request ID is missing. Verify `data-id` in table rows.');
+        return;
+    }
+
+    // Disable the dropdown to prevent multiple submissions
+    $(el).prop('disabled', true);
+
+    $.ajax({
+        url: '{{ route('customers.updateWithStatus') }}',
+        type: 'POST',
+        data: {
             _token: '{{ csrf_token() }}',
             id: requestId,
             trn_status: status
         },
-        function(data) {
-            console.log('Response data:', data);
+        success: function (response) {
+            console.log('Server Response:', response);
 
-            if (data.success) {
+            if (response.success) {
                 AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
-                $(el).closest('tr').find('.status-text').text(status.charAt(0).toUpperCase() + status.slice(1));
-                $(el).closest('tr').find('.action-text').text(status.charAt(0).toUpperCase() + status.slice(1));
+
+                const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1);
+                $(el).closest('tr').find('.action-text').text(statusCapitalized);
+
+                // Update approved_date dynamically
+                if (status === 'approved') {
+                    $(el).closest('tr').find('.approved-date-text').text(new Date().toLocaleString());
+                } else {
+                    $(el).closest('tr').find('.approved-date-text').text('');
+                }
             } else {
                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
             }
+        },
+        error: function (xhr) {
+            console.error('Request failed:', xhr.responseText);
+            AIZ.plugins.notify('danger', 'An error occurred while updating status.');
+        },
+        complete: function () {
+            // Re-enable the dropdown after processing
+            $(el).prop('disabled', false);
         }
-    ).fail(function(xhr) {
-        console.error('Request failed:', xhr.responseText);
     });
 }
+
+
 
 
     </script>

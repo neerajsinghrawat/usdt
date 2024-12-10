@@ -198,8 +198,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
         Route::post('/bulk-customer-delete', 'bulk_customer_delete')->name('bulk-customer-delete');
         Route::post('/customers/published', 'updatePublished')->name('customers.published');
         Route::post('/customers/update-trn-status', 'updateTrnStatus')->name('customers.updateTrnStatus');
-        Route::post('/customers/updateWithStatus', 'updateWithStatus')->name('customers.updateWithStatus');
-
+        Route::post('/customers/updateWithStatus', 'updateWithStatus')->name('customers.updateWithStatus'); 
         
     });
 

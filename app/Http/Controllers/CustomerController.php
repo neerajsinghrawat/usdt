@@ -257,30 +257,39 @@ public function Withdrawal_request(Request $request)
 
     return view('backend.customer.customers.Withdrawal', compact('users', 'sort_search'));
 }
-        public function updateWithStatus(Request $request)
-        {
-            \Log::info('Request data:', $request->all()); // Log incoming data
+public function updateWithStatus(Request $request)
+{
+    \Log::info('Request data:', $request->all());
 
-            $request->validate([
-                'id' => 'required|exists:withdrawal_requests,id',
-                'trn_status' => 'required|string|in:approved,rejected,pending',
-            ]);
+    $request->validate([
+        'id' => 'required|exists:withdrawal_requests,id',
+        'trn_status' => 'required|string|in:approved,rejected,pending',
+    ]);
 
-            $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
-            $withdrawalRequest->action = $request->trn_status;
+    try {
+        $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
+        $withdrawalRequest->action = $request->trn_status;
 
-            if ($request->trn_status === 'approved') {
-                $withdrawalRequest->approved_date = now();
-            } else {
-                $withdrawalRequest->approved_date = null;
-            }
-
-            if ($withdrawalRequest->save()) {
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Failed to update the status.']);
-            }
+        // Update approved_date only if status is 'approved'
+        if ($request->trn_status === 'approved') {
+            $withdrawalRequest->approved_date = now();
+        } else {
+            $withdrawalRequest->approved_date = null;
         }
+
+        if ($withdrawalRequest->save()) {
+            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Failed to update the status.']);
+        }
+        
+    } catch (\Exception $e) {
+        \Log::error('Error updating status:', ['message' => $e->getMessage()]);
+        return response()->json(['success' => false, 'message' => 'An error occurred.']);
+    }
+}
+
+
 
 
 
