@@ -429,7 +429,7 @@ class RegisterController extends Controller
 
         $user = $this->create($request->all());
 
-        $this->guard()->login($user);
+        //$this->guard()->login($user);
 
         if ($user->email != null) {
             if (BusinessSetting::where('type', 'email_verification')->first()->value != 1) {

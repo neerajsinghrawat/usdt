@@ -4,16 +4,16 @@
     <div class="aiz-main-wrapper d-flex flex-column justify-content-md-center bg-white">
         <section class="bg-white overflow-hidden">
             <div class="row">
-                <div class="col-xxl-6 col-xl-9 col-lg-10 col-md-7 mx-auto py-lg-4">
+                <div class="col-xxl-10 col-xl-9 col-lg-10 col-md-7 mx-auto py-lg-4">
                     <div class="card shadow-none rounded-0 border-0">
                         <div class="row no-gutters">
                             <!-- Left Side Image-->
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <img src="{{ uploaded_asset(get_setting('customer_register_page_image')) }}" alt="{{ translate('Customer Register Page Image') }}" class="img-fit h-100">
                             </div>
 
                             <!-- Right Side -->
-                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content" style="height: auto;">
+                            <div class="col-lg-7 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content" style="height: auto;">
                                 <!-- Site Icon -->
                                 <div class="size-48px mb-3 mx-auto mx-lg-0">
                                     <img src="{{ uploaded_asset(get_setting('site_icon')) }}" alt="{{ translate('Site Icon')}}" class="img-fit h-100">
@@ -30,41 +30,19 @@
                                         <form id="reg-form" class="form-default"  enctype="multipart/form-data" role="form" action="{{ route('register') }}" method="POST">
                                             @csrf
                                             <!-- Name -->
-                                            <div class="form-group">
-                                                <label for="name" class="fs-12 fw-700 text-soft-dark">{{  translate('Full Name') }}</label>
-                                                <input type="text" class="form-control rounded-0{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{  translate('Full Name') }}" name="name">
-                                                @if ($errors->has('name'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('name') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-
-                                            <!-- Email or Phone -->
-                                            @if (addon_is_activated('otp_system'))
-                                                <div class="form-group phone-form-group mb-1">
-                                                    <label for="phone" class="fs-12 fw-700 text-soft-dark">{{  translate('Phone') }}</label>
-                                                    <input type="tel" id="phone-code" class="form-control rounded-0{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
-                                                </div>
-
-                                                <input type="hidden" name="country_code" value="">
-
-                                                <div class="form-group email-form-group mb-1 d-none">
-                                                    <label for="email" class="fs-12 fw-700 text-soft-dark">{{  translate('Email') }}</label>
-                                                    <input type="email" class="form-control rounded-0 {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email"  autocomplete="off">
-                                                    @if ($errors->has('email'))
+                                            
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="name" class="fs-12 fw-700 text-soft-dark">{{  translate('Full Name') }}</label>
+                                                    <input type="text" class="form-control rounded-0{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{  translate('Full Name') }}" name="name">
+                                                    @if ($errors->has('name'))
                                                         <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $errors->first('email') }}</strong>
+                                                            <strong>{{ $errors->first('name') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
-
-                                                <div class="form-group text-right">
-                                                    <button class="btn btn-link p-0 text-primary" type="button" onclick="toggleEmailPhone(this)"><i>*{{ translate('Use Email Instead') }}</i></button>
-                                                </div>
-                                            @else
-                                                <div class="form-group">
-                                                    <label for="email" class="fs-12 fw-700 text-soft-dark">{{  translate('Email') }}</label>
+                                                <div class="col-md-6">
+                                                     <label for="email" class="fs-12 fw-700 text-soft-dark">{{  translate('Email') }}</label>
                                                     <input type="email" class="form-control rounded-0{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email">
                                                     @if ($errors->has('email'))
                                                         <span class="invalid-feedback" role="alert">
@@ -72,89 +50,127 @@
                                                         </span>
                                                     @endif
                                                 </div>
-                                            @endif
+                                            </div>
+
+                                            <!-- Email or Phone -->
+                                           
 
                                             <!-- password -->
-                                            <div class="form-group mb-0">
-                                                <label for="password" class="fs-12 fw-700 text-soft-dark">{{  translate('Password') }}</label>
-                                                <div class="position-relative">
-                                                    <input type="password" class="form-control rounded-0{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{  translate('Password') }}" name="password">
-                                                    <i class="password-toggle las la-2x la-eye"></i>
+                                            <div class="form-group mb-0 row">
+                                                <div class="col-md-6">
+                                                    <label for="password" class="fs-12 fw-700 text-soft-dark">{{  translate('Password') }}</label>
+                                                    <div class="position-relative">
+                                                        <input type="password" class="form-control rounded-0{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{  translate('Password') }}" name="password">
+                                                        <i class="password-toggle las la-2x la-eye"></i>
+                                                    </div>
+                                                    <div class="text-right mt-1">
+                                                        <span class="fs-12 fw-400 text-gray-dark">{{ translate('Password must contain at least 6 digits') }}</span>
+                                                    </div>
+                                                    @if ($errors->has('password'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $errors->first('password') }}</strong>
+                                                        </span>
+                                                    @endif
                                                 </div>
-                                                <div class="text-right mt-1">
-                                                    <span class="fs-12 fw-400 text-gray-dark">{{ translate('Password must contain at least 6 digits') }}</span>
+                                                <div class="col-md-6">
+                                                    <label for="password_confirmation" class="fs-12 fw-700 text-soft-dark">{{  translate('Confirm Password') }}</label>
+                                                    <div class="position-relative">
+                                                        <input type="password" class="form-control rounded-0" placeholder="{{  translate('Confirm Password') }}" name="password_confirmation">
+                                                        <i class="password-toggle las la-2x la-eye"></i>
+                                                    </div>
                                                 </div>
-                                                @if ($errors->has('password'))
+                                            </div>
+
+                                        
+
+
+                                            <div class="form-group row">
+
+                                                <div class="col-md-6">
+                                                    <label for="referral_by" class="fs-12 fw-700 text-soft-dark">{{ translate(' Referral by (Optional)') }}</label>
+                                                    <input type="text" class="form-control rounded-0" placeholder="{{ translate(' Referral by') }}" name="referral_by">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="package_no" class="fs-12 fw-700 text-soft-dark">{{ translate('Number of IDs') }}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><b>1000 USDT ×</b> </span>
+                                                    </div>
+                                                    <input type="number"
+                                                        class="form-control rounded-0{{ $errors->has('package_no') ? ' is-invalid' : '' }}" 
+                                                        name="package_no" 
+                                                        id="package_no" 
+                                                        value="{{ old('package_no') }}" 
+                                                        placeholder="{{ translate('number of IDs') }}" 
+                                                        min="1" required>
+                                                </div>
+                                                @if ($errors->has('package_no'))
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('password') }}</strong>
+                                                        <strong>{{ $errors->first('package_no') }}</strong>
+                                                    </span>
+                                                @endif
+                                                </div>
+
+                                            </div>
+
+                                            <!-- <div class="form-group">
+                                                <label for="package_no" class="fs-12 fw-700 text-soft-dark">{{ translate('Number of IDs') }}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><b>1000 USDT ×</b> </span>
+                                                    </div>
+                                                    <input type="number"
+                                                        class="form-control rounded-0{{ $errors->has('package_no') ? ' is-invalid' : '' }}" 
+                                                        name="package_no" 
+                                                        id="package_no" 
+                                                        value="{{ old('package_no') }}" 
+                                                        placeholder="{{ translate('number of IDs') }}" 
+                                                        min="1" required>
+                                                </div>
+                                                @if ($errors->has('package_no'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('package_no') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div> -->
+                                            <!-- ID Document -->
+                                        <div class="form-group row">
+
+                                            <div class="col-md-6">
+                                                <label for="id_document" class="fs-12 fw-700 text-soft-dark">{{ translate('ID Document') }}</label>
+                                                <input type="text"
+                                                    class="form-control rounded-0{{ $errors->has('id_document') ? ' is-invalid' : '' }}"
+                                                    value="{{ old('id_document') }}"
+                                                    placeholder="{{ translate('Enter your ID Document Number') }}"
+                                                    name="id_document"
+                                                    id="id_document">
+                                                @if ($errors->has('id_document'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('id_document') }}</strong>
                                                     </span>
                                                 @endif
                                             </div>
 
-                                            <!-- password Confirm -->
-                                            <div class="form-group">
-                                                <label for="password_confirmation" class="fs-12 fw-700 text-soft-dark">{{  translate('Confirm Password') }}</label>
-                                                <div class="position-relative">
-                                                    <input type="password" class="form-control rounded-0" placeholder="{{  translate('Confirm Password') }}" name="password_confirmation">
-                                                    <i class="password-toggle las la-2x la-eye"></i>
-                                                </div>
+                                            <div class="col-md-6">
+                                                <label for="document_image" class="fs-12 fw-700 text-soft-dark">{{ translate('Upload Document Image') }}</label>
+                                                <input type="file" 
+                                                class="form-control rounded-0{{ $errors->has('document_image') ? ' is-invalid' : '' }}" 
+                                                name="document_image" 
+                                                accept="image/*">
+                                                
+                                                @if ($errors->has('document_image'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('document_image') }}</strong>
+                                                    </span>
+                                                @endif
                                             </div>
-
-
-                                            <div class="form-group">
-                                                <label for="referral_by" class="fs-12 fw-700 text-soft-dark">{{ translate('referral by (Optional)') }}</label>
-                                                <input type="text" class="form-control rounded-0" placeholder="{{ translate('referral by') }}" name="referral_by">
-                                            </div>
-
-
-
-                                            <!-- Package Number -->
-                                        <div class="form-group">
-                                            <label for="package_no" class="fs-12 fw-700 text-soft-dark">{{ translate('Package Number') }}</label>
-                                            <input type="number" 
-                                                class="form-control rounded-0{{ $errors->has('package_no') ? ' is-invalid' : '' }}" 
-                                                name="package_no" 
-                                                value="{{ old('package_no') }}" 
-                                                placeholder="{{ translate('Enter a package number') }}" 
-                                                min="1" max="10" required>
-                                            @if ($errors->has('package_no'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('package_no') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-
-                                            <!-- ID Document -->
-                                        <div class="form-group">
-                                            <label for="id_document" class="fs-12 fw-700 text-soft-dark">{{ translate('ID Document') }}</label>
-                                            <input type="text"
-                                                class="form-control rounded-0{{ $errors->has('id_document') ? ' is-invalid' : '' }}"
-                                                value="{{ old('id_document') }}"
-                                                placeholder="{{ translate('Enter your ID Document Number') }}"
-                                                name="id_document"
-                                                id="id_document">
-                                            @if ($errors->has('id_document'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('id_document') }}</strong>
-                                                </span>
-                                            @endif
                                         </div>
                                         
 
 
                                         <!-- Document Image -->
                                         <div class="form-group">
-                                            <label for="document_image" class="fs-12 fw-700 text-soft-dark">{{ translate('Upload Document Image') }}</label>
-                                            <input type="file" 
-                                            class="form-control rounded-0{{ $errors->has('document_image') ? ' is-invalid' : '' }}" 
-                                            name="document_image" 
-                                            accept="image/*">
                                             
-                                            @if ($errors->has('document_image'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('document_image') }}</strong>
-                                                </span>
-                                            @endif
                                         </div>
 
                                         <!-- Recaptcha -->
@@ -180,12 +196,12 @@
 
                                         <!-- Submit Button -->
                                         <div class="mb-4 mt-4">
-                                            <button type="submit" class="btn btn-primary btn-block fw-600 rounded-0">{{  translate('Create Account') }}</button>
+                                            <button type="submit" class="btn btn-lg btn-primary text-white text-sm fw-semibold ">{{  translate('Create Account') }}</button>
                                         </div>
                                         </form>
                                         
                                         <!-- Social Login -->
-                                        @if(get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1 || get_setting('apple_login') == 1)
+                                       <!--  @if(get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1 || get_setting('apple_login') == 1)
                                             <div class="text-center mb-3">
                                                 <span class="bg-white fs-12 text-gray">{{ translate('Or Join With')}}</span>
                                             </div>
@@ -219,7 +235,7 @@
                                                     </li>
                                                 @endif
                                             </ul>
-                                        @endif
+                                        @endif -->
                                     </div>
 
                                     <!-- Log In -->

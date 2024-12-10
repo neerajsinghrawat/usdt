@@ -18,6 +18,9 @@ use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Auth;
 use Storage;
+use Hash;
+use Illuminate\Validation\ValidationException;
+
 
 class LoginController extends Controller
 {
@@ -245,7 +248,7 @@ class LoginController extends Controller
         if ($request->get('phone') != null) {
             return ['phone' => "+{$request['country_code']}{$request['phone']}", 'password' => $request->get('password')];
         } elseif ($request->get('email') != null) {
-            return $request->only($this->username(), 'password');
+            return/* $request->only($this->username(), 'password');*/array_merge($request->only($this->username(), 'password'), ['status' => 1]);
         }
     }
 
@@ -255,22 +258,7 @@ class LoginController extends Controller
      */
     public function authenticated()
     {
-        if (session('temp_user_id') != null) {
-            if(auth()->user()->user_type == 'customer'){
-                Cart::where('temp_user_id', session('temp_user_id'))
-                ->update(
-                    [
-                        'user_id' => auth()->user()->id,
-                        'temp_user_id' => null
-                    ]
-                );
-            }
-            else {
-                Cart::where('temp_user_id', session('temp_user_id'))->delete();
-            }
-            Session::forget('temp_user_id');
-        }
-
+        
         if (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff') {
             CoreComponentRepository::instantiateShopRepository();
             return redirect()->route('admin.dashboard');
@@ -296,6 +284,23 @@ class LoginController extends Controller
      */
     protected function sendFailedLoginResponse(Request $request)
     {
+      $user = User::where($this->username(), $request->{$this->username()})->first();
+
+        if ($user && !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.password')],
+            ]);
+        }
+
+        if ($user && !$user->active) {
+            throw ValidationException::withMessages([
+                $this->username() => ['Your account is inactive. Please contact support.'],
+            ]);
+        }
+
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ]);
         flash(translate('Invalid login credentials'))->error();
         return back();
     }
