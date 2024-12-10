@@ -79,7 +79,7 @@
                         <th>{{translate('Start Date')}}</th>
                         <th>{{translate('Approved Date')}}</th>
                         <th>{{translate('Transaction Type')}}</th>
-                        <th>{{translate('Action')}}</th>
+                        <th>{{translate('Status')}}</th>
                         <th>{{translate('Amount')}}</th>
                         <th>{{translate('Approval')}}</th>
                     </tr>
@@ -99,15 +99,19 @@
                                     <td>{{ $request->start_date }}</td>
                                     <td>{{ $request->approved_date }}</td>
                                     <td>{{ $request->transaction_type }}</td>
-                                    <td class="action-text">{{ ucfirst($request->action) }}</td>
+                                    <td class="action-text">{{ ucfirst($request->status) }}</td>
                                     <td>{{ $request->amount }}</td>
                                     <td>
-                                        <select class="form-control form-control-sm status-dropdown" onchange="updateWithStatus(this, this.value)">
-                                            <option value="">Select Action</option>
-                                            <option value="approved" {{ $request->action == 'approved' ? 'selected' : '' }}>Approve</option>
-                                            <option value="rejected" {{ $request->action == 'rejected' ? 'selected' : '' }}>Reject</option>
-                                            <option value="pending" {{ $request->action == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        </select>
+                                        @if($request->status == 'pending')
+                                            <button class="btn btn-primary" onclick="if(confirm('Are you sure you want to approve?')) updateWithStatus(this, 'approved')">Approve</button>
+                                            <!-- 
+                                            <select class="form-control form-control-sm status-dropdown" onclick="updateWithStatus(this, this.value)">
+                                                <option value="">Select Action</option>
+                                                <option value="approved" {{ $request->status == 'approved' ? 'selected' : '' }}>Approve</option>
+                                                <option value="rejected" {{ $request->status == 'rejected' ? 'selected' : '' }}>Reject</option>
+                                                <option value="pending" {{ $request->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                            </select> -->
+                                        @endif
                                     </td>
                                     
                                 </tr>
@@ -231,59 +235,62 @@
                 }
             });
         }
-        function updateWithStatus(el, status) {
-    if (!status) {
-        console.warn('No status selected.');
-        return;
-    }
 
-    console.log('Update called with status:', status);
+    function updateWithStatus(el, status) {
 
-    const requestId = $(el).closest('tr').data('id');
-    if (!requestId) {
-        console.error('Request ID is missing. Verify `data-id` in table rows.');
-        return;
-    }
-
-    // Disable the dropdown to prevent multiple submissions
-    $(el).prop('disabled', true);
-
-    $.ajax({
-        url: '{{ route('customers.updateWithStatus') }}',
-        type: 'POST',
-        data: {
-            _token: '{{ csrf_token() }}',
-            id: requestId,
-            trn_status: status
-        },
-        success: function (response) {
-            console.log('Server Response:', response);
-
-            if (response.success) {
-                AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
-
-                const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1);
-                $(el).closest('tr').find('.action-text').text(statusCapitalized);
-
-                // Update approved_date dynamically
-                if (status === 'approved') {
-                    $(el).closest('tr').find('.approved-date-text').text(new Date().toLocaleString());
-                } else {
-                    $(el).closest('tr').find('.approved-date-text').text('');
-                }
-            } else {
-                AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-            }
-        },
-        error: function (xhr) {
-            console.error('Request failed:', xhr.responseText);
-            AIZ.plugins.notify('danger', 'An error occurred while updating status.');
-        },
-        complete: function () {
-            // Re-enable the dropdown after processing
-            $(el).prop('disabled', false);
+        if (!status) {
+            console.warn('No status selected.');
+            return;
         }
-    });
+
+        console.log('Update called with status:', status);
+        
+
+        const requestId = $(el).closest('tr').data('id');
+        if (!requestId) {
+            console.error('Request ID is missing. Verify `data-id` in table rows.');
+            return;
+        }
+        // Disable the dropdown to prevent multiple submissions
+        $(el).prop('disabled', true);
+
+        $.ajax({
+            url: '{{ route('customers_updateWithStatus') }}',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: requestId,
+                trn_status: status
+            },
+            success: function (response) {
+                console.log('Server Response:', response);
+                //alert(response.success);
+                if (response.success) {
+                    AIZ.plugins.notify('success', '{{ translate(' Transaction status updated successfully') }}');
+
+                    const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1);
+                    $(el).closest('tr').find('.action-text').text(statusCapitalized);
+
+                    // Update approved_date dynamically
+                    if (status === 'approved') {
+                        $(el).closest('tr').find('.approved-date-text').text(new Date().toLocaleString());
+                    } else {
+                        $(el).closest('tr').find('.approved-date-text').text('');
+                    }
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+                location.reload();
+            },
+            error: function (xhr) {
+                console.error('Request failed:', xhr.responseText);
+                AIZ.plugins.notify('danger', 'An error occurred while updating status.');
+            },
+            complete: function () {
+                // Re-enable the dropdown after processing
+                $(el).prop('disabled', false);
+            }
+        });
 }
 
 

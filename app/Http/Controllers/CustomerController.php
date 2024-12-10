@@ -244,13 +244,14 @@ public function Withdrawal_request(Request $request)
     // Eager load the related withdrawal requests along with selected fields
     $users = $usersQuery->with(['withdrawalRequests' => function ($query) {
         $query->select(
+            'id',
             'user_id',
             'type',
             'comments',
             'start_date',
             'approved_date',
             'transaction_type',
-            'action',
+            'status',
             'amount'
         );
     }])->paginate(15);
@@ -260,27 +261,31 @@ public function Withdrawal_request(Request $request)
 public function updateWithStatus(Request $request)
 {
     \Log::info('Request data:', $request->all());
-
+    
     $request->validate([
         'id' => 'required|exists:withdrawal_requests,id',
         'trn_status' => 'required|string|in:approved,rejected,pending',
     ]);
 
+
     try {
         $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
-        $withdrawalRequest->action = $request->trn_status;
+        $withdrawalRequest->status = $request->trn_status;
 
         // Update approved_date only if status is 'approved'
-        if ($request->trn_status === 'approved') {
+        if ($request->trn_status == 'approved') {
             $withdrawalRequest->approved_date = now();
         } else {
             $withdrawalRequest->approved_date = null;
         }
 
         if ($withdrawalRequest->save()) {
-            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            if ($request->trn_status == 'approved') {
+                $this->updateWallet($withdrawalRequest);
+            }
+            return response()->json(['success' => true, 'message' => 'Updated successfully.']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Failed to update the status.']);
+            return response()->json(['success' => false, 'message' => 'Failed to update .']);
         }
         
     } catch (\Exception $e) {
@@ -290,7 +295,19 @@ public function updateWithStatus(Request $request)
 }
 
 
+public function updateWallet($withdrawalRequest='')
+{   
+    if (!empty($withdrawalRequest)) {
+        $user = User::findOrFail($withdrawalRequest->user_id);
+        if ($user->wallet_usdt >= $withdrawalRequest->amount) {
+            $user->wallet_usdt -= $withdrawalRequest->amount;
+            $user->save();
+        }
+        
+    }
 
+    return true;
+}
 
 
     /**
