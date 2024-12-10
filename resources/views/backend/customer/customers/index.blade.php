@@ -53,6 +53,7 @@
                         <th data-breakpoints="lg">{{translate('referral Code')}}</th>
                         <th data-breakpoints="lg">{{translate('Package')}}</th>
                         <th data-breakpoints="lg">{{translate('Wallet Balance')}}</th>
+                        <th data-breakpoints="lg">{{translate('transaction image')}}</th>
                         <th data-breakpoints="lg">{{translate('Active')}}</th>
                         <th class="text-right">{{translate('Options')}}</th>
                     </tr>
@@ -77,8 +78,26 @@
                                 <td>{{$user->phone}}</td>
                                 <td>{{$user->referral_code}}</td>
                                 <td>{{$user->package_amount}}</td>
-
+                                
                                 <td>{{single_price($user->balance)}}</td>
+                                {{-- <td>{{$user->transaction_image}}</td>
+                                 --}}
+                              
+                                 <td>
+                                    @if($user->transaction_image)
+                                        <button 
+                                            class="btn btn-primary" type="button"
+                                            onclick="viewImage('{{ asset('public/' . $user->transaction_image) }}')"
+                                        >
+                                            View Image
+                                        </button>
+                                    @else
+                                        {{ translate('No image available') }}
+                                    @endif
+                                </td>
+                                
+                                
+                                
                                 
                                 
                         <td>
@@ -158,6 +177,27 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">{{ translate('Transaction Image') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Transaction Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 @endsection
 
 @section('modal')
@@ -252,6 +292,21 @@
                     }
                 });
                 }
+
+                function viewImage(imageUrl) {
+    // Log the URL for debugging
+    console.log(imageUrl);
+
+    // Set the modal image source
+    document.getElementById('modalImage').src = imageUrl;
+
+    // Display the modal
+    $('#imageModal').modal('show');
+}
+
+
+
+
     </script>
 @endsection
 

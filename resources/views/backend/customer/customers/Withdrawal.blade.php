@@ -74,11 +74,12 @@
                         <th>{{translate('Wallet USDT')}}</th>
                         <th>{{translate('Package Amount')}}</th>
                         
-                        <th>{{translate('Type')}}</th>
+                        {{-- <th>{{translate('Type')}}</th> --}}
                         <th>{{translate('Comments')}}</th>
+                        <th>{{translate('Wallet Url')}}</th>
                         <th>{{translate('Start Date')}}</th>
                         <th>{{translate('Approved Date')}}</th>
-                        <th>{{translate('Transaction Type')}}</th>
+                        {{-- <th>{{translate('Transaction Type')}}</th> --}}
                         <th>{{translate('Status')}}</th>
                         <th>{{translate('Amount')}}</th>
                         <th>{{translate('Approval')}}</th>
@@ -94,23 +95,24 @@
                                     <td>{{ $request->user->email }}</td>
                                     <td>{{ $request->user->wallet_usdt }}</td>
                                     <td>{{ $request->user->package_amount }}</td>
-                                    <td>{{ $request->type }}</td>
+                                    {{-- <td>{{ $request->type }}</td> --}}
                                     <td>{{ $request->comments }}</td>
+                                    <td>{{ $request->wallet_url ?? 'No URL' }}</td>
+                                    
                                     <td>{{ $request->start_date }}</td>
                                     <td>{{ $request->approved_date }}</td>
-                                    <td>{{ $request->transaction_type }}</td>
+                                    {{-- <td>{{ $request->transaction_type }}</td> --}}
                                     <td class="action-text">{{ ucfirst($request->status) }}</td>
                                     <td>{{ $request->amount }}</td>
-                                    <td>
+                                    {{-- <td>
                                         @if($request->status == 'pending')
                                             <button class="btn btn-primary" onclick="if(confirm('Are you sure you want to approve?')) updateWithStatus(this, 'approved')">Approve</button>
-                                            <!-- 
-                                            <select class="form-control form-control-sm status-dropdown" onclick="updateWithStatus(this, this.value)">
-                                                <option value="">Select Action</option>
-                                                <option value="approved" {{ $request->status == 'approved' ? 'selected' : '' }}>Approve</option>
-                                                <option value="rejected" {{ $request->status == 'rejected' ? 'selected' : '' }}>Reject</option>
-                                                <option value="pending" {{ $request->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                            </select> -->
+                                           
+                                        @endif
+                                    </td> --}}
+                                    <td>
+                                        @if($request->status == 'pending')
+                                            <button class="btn btn-primary" onclick="openUploadModal(this)">Approve</button>
                                         @endif
                                     </td>
                                     
@@ -165,6 +167,35 @@
         </div>
     </div>
 </div>
+
+
+<!-- Image Upload Modal -->
+<div id="uploadModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload translation Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadImageForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="image" accept="image/*" required>
+                    <input type="hidden" id="requestId" name="id">
+                    <input type="hidden" id="status" name="trn_status" value="approved">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitImageAndUpdate()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 @section('modal')
@@ -235,6 +266,39 @@
                 }
             });
         }
+
+
+        function openUploadModal(el) {
+    const requestId = $(el).closest('tr').data('id');
+    $('#requestId').val(requestId);  // Set the request ID in the hidden field
+    $('#uploadModal').modal('show'); // Show the modal
+}
+
+
+function submitImageAndUpdate() {
+    const formData = new FormData($('#uploadImageForm')[0]);
+
+    $.ajax({
+        url: '{{ route('customers_updateWithStatus') }}',
+        type: 'POST',
+        data: formData,
+        processData: false,  // Prevent jQuery from processing the data
+        contentType: false,  // Prevent jQuery from setting contentType
+        success: function(response) {
+            if (response.success) {
+                AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
+                $('#uploadModal').modal('hide'); // Close the modal
+                location.reload();  // Reload the page to reflect the changes
+            } else {
+                AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+            }
+        },
+        error: function(xhr) {
+            AIZ.plugins.notify('danger', 'An error occurred while uploading the image.');
+        }
+    });
+}
+
 
     function updateWithStatus(el, status) {
 

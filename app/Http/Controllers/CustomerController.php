@@ -256,47 +256,102 @@ public function Withdrawal_request(Request $request)
             'approved_date',
             'transaction_type',
             'status',
-            'amount'
+            'amount',
+            'wallet_url'
         );
     }])->paginate(15);
 
     return view('backend.customer.customers.Withdrawal', compact('users', 'sort_search'));
 }
+
+// public function updateWithStatus(Request $request)
+// {
+//     \Log::info('Request data:', $request->all());
+    
+//     $request->validate([
+//         'id' => 'required|exists:withdrawal_requests,id',
+//         'trn_status' => 'required|string|in:approved,rejected,pending',
+//         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+//     ]);
+
+
+//     try {
+//         $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
+//         $withdrawalRequest->status = $request->trn_status;
+
+//         // Update approved_date only if status is 'approved'
+//         if ($request->trn_status == 'approved') {
+//             $withdrawalRequest->approved_date = now();
+//         } else {
+//             $withdrawalRequest->approved_date = null;
+//         }
+
+//         if ($withdrawalRequest->save()) {
+//             if ($request->trn_status == 'approved') {
+
+//                 $this->updateWallet($withdrawalRequest);
+//             }
+//             return response()->json(['success' => true, 'message' => 'Updated successfully.']);
+//         } else {
+//             return response()->json(['success' => false, 'message' => 'Failed to update .']);
+//         }
+        
+//     } catch (\Exception $e) {
+//         \Log::error('Error updating status:', ['message' => $e->getMessage()]);
+//         return response()->json(['success' => false, 'message' => 'An error occurred.']);
+//     }
+// }
+
+
 public function updateWithStatus(Request $request)
 {
     \Log::info('Request data:', $request->all());
-    
+
+    // Validate the incoming request
     $request->validate([
         'id' => 'required|exists:withdrawal_requests,id',
         'trn_status' => 'required|string|in:approved,rejected,pending',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Optional image validation
     ]);
 
-
     try {
+        // Find the withdrawal request
         $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
         $withdrawalRequest->status = $request->trn_status;
 
-        // Update approved_date only if status is 'approved'
+        // Handle image upload if status is 'approved'
         if ($request->trn_status == 'approved') {
+            if ($request->hasFile('image')) {
+                // Store the uploaded image
+                $image = $request->file('image');
+                $imagePath = $image->store('withdrawal_images', 'public'); // Store in the 'withdrawal_images' directory
+
+                // Save the image path to the withdrawal request
+                $withdrawalRequest->image = $imagePath;
+            }
             $withdrawalRequest->approved_date = now();
         } else {
             $withdrawalRequest->approved_date = null;
         }
 
+        // Save the withdrawal request
         if ($withdrawalRequest->save()) {
             if ($request->trn_status == 'approved') {
+                // Call the method to update the wallet or any other logic
                 $this->updateWallet($withdrawalRequest);
             }
+
             return response()->json(['success' => true, 'message' => 'Updated successfully.']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Failed to update .']);
+            return response()->json(['success' => false, 'message' => 'Failed to update.']);
         }
-        
+
     } catch (\Exception $e) {
         \Log::error('Error updating status:', ['message' => $e->getMessage()]);
         return response()->json(['success' => false, 'message' => 'An error occurred.']);
     }
 }
+
 
 
 public function updateWallet($withdrawalRequest='')
