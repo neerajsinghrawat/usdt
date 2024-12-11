@@ -17,24 +17,8 @@
         @endphp
         <!-- Customer info -->
         <div class="p-4 text-center mb-4 border-bottom position-relative">
-            {{-- <!-- Image -->
-            <span class="avatar avatar-md mb-3">
-                @if ($user->avatar_original != null)
-                    <img src="{{ $user_avatar }}"
-                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                @else
-                    <img src="{{ static_asset('assets/img/avatar-place.png') }}" class="image rounded-circle"
-                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                @endif
-            </span> --}}
-
             <!-- Image -->
             <span class="avatar avatar-md mb-3">
-                @php
-                    // print_r($user->avatar);
-                    // die();
-                @endphp
-            
                 @if ($user->avatar != null)
                     <img src="{{ asset('public/' . $user->avatar) }}"
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
@@ -43,18 +27,30 @@
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
                 @endif
             </span>
-            
-
+        
             <!-- Name -->
             <h4 class="h5 fs-14 mb-1 fw-700 text-dark">{{ $user->name }}</h4>
-            <!-- Phone -->
-            @if ($user->phone != null)
-                <div class="text-truncate opacity-60 fs-12">{{ $user->phone }}</div>
-            <!-- Email -->
-            @else
-                <div class="text-truncate opacity-60 fs-12">{{ $user->email }}</div>
-            @endif
-        </div>
+            <!-- Phone, Email, or Referral Code -->
+                <div class="text-truncate opacity-60 fs-12">
+                    @if ($user->phone != null)
+                        {{ $user->email }}
+                    @elseif ($user->email != null)
+                    {{ $user->phone }}
+                    @endif
+                <br>
+
+                <!-- Always show the referral code if it's available -->
+
+                <span id="referralCode">{{ $user->referral_code }}</span>
+
+                <!-- Use an icon for copying the referral URL -->
+                <i class="las la-copy ms-2" id="copyReferralCode" onclick="copyReferralCode()" style="cursor: pointer;"></i>
+                
+                </div>
+                
+                
+    </div>
+            
 
         <!-- Menus -->
         <div class="sidemnenu">
@@ -412,3 +408,26 @@
 
     </div>
 </div>
+
+
+<!-- Script to copy referral code -->
+<script>
+    function copyReferralCode() {
+        // Get the referral code from the element
+        var referralCode = document.getElementById('referralCode').innerText;
+
+        // Construct the registration URL with the referral code
+        var referralUrl = window.location.origin + '/usdt/users/registration?referral_code=' + referralCode;
+
+        // Create a temporary textarea element to copy the URL to clipboard
+        var textarea = document.createElement('textarea');
+        textarea.value = referralUrl;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        // Notify the user that the URL has been copied
+        alert('Referral URL copied to clipboard! You can now share this link to register with your referral code.');
+    }
+</script>

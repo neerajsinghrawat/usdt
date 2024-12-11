@@ -86,10 +86,16 @@
 
                                             <div class="form-group row">
 
-                                                <div class="col-md-6">
+                                                {{-- <div class="col-md-6">
                                                     <label for="referral_by" class="fs-12 fw-700 text-soft-dark">{{ translate(' Referral by (Optional)') }}</label>
                                                     <input type="text" class="form-control rounded-0" placeholder="{{ translate(' Referral by') }}" name="referral_by">
+                                                </div> --}}
+
+                                                <div class="col-md-6">
+                                                    <label for="referral_by" class="fs-12 fw-700 text-soft-dark">{{ translate('Referral by (Optional)') }}</label>
+                                                    <input type="text" class="form-control rounded-0" placeholder="{{ translate('Referral by') }}" name="referral_by" id="referral_by">
                                                 </div>
+                                                
                                                 <div class="col-md-6">
                                                     <label for="package_no" class="fs-12 fw-700 text-soft-dark">{{ translate('Number of IDs') }}</label>
                                                 <div class="input-group">
@@ -113,26 +119,8 @@
 
                                             </div>
 
-                                            <!-- <div class="form-group">
-                                                <label for="package_no" class="fs-12 fw-700 text-soft-dark">{{ translate('Number of IDs') }}</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><b>1000 USDT ×</b> </span>
-                                                    </div>
-                                                    <input type="number"
-                                                        class="form-control rounded-0{{ $errors->has('package_no') ? ' is-invalid' : '' }}" 
-                                                        name="package_no" 
-                                                        id="package_no" 
-                                                        value="{{ old('package_no') }}" 
-                                                        placeholder="{{ translate('number of IDs') }}" 
-                                                        min="1" required>
-                                                </div>
-                                                @if ($errors->has('package_no'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('package_no') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div> -->
+                                            
+                                            </div>
                                             <!-- ID Document -->
                                         <div class="form-group row">
 
@@ -266,6 +254,7 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @endif
 
+
     <script type="text/javascript">
         @if(get_setting('google_recaptcha') == 1)
         // making the CAPTCHA  a required field for form submission
@@ -287,4 +276,15 @@
         });
         @endif
     </script>
+
+<script>
+    // Automatically populate referral code from URL if available
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('referral_code');
+        if (referralCode) {
+            document.getElementById('referral_by').value = referralCode;
+        }
+    }
+</script>
 @endsection

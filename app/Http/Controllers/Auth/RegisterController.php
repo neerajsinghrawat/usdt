@@ -130,6 +130,7 @@ class RegisterController extends Controller
             if (isset($user->id) && isset($user->parent_id) && isset($user->referred_by) && isset($user->package_no)) {
                 $this->coindivided($user->id, $user->parent_id, $user->referred_by, $user->package_no);
             }
+            
 
             if (isset($user->id) && isset($user->package_no)) {
                 $this->coinpack($user->id, $user->parent_id ?? null, $user->referred_by ?? null, $user->package_no);
