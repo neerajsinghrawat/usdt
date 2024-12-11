@@ -107,11 +107,15 @@
                             </label>
                         </td>
                                 <td class="text-right">
-                                    @can('login_as_customer')
+
+                                    {{-- tree --}}
+                                    {{-- @can('login_as_customer')
                                         <a href="{{route('customers.login', encrypt($user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this Customer') }}">
                                             <i class="las la-edit"></i>
                                         </a>
-                                    @endcan
+                                    @endcan --}}
+
+
                                     @can('ban_customer')
                                         @if($user->banned != 1)
                                             <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="confirm_ban('{{route('customers.ban', encrypt($user->id))}}');" title="{{ translate('Ban this Customer') }}">
