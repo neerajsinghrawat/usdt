@@ -346,6 +346,22 @@
 
                 <!-- Manage Profile -->
                 <li class="aiz-side-nav-item">
+                    <a href="{{ route('team') }}" class="aiz-side-nav-link {{ areActiveRoutes(['team']) }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <!-- First User Icon -->
+                          <circle cx="8" cy="8" r="4" fill="#b5b5bf" />
+                          <!-- Second User Icon -->
+                          <circle cx="16" cy="8" r="4" fill="#b5b5bf" />
+                          <!-- First User's Group Base -->
+                          <ellipse cx="8" cy="16" rx="6" ry="3" fill="#b5b5bf" />
+                          <!-- Second User's Group Base -->
+                          <ellipse cx="16" cy="16" rx="6" ry="3" fill="#b5b5bf" />
+                        </svg>
+
+                        <span class="aiz-side-nav-text ml-3">{{ translate(' Team') }}</span>
+                    </a>
+                </li>
+                <li class="aiz-side-nav-item">
                     <a href="{{ route('profile') }}" class="aiz-side-nav-link {{ areActiveRoutes(['profile']) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8094" data-name="Group 8094" transform="translate(3176 -602)">

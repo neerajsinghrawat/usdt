@@ -17,6 +17,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\FlashDeal;
 use App\Models\OrderDetail;
+use App\Models\TeamHistory;
 use Illuminate\Support\Str;
 use App\Models\ProductQuery;
 use Illuminate\Http\Request;
@@ -252,6 +253,19 @@ public function SaveTransactionRegister(Request $request)
         } else {
             abort(404);
         }
+    }
+
+    /**
+     * Show the customer/seller team.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function team()
+    {
+        $history = TeamHistory::with('referreduser')->where('user_id', Auth::user()->id)->latest()->paginate(10);
+        //echo "<pre>";print_r($history);die;
+        return view('frontend.user.customer.team', compact('history'));
+       
     }
 
     public function profile(Request $request)

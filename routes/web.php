@@ -254,6 +254,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
     Route::controller(HomeController::class)->group(function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard')->middleware(['prevent-back-history']);
         Route::get('/profile', 'profile')->name('profile');
+        Route::get('/team', 'team')->name('team');
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');

@@ -281,6 +281,37 @@
     				</form>
     			</div>
     		</div>
+            <!-- Cookies Agreement -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="fw-600 mb-0">{{ translate('Team Value Reward') }}</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('business_settings.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Cookies Agreement Text -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-from-label">{{ translate('Team Value Reward') }}</label>
+                            <div class="col-md-8">
+                                <input type="hidden" name="types[]" value="team_value_reward">
+                                <textarea
+                                    class="aiz-text-editor form-control"
+                                    data-buttons='[["font", ["bold", "underline", "italic", "clear"]],["para", ["ul", "ol", "paragraph"]],["style", ["style"]],["color", ["color"]],["table", ["table"]],["insert", ["link", "picture", "video"]],["view", ["fullscreen", "codeview", "undo", "redo"]]]'
+                                    placeholder="Team Value Reward.."
+                                    data-min-height="300"
+                                    name="team_value_reward"
+                                    
+                                >{{ get_setting('team_value_reward') }}</textarea>
+                            </div>
+                        </div>
+                       
+                        <!-- Update Button -->
+                        <div class="mt-4 text-right">
+                            <button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
 			<!-- Website Popup -->
            {{--  <div class="card">
