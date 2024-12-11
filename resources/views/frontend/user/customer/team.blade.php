@@ -12,7 +12,9 @@
                 
                 <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
                 <div class="py-2">
-                    <div class="fs-30 fw-700 text-center">{{ Auth::user()->package_amount }} <small>USDT</small></div>
+                    {{-- <div class="fs-30 fw-700 text-center">{{ Auth::user()->users ->team_value }} <small>USDT</small></div> --}}
+                    <div class="fs-30 fw-700 text-center">{{ $teamValue }} <small>USDT</small></div>
+
 
                     <div class="fs-14 fw-400 text-center">{{ translate('Team value') }}</div>
                 </div>

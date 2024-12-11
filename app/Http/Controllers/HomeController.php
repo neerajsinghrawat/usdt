@@ -294,11 +294,19 @@ public function SaveTransactionRegister(Request $request)
      */
     public function team()
     {
+        
+
         $history = TeamHistory::with('referreduser')->where('user_id', Auth::user()->id)->latest()->paginate(10);
         //echo "<pre>";print_r($history);die;
-        return view('frontend.user.customer.team', compact('history'));
+       
+        $teamValue = Auth::user()->team_value;
+    
+        return view('frontend.user.customer.team', compact('history','teamValue'));
        
     }
+
+
+
 
     public function profile(Request $request)
     {
