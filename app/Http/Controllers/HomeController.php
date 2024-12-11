@@ -122,47 +122,99 @@ class HomeController extends Controller
     }
     
 
-     
+    public function login_pay_request()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+    
+    
+        // Handle fallback logic
+        if (Route::currentRouteName() == 'seller.login' && get_setting('vendor_system_activation') == 1) {
+            return view('auth.' . get_setting('authentication_layout_select') . '.seller_login');
+        } else if (Route::currentRouteName() == 'deliveryboy.login' && addon_is_activated('delivery_boy')) {
+            return view('auth.' . get_setting('authentication_layout_select') . '.deliveryboy_login');
+        }
+    
+        return view('auth.' . get_setting('authentication_layout_select') . '.user_req_pay');
+    }
+
+ 
+    public function login_pay_request_new()
+{
+    if (Auth::check()) {
+        return redirect()->route('home');
+    }
+
+    if (request()->has('email')) {
+        $email = request()->input('email');
+
+        // Check if the email exists in the database
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return redirect()->back()->withErrors(['email' => 'Email does not exist in our records.']);
+        }
+
+        // Check if payment_status is 'completed'
+        if ($user->payment_status === 'completed') {
+            return redirect()->route('home')->with('success', 'Payment already completed. Redirected to home page.');
+        }
+
+        // Redirect to the login_pay route with the user's ID if payment is not completed
+        return redirect()->route('user.login_pay', ['id' => $user->id]);
+    }
+
+    return view('auth.' . get_setting('authentication_layout_select') . '.user_req_pay');
+}
+
+    
+
+
 
 public function SaveTransactionRegister(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'transaction_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
-            'transaction_id' => 'required|string|max:255', // Validate transaction ID
-        ]);
-    
-        try {
-            if (isset($request->user_id) && !empty($request->user_id)) {
-                $user = User::find($request->user_id);
-                if (!$user) {
-                    return redirect()->route('login')->with('error', 'Please log in to perform this action.');
-                }
+{
+    // Validate the request data
+    $request->validate([
+        'transaction_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
+        'transaction_id' => 'required|string|max:255', // Validate transaction ID
+    ]);
 
-                // Handle file upload
-                if ($request->hasFile('transaction_image')) {
-                    $file = $request->file('transaction_image');
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $filePath = 'uploads/transactions/';
-                    
-                    // Move the file to the desired location
-                    $file->move(public_path($filePath), $filename);
+    try {
+        if (isset($request->user_id) && !empty($request->user_id)) {
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return redirect()->route('login')->with('error', 'Please log in to perform this action.');
+            }
 
-                    // Save transaction data to the user
-                    $user->transaction_id = $request->transaction_id;
-                    $user->transaction_image = $filePath . $filename;
-                    $user->save();
+            // Handle file upload
+            if ($request->hasFile('transaction_image')) {
+                $file = $request->file('transaction_image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = 'uploads/transactions/';
+                
+                // Move the file to the desired location
+                $file->move(public_path($filePath), $filename);
 
-                    return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
-                }
-            }           
-    
-            return back()->with('error', 'Transaction image upload failed.');
-        } catch (\Exception $e) {
-            // Handle exceptions
-            return back()->with('error', 'An error occurred: ' . $e->getMessage());
-        }
+                // Save transaction data to the user
+                $user->transaction_id = $request->transaction_id;
+                $user->transaction_image = $filePath . $filename;
+
+                // Update payment_status to 'completed'
+                $user->payment_status = 'completed';
+                
+                $user->save();
+
+                return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
+            }
+        }           
+
+        return back()->with('error', 'Transaction image upload failed.');
+    } catch (\Exception $e) {
+        // Handle exceptions
+        return back()->with('error', 'An error occurred: ' . $e->getMessage());
     }
+}
+
 
     // public function registration(Request $request)
     // {

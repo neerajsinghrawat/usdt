@@ -191,6 +191,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
     Route::resource('customers', CustomerController::class);
     Route::controller(CustomerController::class)->group(function () {
         Route::get('/pay-request', 'pay_request')->name('pay-request');
+
         Route::get('/Withdrawal-request', 'Withdrawal_request')->name('Withdrawal-request');
         Route::get('customers_ban/{customer}', 'ban')->name('customers.ban');
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
