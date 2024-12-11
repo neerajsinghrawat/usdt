@@ -64,15 +64,19 @@
                                             
                                             <button class="btn w-100 text-start dropdown-toggle px-3 text-body-emphasis bg-body-secondary-hover nav-link rounded-3 text-base leading-6 fw-semibold" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="size-40px rounded-circle overflow-hidden border border-transparent nav-user-img" id="nav-user-info">
-                                            @if ($user->avatar_original != null)
-                                                <img src="{{ $user_avatar }}"
-                                                    class="img-fit h-100" alt="{{ translate('avatar') }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                                            @else
-                                                <img src="{{ static_asset('assets/img/avatar-place.png') }}" class="image" alt="{{ translate('avatar') }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                                            @endif
-                                            </span>
+                                                    @if ($user->avatar != null)
+                                                        <img src="{{ asset( 'public/' .$user->avatar) }}" 
+                                                            class="img-fit h-100" 
+                                                            alt="{{ translate('avatar') }}" 
+                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
+                                                    @else
+                                                        <img src="{{ static_asset('assets/img/avatar-place.png') }}" 
+                                                            class="image" 
+                                                            alt="{{ translate('avatar') }}" 
+                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
+                                                    @endif
+                                                </span>
+                                                
                                             {{ $user->name }}
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-hover end-0 text-sm shadow bg-body-tertiary" style="--bs-dropdown-min-width: 9rem;">

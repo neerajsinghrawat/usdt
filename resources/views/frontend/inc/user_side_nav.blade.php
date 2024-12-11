@@ -17,7 +17,7 @@
         @endphp
         <!-- Customer info -->
         <div class="p-4 text-center mb-4 border-bottom position-relative">
-            <!-- Image -->
+            {{-- <!-- Image -->
             <span class="avatar avatar-md mb-3">
                 @if ($user->avatar_original != null)
                     <img src="{{ $user_avatar }}"
@@ -26,7 +26,25 @@
                     <img src="{{ static_asset('assets/img/avatar-place.png') }}" class="image rounded-circle"
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
                 @endif
+            </span> --}}
+
+            <!-- Image -->
+            <span class="avatar avatar-md mb-3">
+                @php
+                    // print_r($user->avatar);
+                    // die();
+                @endphp
+            
+                @if ($user->avatar != null)
+                    <img src="{{ asset('public/' . $user->avatar) }}"
+                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
+                @else
+                    <img src="{{ static_asset('assets/img/avatar-place.png') }}" class="image rounded-circle"
+                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
+                @endif
             </span>
+            
+
             <!-- Name -->
             <h4 class="h5 fs-14 mb-1 fw-700 text-dark">{{ $user->name }}</h4>
             <!-- Phone -->
