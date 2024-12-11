@@ -31,7 +31,15 @@
                         <input type="text" class="form-control rounded-0" placeholder="{{ translate('Your Phone')}}" name="phone" value="{{ Auth::user()->phone }}">
                     </div>
                 </div>
-                <!-- Photo-->
+
+                <!-- Photo -->
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label fs-14">{{ translate('Photo') }}</label>
+                    <div class="col-md-10">
+                        <input type="file" name="photo" class="form-control rounded-0">
+                    </div>
+                </div>
+                {{-- <!-- Photo-->
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label fs-14">{{ translate('Photo') }}</label>
                     <div class="col-md-10">
@@ -45,7 +53,7 @@
                         <div class="file-preview box sm">
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Password-->
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label fs-14">{{ translate('Your Password') }}</label>
@@ -64,6 +72,7 @@
                 <div class="form-group mb-0 text-right">
                     <button type="submit" class="btn btn-primary rounded-0 w-150px mt-3">{{translate('Update Profile')}}</button>
                 </div>
+
             </form>
         </div>
     </div>

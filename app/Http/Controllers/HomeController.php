@@ -298,7 +298,22 @@ public function SaveTransactionRegister(Request $request)
             $user->password = Hash::make($request->new_password);
         }
 
-        $user->avatar_original = $request->photo;
+
+         // Photo upload logic
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $filePath = 'uploads/user_photos/';
+
+        // Move the file to the desired location
+        $file->move(public_path($filePath), $filename);
+
+        // Save the file path to the user's avatar field
+        $user->avatar = $filePath . $filename;
+    }
+
+
+        // $user->avatar_original = $request->photo;
         $user->save();
 
         flash(translate('Your Profile has been updated successfully!'))->success();
