@@ -4,7 +4,7 @@
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="align-items-center">
-        <h1 class="h3">{{translate('Team Members')}}</h1>
+        <h1 class="h3">{{translate('All Members')}}</h1>
     </div>
 </div>
 
@@ -13,7 +13,7 @@
     <form class="" id="sort_customers" action="" method="GET">
         <div class="card-header row gutters-5">
             <div class="col">
-                <h5 class="mb-0 h6">{{translate('Team Members')}}</h5>
+                <h5 class="mb-0 h6">{{translate('Members')}}</h5>
             </div>
 
             <div class="dropdown mb-2 mb-md-0">
