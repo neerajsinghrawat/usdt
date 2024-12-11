@@ -39,6 +39,55 @@ class CustomerController extends Controller
     }
 
 
+    public function user_tree($id)
+    {
+        // Decrypt the user ID
+        $userId = decrypt($id);
+        
+        // Fetch the user who clicked
+        $user = User::find($userId);
+    
+        
+    
+        // Fetch the user tree
+        $userTree = $this->getUsersUnder($user->referral_code);
+        
+        // Return a view to show the user tree
+        return view('backend.customer.customers.user_tree', compact('user', 'userTree'));
+    }
+    
+    
+// Function to fetch all users under a given referral code (recursive approach)
+private function getUsersUnder($referralCode)
+{
+    // Fetch users with this referral code
+    $users = User::where('referred_by', $referralCode)->get();
+
+    // You can add more levels of recursion if needed to fetch all nested users
+    foreach ($users as $user) {
+        // Recursively find users under this user
+        $user->descendants = $this->getUsersUnder($user->referral_code);
+        
+        // Calculate the number of descendants (users under this user)
+        $user->descendant_count = $user->descendants->count();
+        
+        // Debugging - Print user details along with the referral code and descendant count
+        // echo '<pre>';
+        // print_r([
+        //     'user' => $user->user_name,
+        //     'referral_code' => $user->referral_code,
+        //     'descendant_count' => $user->descendant_count
+        // ]);
+        // echo '</pre>';
+    }
+
+    return $users;
+}
+
+    
+
+
+
     // public function pay_request(Request $request)
     // {
 

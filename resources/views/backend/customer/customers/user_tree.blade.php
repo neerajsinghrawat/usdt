@@ -36,122 +36,22 @@
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
-                        <!--<th data-breakpoints="lg">#</th>-->
-                        <th>
-                            <div class="form-group">
-                                <div class="aiz-checkbox-inline">
-                                    <label class="aiz-checkbox">
-                                        <input type="checkbox" class="check-all">
-                                        <span class="aiz-square-check"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </th>
-                        <th>{{translate('Name')}}</th>
-                        <th data-breakpoints="lg">{{translate('Email Address')}}</th>
-                        <th data-breakpoints="lg">{{translate('Phone')}}</th>
-                        <th data-breakpoints="lg">{{translate('referral Code')}}</th>
-                        <th data-breakpoints="lg">{{translate('Team value')}}</th>
-                        <th data-breakpoints="lg">{{translate('Package')}}</th>
-                        <th data-breakpoints="lg">{{translate('Wallet Balance')}}</th>
-                        <th data-breakpoints="lg">{{translate('transaction image')}}</th>
-                        <th data-breakpoints="lg">{{translate('Active')}}</th>
-                        <th class="text-right">{{translate('Options')}}</th>
+                        <th>SR Number</th>  <!-- Add a column for the serial number -->
+                        <th>User Name</th>
+                        <th>Referral Code</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $key => $user)
-                        @if ($user != null)
-                            <tr>
-                                <!--<td>{{ ($key+1) + ($users->currentPage() - 1)*$users->perPage() }}</td>-->
-                                <td>
-                                    <div class="form-group">
-                                        <div class="aiz-checkbox-inline">
-                                            <label class="aiz-checkbox">
-                                                <input type="checkbox" class="check-one" name="id[]" value="{{$user->id}}">
-                                                <span class="aiz-square-check"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>@if($user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif {{$user->name}}</td>
-                                <td>{{$user->email}}</td>
-                                <td>{{$user->phone}}</td>
-                                <td>{{$user->referral_code}}</td>
-                                <td>{{$user->team_value}}</td>
-                                <td>{{$user->package_amount}}</td>
-                                
-                                <td>{{single_price($user->balance)}}</td>
-                                {{-- <td>{{$userfsadf->transaction_image}}</td>
-                                 --}}
-                              
-                                 <td>
-                                    @if($user->transaction_image)
-                                        <button 
-                                            class="btn btn-primary" type="button"
-                                            onclick="viewImage('{{ asset('public/' . $user->transaction_image) }}')"
-                                        >
-                                            View Image
-                                        </button>
-                                    @else
-                                        {{ translate('No image available') }}
-                                    @endif
-                                </td>
-                                  
-                                
-                                
-                                
-                                
-                            <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_published(this)" value="{{ $user->id }}" type="checkbox" <?php if ($user->status == 1) echo "checked"; ?> >
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
-                                <td class="text-right">
-
-                                     {{-- View user_tree Button --}}
-                                <a href="{{ route('users.user_tree', encrypt($user->id)) }}" 
-                                    class="btn btn-soft-info btn-icon btn-circle btn-sm" 
-                                    title="{{'user_tree' }}" 
-                                    style="text-decoration: none;">
-                                    <i class="las la-user"></i>
-                                </a>
-
-                                    {{-- tree --}}
-                                    {{-- @can('login_as_customer')
-                                        <a href="{{route('customers.login', encrypt($user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this Customer') }}">
-                                            <i class="las la-edit"></i>
-                                        </a>
-                                    @endcan --}}
-
-
-                                    @can('ban_customer')
-                                        @if($user->banned != 1)
-                                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="confirm_ban('{{route('customers.ban', encrypt($user->id))}}');" title="{{ translate('Ban this Customer') }}">
-                                                <i class="las la-user-slash"></i>
-                                            </a>
-                                            @else
-                                            <a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm" onclick="confirm_unban('{{route('customers.ban', encrypt($user->id))}}');" title="{{ translate('Unban this Customer') }}">
-                                                <i class="las la-user-check"></i>
-                                            </a>
-                                        @endif
-                                    @endcan
-                                    
-                                    {{-- @can('delete_customer')
-                                        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('customers.destroy', $user->id)}}" title="{{ translate('Delete') }}">
-                                            <i class="las la-trash"></i>
-                                        </a>
-                                    @endcan --}}
-                                </td>
-                            </tr>
-                        @endif
+                    @foreach ($userTree as $index => $user) <!-- Use the $index for SR number -->
+                    <tr>
+                        <td>{{ $index + 1 }}</td> <!-- Add 1 to index to start from 1 instead of 0 -->
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->referral_code }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
-            <div class="aiz-pagination">
-                {{ $users->appends(request()->input())->links() }}
-            </div>
+            
         </div>
     </form>
 </div>
