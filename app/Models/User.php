@@ -24,6 +24,10 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(WithdrawalRequest::class);
 }
 
+public function teamHistory()
+{
+    return $this->hasMany(TeamHistory::class, 'user_id');
+}
 
 
 

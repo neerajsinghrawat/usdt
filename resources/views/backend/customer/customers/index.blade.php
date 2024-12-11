@@ -113,11 +113,17 @@
                                      {{-- View user_tree Button --}}
                                 <a href="{{ route('users.user_tree', encrypt($user->id)) }}" 
                                     class="btn btn-soft-info btn-icon btn-circle btn-sm" 
-                                    title="{{'user_tree' }}" 
+                                    title="{{'Members' }}" 
                                     style="text-decoration: none;">
                                     <i class="las la-user"></i>
                                 </a>
-
+                                    {{-- View Team Members Button --}}
+                                    <a href="{{ route('users.team_member', encrypt($user->id)) }}" 
+                                        class="btn btn-soft-info btn-icon btn-circle btn-sm" 
+                                        title="{{'Team Members' }}" 
+                                        style="text-decoration: none;">
+                                        <i class="las la-user"></i>
+                                    </a>
                                     {{-- tree --}}
                                     {{-- @can('login_as_customer')
                                         <a href="{{route('customers.login', encrypt($user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this Customer') }}">

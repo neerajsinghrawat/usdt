@@ -197,6 +197,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
 
         Route::get('/users/{id}/user_tree', 'user_tree')->name('users.user_tree');
+        Route::get('/users/{id}/team_member', 'team_member')->name('users.team_member');
 
 
         Route::get('/customers/destroy/{id}', 'destroy')->name('customers.destroy');

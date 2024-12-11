@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Models\UserCoinAudit;
 use App\Models\WithdrawalRequest;
+use App\Models\TeamHistory;
 
 class CustomerController extends Controller
 {
@@ -58,7 +59,7 @@ class CustomerController extends Controller
     
     
 // Function to fetch all users under a given referral code (recursive approach)
-private function getUsersUnder($referralCode)
+    private function getUsersUnder($referralCode)
 {
     // Fetch users with this referral code
     $users = User::where('referred_by', $referralCode)->get();
@@ -84,100 +85,67 @@ private function getUsersUnder($referralCode)
     return $users;
 }
 
-    
+
+public function team_member($id)
+{
+    // Decrypt the user ID
+    $userId = decrypt($id);
+
+    // Fetch the user details
+    $user = User::find($userId);
+
+    if (!$user) {
+        abort(404, 'User not found');
+    }
+
+    // Fetch the team history where the parent_id is the user's id
+    $teamMembers = TeamHistory::with('referreduser')
+        ->where('parent_id', $userId)
+        ->get();
+
+    // Fetch team value for the user
+    $teamValue = $user->team_value;
+
+    // Return the view with the required data
+    return view('backend.customer.customers.team_member', compact('user', 'teamMembers', 'teamValue'));
+}
+
+
+/**
+ * Recursive function to get all team members under a user.
+ *
+ * @param int $parentId
+ * @return Collection
+ */
+private function getAllTeamMembers($parentId)
+{
+    // Fetch direct children of the user
+    $directMembers = TeamHistory::with('referreduser')
+        ->where('parent_id', $parentId)
+        ->get();
+
+    $allMembers = collect();
+
+    foreach ($directMembers as $member) {
+        // Add the current member to the collection
+        $allMembers->push($member);
+
+        // Recursively fetch and add children of the current member
+        $allMembers = $allMembers->merge($this->getAllTeamMembers($member->user_id));
+    }
+
+    return $allMembers;
+}
 
 
 
-    // public function pay_request(Request $request)
-    // {
 
-    //     $sort_search = null;
-    //     $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
-    //     if ($request->has('search')){
-    //         $sort_search = $request->search;
-    //         $users->where(function ($q) use ($sort_search){
-    //             $q->where('name', 'like', '%'.$sort_search.'%')->orWhere('email', 'like', '%'.$sort_search.'%');
-    //         });
-    //     }
-    //     $users = $users->paginate(15);
-    //     return view('backend.customer.customers.payrequest', compact('users', 'sort_search'));
-    // }
+// echo '<pre>';
+    // print_r($user);
+    // echo '</pre>';
+    // die();
 
 
-    // public function pay_request(Request $request)
-    // {
-    //     $sort_search = null;
-
-    //     // Fetch customers with email_verified_at not null
-    //         $users = User::where('user_type', 'customer')
-    //     ->whereNotNull('email_verified_at')
-    //     ->whereHas('userCoinAudit', function ($query) {
-    //         $query->where('type', 'roi'); // Ensure type = 'roi'
-    //     })
-    //     ->with(['userCoinAudit' => function ($query) {
-    //         $query->where('type', 'roi'); // Fetch only 'roi' type records in the relationship
-    //     }])
-    //     ->orderBy('created_at', 'desc');
-
-
-    //     // Add search functionality
-    //     if ($request->has('search')) {
-    //         $sort_search = $request->search;
-    //         $users->where(function ($q) use ($sort_search) {
-    //             $q->where('name', 'like', '%' . $sort_search . '%')
-    //                 ->orWhere('email', 'like', '%' . $sort_search . '%');
-    //         });
-    //     }
-
-    //     // Paginate the results
-    //     $users = $users->paginate(15);
-
-    //     return view('backend.customer.customers.payrequest', compact('users', 'sort_search'));
-    // }
-
-
-    // public function pay_request(Request $request)
-    // {
-    //     $sort_search = $request->input('search', null);
-    
-    //     // Build the query
-    //     $users = User::where('user_type', 'customer')
-    //         ->whereNotNull('email_verified_at')
-    //         ->whereHas('userCoinAudit', function ($query) {
-    //             $query->where('type', 'roi') // Filter by 'type' = 'roi'
-    //                   ->where('trn_status', 'pending'); // Filter by 'trn_status' = 'pending'
-    //         })
-    //         ->with(['userCoinAudit' => function ($query) {
-    //             $query->where('type', 'roi') // Fetch only 'roi' type records in the relationship
-    //                   ->where('trn_status', 'pending'); // Fetch only 'pending' status
-    //         }])
-    //         ->when($sort_search, function ($query, $sort_search) {
-    //             $query->where(function ($q) use ($sort_search) {
-    //                 $q->where('name', 'like', '%' . $sort_search . '%')
-    //                     ->orWhere('email', 'like', '%' . $sort_search . '%');
-    //             });
-    //         })
-    //         ->when($request->input('requested_usdt'), function ($query, $requested_usdt) {
-    //             $query->whereHas('userCoinAudit', function ($subQuery) use ($requested_usdt) {
-    //                 $subQuery->where('coins_added', '>=', $requested_usdt);
-    //             });
-    //         })
-    //         ->when($request->input('start_date'), function ($query, $start_date) {
-    //             $query->whereDate('created_at', '>=', $start_date);
-    //         })
-    //         ->when($request->input('end_date'), function ($query, $end_date) {
-    //             $query->whereDate('created_at', '<=', $end_date);
-    //         })
-    //         ->orderBy('created_at', 'desc')
-    //         ->paginate(15);
-    
-    //     // Debugging to verify SQL query
-    //     // echo $users->toSql(); 
-    //     // die();
-    
-    //     // Return view with data
-    //     return view('backend.customer.customers.payrequest', compact('users', 'sort_search'));
-    // }
     
 
     public function pay_request(Request $request)

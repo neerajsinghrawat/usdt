@@ -36,23 +36,41 @@
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
-                        <th>SR Number</th>  <!-- Add a column for the serial number -->
+                        <th>SR Number</th>
                         <th>User Name</th>
+                        <th>Email</th>
                         <th>Referral Code</th>
-                        <th>Referred by</th>
+                        <th>Referred By</th>
+                        <th>Team Value</th>
+                        <th>Package</th>
+                        <th>Level</th>
+                        <th>Amount</th>
+                        
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($userTree as $index => $user) <!-- Use the $index for SR number -->
+                    @foreach ($teamMembers as $index => $item)
                     <tr>
-                        <td>{{ $index + 1 }}</td> <!-- Add 1 to index to start from 1 instead of 0 -->
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->referral_code }}</td>
-                        <td>{{ $user->referred_by }}</td>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $item->referreduser->name ?? 'N/A' }}</td>
+                        <td>{{ $item->referreduser->email ?? 'N/A' }}</td>
+                        <td>{{ $item->referreduser->referral_code ?? 'N/A' }}</td>
+                        <td>{{ $item->parent_id }}</td>
+                        <td>{{ $item->referreduser->team_value ?? 'N/A' }}</td>
+                        <td>{{ $item->referreduser->package_amount ?? 'N/A' }}</td>
+                        <td>{{ $item->level }}</td>
+                        <td>{{ $item->amount }}</td>
+                        
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            
+            
+           
+            
+            
             
         </div>
     </form>
