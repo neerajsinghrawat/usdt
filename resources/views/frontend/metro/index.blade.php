@@ -19,10 +19,10 @@
                         <div class="mt-4 pt-2">
                             <div class="text-center text-xl-start">
                                 <h1 class="m-0 text-white tracking-tight text-6xl fw-bold" data-aos-delay="0" data-aos="fade" data-aos-duration="3000">
-                                    Experience Ultimate Cleanliness
+                                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
                                 </h1>
                                 <p class="m-0 mt-4 text-white text-lg leading-8" data-aos-delay="100" data-aos="fade" data-aos-duration="3000">
-                                    No more worries about laundry! Let our professional crew at Freshen Laundry Service take the task off your hands.
+                                    " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                                 </p>
                                 <div class="mt-4 pt-3 d-flex align-items-center justify-content-center justify-content-xl-start column-gap-3">
                                     <a href="javascript:;" class="btn btn-lg btn-primary text-white text-sm fw-semibold" data-aos-delay="200" data-aos="fade" data-aos-duration="3000">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-xl-4">
+                {{-- <div class="col-12 col-xl-4">
                     <div class="pt-3 pt-md-4 pt-xl-12 pb-2 pb-md-3 pb-xl-6">
                         <!-- Button trigger modal -->
                         <a class="video-play-button video-btn-modal position-relative" href="javascript:;"
@@ -48,7 +48,7 @@
                             <span class="top-50 start-50 translate-middle"></span>
                         </a>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div> 
@@ -83,10 +83,10 @@
                         Our services
                     </h2>
                     <p class="m-0 mt-2 text-body-emphasis text-4xl tracking-tight fw-bold">
-                        Convenient Laundry Services in NYC
+                        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
                     </p>
                     <p class="m-0 mt-4 text-body text-lg leading-8">
-                        Experience the power of eco-friendly laundry with our premium detergents
+                        " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                     </p>
                 </div>
             </div>
@@ -99,12 +99,12 @@
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                Eco-Friendly Dry Cleaning
+                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                Safely clean your delicate garments with our eco-friendly dry cleaning services, leaving them fresh and free from harsh chemicals.
+                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                             </p>
                         </div>
                     </div>
@@ -116,12 +116,12 @@
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                Wash & Fold Service
+                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                Save time by letting us handle your laundry needs with our efficient wash & fold service, ensuring your clothes are clean and neatly folded.
+                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                             </p>
                         </div>
                     </div>
@@ -133,12 +133,13 @@
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                Same-Day Pickup & Delivery
+                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                Forget about waiting – our same-day pickup and delivery service ensures your laundry is promptly picked up, cleaned, and returned to you on time.
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
                             </p>
                         </div>
                     </div>
@@ -167,10 +168,10 @@
                             About Us
                         </h2>
                         <p class="m-0 mt-2 text-body-emphasis text-4xl tracking-tight fw-bold">
-                            Making laundry a breeze, one clean garment at a time.
+                            What is Lorem Ipsum?
                         </p>
                         <p class="m-0 mt-4 text-body-secondary text-lg leading-8">
-                            Welcome to Freshen, your premier laundry service in New York, NY. We are dedicated to providing top-quality, convenient, and affordable laundry solutions to our valued customers.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                         </p>
                         <div class="mt-4">
                             <a href="javascript:;" class="icon-link icon-link-hover text-decoration-none text-sm leading-6 fw-bold">
@@ -216,7 +217,7 @@
                             <figure class="m-0 mt-5">
                                 <blockquote class="text-center fw-semibold text-body-emphasis text-2xl leading-9">
                                     <p class="m-0">
-                                        “ Freshen is fantastic! Their laundry service is top-notch, and the staff is friendly and professional. I was impressed by the quality of their work and their attention to detail. Thank you, Freshen, for taking care of my laundry needs! ”
+                                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
                                     </p>
                                 </blockquote>
 
@@ -240,7 +241,7 @@
                             <figure class="m-0 mt-5">
                                 <blockquote class="text-center fw-semibold text-body-emphasis text-2xl leading-9">
                                     <p class="m-0">
-                                        “ Freshen is fantastic! Their laundry service is top-notch, and the staff is friendly and professional. I was impressed by the quality of their work and their attention to detail. Thank you, Freshen, for taking care of my laundry needs! ”
+                                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
                                     </p>
                                 </blockquote>
 
@@ -264,7 +265,7 @@
                             <figure class="m-0 mt-5">
                                 <blockquote class="text-center fw-semibold text-body-emphasis text-2xl leading-9">
                                     <p class="m-0">
-                                        “ Freshen is fantastic! Their laundry service is top-notch, and the staff is friendly and professional. I was impressed by the quality of their work and their attention to detail. Thank you, Freshen, for taking care of my laundry needs! ”
+                                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
                                     </p>
                                 </blockquote>
 
@@ -304,7 +305,7 @@
                     Our Clients
                 </h2>
                 <div class="m-0 mt-2 text-body-emphasis text-4xl tracking-tight fw-bold">
-                    We're fortunate to have incredible clients.
+                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
                 </div>
             </div>
 
