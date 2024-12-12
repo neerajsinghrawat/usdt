@@ -186,6 +186,9 @@ Route::get('/sitemap.xml', function () {
     return base_path('sitemap.xml');
 });
 
+
+Route::get('/auto-distribute-coins', [HomeController::class, 'autodistributed'])->name('auto.distribute.coins');
+
 // Classified Product
 Route::controller(CustomerProductController::class)->group(function () {
     Route::get('/customer-products', 'customer_products_listing')->name('customer.products');
@@ -257,6 +260,7 @@ Route::controller(CompareController::class)->group(function () {
 // Subscribe
 Route::resource('subscribers', SubscriberController::class);
 
+
 Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
 
     Route::controller(HomeController::class)->group(function () {
@@ -266,8 +270,10 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
+      
+          
     });
-
+   
     Route::controller(NotificationController::class)->group(function () {
         Route::get('/all-notifications', 'customerIndex')->name('customer.all-notifications');
         Route::post('/notifications/bulk-delete', 'bulkDeleteCustomer')->name('notifications.bulk_delete');

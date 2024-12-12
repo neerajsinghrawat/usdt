@@ -23,7 +23,7 @@
 
 <div class="row gutters-16">
     <!-- Wallet Balance Box -->
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-lg-6 col-md-6 mb-4">
         <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
             <div class="p-4 h-100 w-100 w-xl-50">
                 <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
@@ -45,7 +45,7 @@
     </div>
 
     <!-- Pending USDT Box -->
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6 mb-4">
         <div class="bg-light text-dark overflow-hidden text-center p-4 h-100">
             <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
             <div class="py-2">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Package Activated IDs Box -->
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6 mb-4">
         <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
             <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
             <div class="py-2">

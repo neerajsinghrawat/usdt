@@ -132,10 +132,10 @@ class RegisterController extends Controller
             }
             
 
-            if (isset($user->id) && isset($user->package_no)) {
-                $this->coinpack($user->id, $user->parent_id ?? null, $user->referred_by ?? null, $user->package_no);
-                $this->roiDistribution($user->id);
-            }
+            // if (isset($user->id) && isset($user->package_no)) {
+            //     $this->coinpack($user->id, $user->parent_id ?? null, $user->referred_by ?? null, $user->package_no);
+            //     $this->roiDistribution($user->id);
+            // }
         } else {
             if (addon_is_activated('otp_system')) {
                 $user = User::create([

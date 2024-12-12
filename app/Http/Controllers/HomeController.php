@@ -36,7 +36,7 @@ use DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use ZipArchive;
-
+use Carbon\Carbon;  // Import Carbon class
 class HomeController extends Controller
 {
     /**
@@ -275,10 +275,93 @@ public function SaveTransactionRegister(Request $request)
     return view('auth.' . get_setting('authentication_layout_select') . '.user_registration');
 }
 
+public function autodistributed()
+{
+    try {
+        // Get the current date
+        $currentDate = Carbon::now();
+
+        // Get users who registered 1 month ago or more and have 'pending' trn_status
+        $users = DB::table('users')
+            ->join('user_coin_audit', 'users.id', '=', 'user_coin_audit.user_id')
+            ->select('users.id', 'users.created_at', 'users.wallet_usdt', DB::raw('SUM(user_coin_audit.coins_added) as total_coins_added'))
+            ->whereIn('user_coin_audit.type', ['roi', 'coins_distributed'])
+            ->where('user_coin_audit.trn_status', '=', 'pending')  // Only include pending transactions
+            ->where('users.created_at', '<=', $currentDate->subMonth()->toDateString())
+            ->groupBy('users.id')
+            ->get();
+
+        // Initialize an array to store user IDs of the updated records
+        $updatedUsers = [];
+
+        // Loop through each user and update their data
+        foreach ($users as $user) {
+            // Add the total accumulated coins to the user's wallet_usdt
+            $newWalletAmount = $user->wallet_usdt + $user->total_coins_added;
+
+            // Update the user's wallet_usdt in the users table
+            User::where('id', $user->id)->update(['wallet_usdt' => $newWalletAmount]);
+
+            // Update the trn_status to 'completed' for all related entries in user_coin_audit
+            UserCoinAudit::where('user_id', $user->id)
+                ->whereIn('type', ['roi', 'coins_distributed'])
+                ->where('trn_status', 'pending') // Only update pending transactions
+                ->update(['trn_status' => 'completed']);
+
+            // Call the roiDistribution function for each user
+            $this->roiDistribution($user->id);
+
+            // Add this user ID to the updated users list
+            $updatedUsers[] = $user->id;
+        }
+
+        // Prepare the response message
+        $message = 'Coins successfully distributed to user wallets and ROI distributed. Updated user IDs: ' . implode(', ', $updatedUsers);
+
+        return response()->json(['success' => true, 'message' => $message]);
+    } catch (\Exception $e) {
+        // Log error and return failure response
+        \Log::error("Error in autodistributed function: " . $e->getMessage());
+        return response()->json(['success' => false, 'error' => 'An error occurred while distributing coins']);
+    }
+}
 
 
+        
 
+public function roiDistribution($id)
+    {
+        
+        $user = User::find($id);
 
+        if ($user) {            
+            $package_amount = $user->package_amount;
+            $roi_per_month = 10/100;
+            $month = 25;
+            $total_amount = $package_amount*$roi_per_month;
+
+            $roiCount = UserCoinAudit::where('user_id', $id)->where('type', 'roi')->count();
+
+            if ($roiCount < $month) {
+                \DB::table('user_coin_audit')->insert([
+                        'user_id' => $id,
+                        'coins_added' => $total_amount,
+                        'action' => 'Returns on Investment',
+                        'created_at' => now(),
+                        'parent_id' => $user->parent_id, // Store the parent ID
+                        'transaction_type' => 'credit', // Example transaction type
+                        'comments' => 'Returns on Investment',
+                        'type' => 'roi',
+                        'trn_status' => 'pending',
+                        'start_date' => date('Y-m-d H:m:s'),
+                    ]);
+            }
+
+            $user->pending_usdt = $user->pending_usdt + $total_amount;
+            $user->save();
+            
+        }
+    }
 
 
     public function cart_login(Request $request)
@@ -343,6 +426,7 @@ public function SaveTransactionRegister(Request $request)
         }
     }
 
+    
     /**
      * Show the customer/seller team.
      *
