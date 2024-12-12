@@ -37,6 +37,16 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000, 9999) }}">
     
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ static_asset('assets/usdt/assets/logo/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ static_asset('assets/usdt/assets/logo/favicon-16x16.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ static_asset('assets/usdt/assets/logo/favicon.ico') }}">
+    <link rel="manifest" href="{{ static_asset('assets/usdt/assets/logo/site.webmanifest') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/glide/css/glide.core.min.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/aos/aos.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/main.min.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/style.css') }}">
     <style>
         :root{
             --blue: #3490f3;
@@ -70,6 +80,10 @@
         .form-control:focus {
             border-width: 2px !important;
         }
+
+
+
+        
         @media (max-width: 991px) {
             .right-content{
                 background: var(--white);
@@ -92,8 +106,13 @@
 </head>
 <body>
 
+    @include('frontend.inc.nav')
+    
     @yield('content')
 
+
+    <!-- footer -->
+    @include('frontend.inc.footer')
     <!-- SCRIPTS -->
     @include('auth.login_register_js')
 
