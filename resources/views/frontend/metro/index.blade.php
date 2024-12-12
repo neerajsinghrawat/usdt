@@ -146,13 +146,6 @@
                 </div>
             </div>
 
-            <div class="text-center pt-7">
-                <a href="javascript:;" class="btn btn-lg btn-primary text-white icon-link icon-link-hover text-sm leading-6 fw-semibold">
-                    Learn more 
-                    <span class="bi align-self-start left-to-right" aria-hidden="true">→</span>
-                    <span class="bi align-self-start right-to-left" aria-hidden="true">←</span>
-                </a>
-            </div>
         </div>      
     </div>  
 
@@ -165,21 +158,13 @@
                 <div class="col-12 col-xl-5 order-last">
                     <div class="mx-auto max-w-2xl">
                         <h2 class="m-0 text-primary-emphasis text-base leading-7 fw-semibold">
-                            About Us
+                            Team Value and Benefits
                         </h2>
                         <p class="m-0 mt-2 text-body-emphasis text-4xl tracking-tight fw-bold">
-                            What is Lorem Ipsum?
+                            Benefits Based on Team Value
                         </p>
-                        <p class="m-0 mt-4 text-body-secondary text-lg leading-8">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        </p>
-                        <div class="mt-4">
-                            <a href="javascript:;" class="icon-link icon-link-hover text-decoration-none text-sm leading-6 fw-bold">
-                                Learn more 
-                                <span class="bi align-self-start left-to-right" aria-hidden="true">→</span>
-                                <span class="bi align-self-start right-to-left" aria-hidden="true">←</span>
-                            </a>
-                        </div>
+                        <?php echo get_setting('team_value_reward'); ?>
+                        
                     </div>
                 </div>
 

@@ -48,7 +48,7 @@
                         <td>{{ $index + 1 }}</td> <!-- Add 1 to index to start from 1 instead of 0 -->
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->referral_code }}</td>
-                        <td>{{ $user->referred_by }}</td>
+                        <td>{{ $user['referred_by_user']->name }}</td>
                     </tr>
                     @endforeach
                 </tbody>

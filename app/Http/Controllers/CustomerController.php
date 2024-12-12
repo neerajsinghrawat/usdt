@@ -62,7 +62,7 @@ class CustomerController extends Controller
     private function getUsersUnder($referralCode)
 {
     // Fetch users with this referral code
-    $users = User::where('referred_by', $referralCode)->get();
+    $users = User::with('referred_by_user')->where('referred_by', $referralCode)->get();
 
     // You can add more levels of recursion if needed to fetch all nested users
     foreach ($users as $user) {

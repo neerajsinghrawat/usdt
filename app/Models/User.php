@@ -30,6 +30,10 @@ public function teamHistory()
 }
 
 
+    public function referred_by_user()
+    {
+        return $this->belongsTo(User::class, 'parent_id');
+    }
 
     public function sendEmailVerificationNotification()
     {
