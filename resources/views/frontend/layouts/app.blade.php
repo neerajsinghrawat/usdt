@@ -60,6 +60,7 @@
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/main.min.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/style.css') }}">
+ 
 
     <!-- Open Graph Meta Tags for Social Sharing -->
     <!-- Update the 'title' and 'description' content below to enhance social sharing -->
@@ -107,7 +108,7 @@
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000, 9999) }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
 
-
+   <!-- <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/development.css?v=') }} <?php //echo time(); ?>"> -->
     <script>
         var AIZ = AIZ || {};
         AIZ.local = {
