@@ -30,10 +30,21 @@ public function teamHistory()
 }
 
 
-    public function referred_by_user()
-    {
-        return $this->belongsTo(User::class, 'parent_id');
-    }
+
+public function referred_by_user()
+{
+    return $this->belongsTo(User::class, 'parent_id');
+}
+
+public function children()
+{
+    return $this->hasMany(User::class, 'parent_id');
+}
+
+public function referrer()
+{
+    return $this->belongsTo(User::class, 'parent_id');
+}
 
     public function sendEmailVerificationNotification()
     {

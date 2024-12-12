@@ -1,4 +1,114 @@
 @extends('backend.layouts.app')
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .aiz-titlebar {
+        background-color: #0056b3;
+        color: white;
+        padding: 10px 20px;
+    }
+
+    .card {
+        margin: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    h2.text-center {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    #tree-container {
+        width: 100%;
+        height: 600px; /* Set height to a fixed value */
+        overflow: auto;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        margin-top: 20px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .node circle {
+        fill: #6bbf59;
+        stroke: #333;
+        stroke-width: 2px;
+        transition: transform 0.3s;
+    }
+
+    .node.highlight circle {
+        fill: #ff7f0e; /* Orange for highlighted nodes */
+    }
+
+    .node:hover circle {
+        transform: scale(1.2);
+    }
+
+    .node text {
+        font-size: 10px;
+        font-weight: bold;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100px;
+        display: inline-block;
+        color: #333;
+    }
+
+    .link {
+        fill: none;
+        stroke: #888;
+        stroke-width: 2px;
+        transition: stroke 0.3s;
+    }
+
+    .left-link {
+        stroke: #1f77b4; /* Blue color for left links */
+    }
+
+    .right-link {
+        stroke: #ff7f0e; /* Orange color for right links */
+    }
+
+    .form-group input {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .form-control {
+        font-size: 14px;
+    }
+
+    .form-group .btn {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .form-group .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
 
 @section('content')
 
@@ -8,7 +118,6 @@
     </div>
 </div>
 
-
 <div class="card">
     <form class="" id="sort_customers" action="" method="GET">
         <div class="card-header row gutters-5">
@@ -16,215 +125,84 @@
                 <h5 class="mb-0 h6">{{translate('Members')}}</h5>
             </div>
 
-            <div class="dropdown mb-2 mb-md-0">
-                <button class="btn border dropdown-toggle" type="button" data-toggle="dropdown">
-                    {{translate('Bulk Action')}}
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item confirm-alert" href="javascript:void(0)"  data-target="#bulk-delete-modal">{{translate('Delete selection')}}</a>
-                </div>
-            </div>
-
             <div class="col-md-3">
                 <div class="form-group mb-0">
-                    <input type="text" class="form-control" id="search" name="search"@isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type email or name & Enter') }}">
+                    <input type="text" class="form-control" id="search" name="search" @isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type email or name & Enter') }}">
                 </div>
             </div>
         </div>
 
         <div class="card-body">
-            <table class="table aiz-table mb-0">
-                <thead>
-                    <tr>
-                        <th>SR Number</th>  <!-- Add a column for the serial number -->
-                        <th>User Name</th>
-                        <th>Referral Code</th>
-                        <th>Referred by</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($userTree as $index => $user) <!-- Use the $index for SR number -->
-                    <tr>
-                        <td>{{ $index + 1 }}</td> <!-- Add 1 to index to start from 1 instead of 0 -->
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->referral_code }}</td>
-                        <td>{{ $user['referred_by_user']->name }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            
+            <h2 class="text-center">Interactive User Hierarchy Tree</h2>
+            <div id="tree-container"></div>
+
+            <script src="https://d3js.org/d3.v6.min.js"></script>
+            <script>
+                // Convert the PHP user tree data to a JavaScript object
+                const treeData = {!! json_encode($userTree) !!};
+
+                const margin = { top: 20, right: 120, bottom: 20, left: 120 };
+                const width = window.innerWidth - margin.left - margin.right;
+                const height = 1200 - margin.top - margin.bottom;
+
+                const treeLayout = d3.tree().size([height, width]);
+
+                const svg = d3.select("#tree-container").append("svg")
+                    .attr("width", "100%")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+                const root = d3.hierarchy(treeData);
+                treeLayout(root);
+
+                svg.selectAll(".link")
+                    .data(root.links())
+                    .enter().append("path")
+                    .attr("class", "link")
+                    .attr("class", d => {
+                        const source = d.source;
+                        const target = d.target;
+                        return target.x < source.x ? "link left-link" : "link right-link";
+                    })
+                    .attr("d", d3.linkVertical()
+                        .x(d => d.x)
+                        .y(d => d.y));
+
+                const node = svg.selectAll(".node")
+                    .data(root.descendants())
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", d => `translate(${d.x},${d.y})`)
+                    .attr("class", d => {
+                        // Add 'highlight' class if depth is 3 or less
+                        return d.depth <= 3 ? "node highlight" : "node";
+                    });
+
+                node.append("circle")
+                    .attr("r", 10);
+
+                    node.append("text")
+                    .attr("dy", 3)
+                    .attr("x", d => d.children ? -15 : 15)
+                    .style("text-anchor", d => d.children ? "end" : "start")
+                    .text(d => {
+                        const relationship = d.data.relationship ? ` (${d.data.relationship})` : '';
+                        const referrerName = d.data.referrer_name ? ` [Ref: ${d.data.referrer_name}]` : '';
+                        return `${d.data.user_name}${referrerName}${relationship}`;
+                    });
+
+
+                const zoom = d3.zoom()
+                    .scaleExtent([0.5, 2])
+                    .on("zoom", (event) => {
+                        svg.attr("transform", event.transform);
+                    });
+
+                d3.select("#tree-container svg").call(zoom);
+            </script>
         </div>
     </form>
 </div>
 
-
-<div class="modal fade" id="confirm-ban">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title h6">{{translate('Confirmation')}}</h5>
-                <button type="button" class="close" data-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{translate('Do you really want to ban this Customer?')}}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
-                <a type="button" id="confirmation" class="btn btn-primary">{{translate('Proceed!')}}</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirm-unban">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title h6">{{translate('Confirmation')}}</h5>
-                <button type="button" class="close" data-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{translate('Do you really want to unban this Customer?')}}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
-                <a type="button" id="confirmationunban" class="btn btn-primary">{{translate('Proceed!')}}</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">{{ translate('Transaction Image') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <img id="modalImage" src="" alt="Transaction Image" class="img-fluid">
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 @endsection
-
-@section('modal')
-    <!-- Delete modal -->
-    @include('modals.delete_modal')
-    <!-- Bulk Delete modal -->
-    @include('modals.bulk_delete_modal')
-@endsection
-
-@section('script')
-    <script type="text/javascript">
-
-        $(document).on("change", ".check-all", function() {
-            if(this.checked) {
-                // Iterate each checkbox
-                $('.check-one:checkbox').each(function() {
-                    this.checked = true;
-                });
-            } else {
-                $('.check-one:checkbox').each(function() {
-                    this.checked = false;
-                });
-            }
-
-        });
-
-        function sort_customers(el){
-            $('#sort_customers').submit();
-        }
-        function confirm_ban(url)
-        {
-            if('{{env('DEMO_MODE')}}' == 'On'){
-                    AIZ.plugins.notify('info', '{{ translate('Data can not change in demo mode.') }}');
-                    return;
-                }
-
-            $('#confirm-ban').modal('show', {backdrop: 'static'});
-            document.getElementById('confirmation').setAttribute('href' , url);
-        }
-
-        function confirm_unban(url)
-        {
-            if('{{env('DEMO_MODE')}}' == 'On'){
-                    AIZ.plugins.notify('info', '{{ translate('Data can not change in demo mode.') }}');
-                    return;
-                }
-
-            $('#confirm-unban').modal('show', {backdrop: 'static'});
-            document.getElementById('confirmationunban').setAttribute('href' , url);
-        }
-
-        function bulk_delete() {
-            var data = new FormData($('#sort_customers')[0]);
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{route('bulk-customer-delete')}}",
-                type: 'POST',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if(response == 1) {
-                        location.reload();
-                    }
-                }
-            });
-        }
-
-
-            function update_published(el){
-
-                if('{{env('DEMO_MODE')}}' == 'On'){
-                    AIZ.plugins.notify('info', '{{ translate('Data can not change in demo mode.') }}');
-                    return;
-                }
-
-                if(el.checked){
-                    var status = 1;
-                }
-                else{
-                    var status = 0;
-                }
-                $.post('{{ route('customers.published') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
-                    if(data == 1){
-                        AIZ.plugins.notify('success', '{{ translate('Published User updated successfully') }}');
-                    }
-                    else{
-                        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                    }
-                });
-                }
-
-                function viewImage(imageUrl) {
-                // Log the URL for debugging
-                console.log(imageUrl);
-
-                // Set the modal image source
-                document.getElementById('modalImage').src = imageUrl;
-
-                // Display the modal
-                $('#imageModal').modal('show');
-                }
-
-
-
-
-    </script>
-@endsection
-
-

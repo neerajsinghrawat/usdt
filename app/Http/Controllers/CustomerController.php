@@ -38,12 +38,96 @@ class CustomerController extends Controller
         $users = $users->paginate(15);
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
-
-
-    public function user_tree($id)
+    public function userHistory($id)
     {
-        // Decrypt the user ID
-        $userId = decrypt($id);
+
+
+       
+        $userId = ($id); //  the user ID
+    
+        $history = UserCoinAudit::select(
+                'user_coin_audit.coins_added',
+                'user_coin_audit.action',
+                'user_coin_audit.created_at',
+                'user_coin_audit.updated_at',
+                'user_coin_audit.parent_id',
+                'user_coin_audit.transaction_type',
+                'user_coin_audit.referral_code',
+                'user_coin_audit.comments',
+                'user_coin_audit.type',
+                'user_coin_audit.trn_status',
+                'user_coin_audit.start_date',
+                'user_coin_audit.approved_date',
+                'users.name as name'
+            )
+            ->join('users', 'users.id', '=', 'user_coin_audit.user_id') // Join with users table
+            ->where('user_coin_audit.user_id', $userId)
+            ->orderBy('user_coin_audit.created_at', 'desc')
+            ->get();
+            $userName = User::where('id', $userId)->value('name'); // Fetch the user's name
+        return view('backend.customer.customers.history', compact('history', 'userId' , 'userName'));
+    }
+    
+
+        public function userTree($id)
+        {
+            
+
+           
+            // Fetch the user hierarchy data based on the ID
+            $userTree = $this->getUserTreeData($id);
+
+            // echo '<pre>';
+            // print_r($userTree);
+            // echo '</pre>';
+            // die();
+
+            // Render the tree view
+            return view('backend.customer.customers.user_tree', compact('userTree'));
+        }
+
+       // In your Controller
+       private function getUserTreeData($userId)
+       {
+           // Fetch the user along with their children and referrer relationship
+           $user = User::with(['children', 'referrer'])->findOrFail($userId);
+
+
+        //    echo '<pre>ttttt=>';
+        //    print_r($user);
+
+        //    die();
+           // Recursive function to format tree data
+           $formatTree = function ($user) use (&$formatTree) {
+               // Prepare the data to be printed
+               $userData = [
+                   'user_name' => $user->name,
+                   'relationship' => $user->relationship ?? null,
+                   'referrer_name' => $user['referrer'] ? $user['referrer']->name : null, // Referrer name from 'referral_by'
+                   'children' => $user->children->map($formatTree)->toArray(),
+               ];
+       
+               // Print the data for debugging
+            //    echo '<pre>';
+            //    print_r($userData); 
+            //    echo '</pre>';
+            //    die(); 
+       
+               return $userData;
+           };
+       
+           // Call the recursive function and return the result
+           return $formatTree($user);
+       }
+       
+
+
+
+    
+    public function member($id)
+    {
+        //  user ID
+        $userId = ($id);
         
         // Fetch the user who clicked
         $user = User::find($userId);
@@ -54,7 +138,7 @@ class CustomerController extends Controller
         $userTree = $this->getUsersUnder($user->referral_code);
         
         // Return a view to show the user tree
-        return view('backend.customer.customers.user_tree', compact('user', 'userTree'));
+        return view('backend.customer.customers.member', compact('user', 'userTree'));
     }
     
     
@@ -62,7 +146,7 @@ class CustomerController extends Controller
     private function getUsersUnder($referralCode)
 {
     // Fetch users with this referral code
-    $users = User::with('referred_by_user')->where('referred_by', $referralCode)->get();
+    $users = User::where('referred_by', $referralCode)->get();
 
     // You can add more levels of recursion if needed to fetch all nested users
     foreach ($users as $user) {
@@ -88,8 +172,8 @@ class CustomerController extends Controller
 
 public function team_member($id)
 {
-    // Decrypt the user ID
-    $userId = decrypt($id);
+    //  the user ID
+    $userId = ($id);
 
     // Fetch the user details
     $user = User::find($userId);

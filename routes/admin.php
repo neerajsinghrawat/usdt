@@ -196,10 +196,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
         Route::get('customers_ban/{customer}', 'ban')->name('customers.ban');
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
 
-        Route::get('/users/{id}/user_tree', 'user_tree')->name('users.user_tree');
+        Route::get('/users/{id}/member', 'member')->name('users.member');
         Route::get('/users/{id}/team_member', 'team_member')->name('users.team_member');
+        Route::get('/users/{id}/history', 'userHistory')->name('users.history'); // New route for user history
+        Route::get('/users/{id}/tree', 'userTree')->name('users.tree'); 
 
-
+        
         Route::get('/customers/destroy/{id}', 'destroy')->name('customers.destroy');
         Route::post('/bulk-customer-delete', 'bulk_customer_delete')->name('bulk-customer-delete');
         Route::post('/customers/published', 'updatePublished')->name('customers.published');

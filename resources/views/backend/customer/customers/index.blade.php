@@ -108,10 +108,10 @@
                                     <span class="slider round"></span>
                                 </label>
                             </td>
-                                <td class="text-right">
+                            <td class="text-right">
 
                                 {{-- View Members Button --}}
-                                <a href="{{ route('users.user_tree', encrypt($user->id)) }}" 
+                                <a href="{{ route('users.member', $user->id )}}" 
                                     class="btn btn-soft-info btn-icon btn-circle btn-sm" 
                                     title="{{ 'Members' }}" 
                                     style="text-decoration: none;">
@@ -119,7 +119,7 @@
                                 </a>
 
                                 {{-- View Team Members Button --}}
-                                <a href="{{ route('users.team_member', encrypt($user->id)) }}" 
+                                <a href="{{ route('users.team_member', $user->id) }}" 
                                     class="btn btn-soft-info btn-icon btn-circle btn-sm" 
                                     title="{{ 'Team Members' }}" 
                                     style="text-decoration: none;">
@@ -133,6 +133,21 @@
                                         </a>
                                     @endcan --}}
 
+                                    <a href="{{ route('users.history', $user->id) }}" 
+                                        class="btn btn-soft-info btn-icon btn-circle btn-sm" 
+                                        title="{{ 'View History' }}" 
+                                        style="text-decoration: none;">
+                                        <i class="las la-history"></i>
+                                    </a>
+                                      {{-- User Tree Button --}}
+
+                                      <a href="{{ route('users.tree', $user->id) }}" 
+                                        class="btn btn-soft-primary btn-icon btn-circle btn-sm" 
+                                        title="{{ 'User Tree' }}" 
+                                        style="text-decoration: none;">
+                                        <i class="las la-sitemap"></i>
+                                    </a>
+                                    
 
                                     @can('ban_customer')
                                         @if($user->banned != 1)
