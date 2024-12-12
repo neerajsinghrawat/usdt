@@ -259,7 +259,7 @@
                 @endif -->
 
                 <!-- My Wallet -->
-                    <li class="aiz-side-nav-item">
+                    {{-- <li class="aiz-side-nav-item">
                         <a href="{{ route('wallet.index') }}"
                             class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index']) }}">
                             <svg id="Group_8103" data-name="Group 8103" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
@@ -274,7 +274,7 @@
                             </svg>
                             <span class="aiz-side-nav-text ml-3">{{ translate('My Wallet') }}</span>
                         </a>
-                    </li>
+                    </li> --}}
                 
 
                 <!-- Earning Points -->

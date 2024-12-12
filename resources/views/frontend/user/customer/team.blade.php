@@ -22,7 +22,7 @@
         </div>
     </div>
 <!-- Wallet Recharge History -->
-    <div class="card rounded-0 shadow-none border">
+    {{-- <div class="card rounded-0 shadow-none border">
         <div class="card-header border-bottom-0">
             <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('Team History') }}</h5>
         </div>
@@ -54,7 +54,58 @@
                 {{ $history->links() }}
             </div> 
         </div>
+    </div> --}}
+
+    <div class="card rounded-0 shadow-sm border">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">
+                {{ translate('Team History') }}
+            </h5>
+        </div>
+        <div class="card-body p-3">
+            <!-- List-style layout for mobile -->
+            <ul class="list-group list-group-flush">
+                @forelse ($history as $key => $his)
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-3">
+                        <div class="w-100">
+                            <!-- Row Header -->
+                            <div class="d-flex justify-content-between">
+                                <div class="text-dark fw-bold fs-14">
+                                    {{ sprintf('%02d', ($key+1)) }}. {{ $his['referreduser']->name }}
+                                </div>
+                                <div class="fs-12 text-muted">
+                                    {{ date('d-m-Y', strtotime($his->created_at)) }}
+                                </div>
+                            </div>
+                            <!-- Row Content -->
+                            <div class="mt-2 d-flex justify-content-between">
+                                <div class="text-muted fs-12">
+                                    {{ translate('User Name (Add New User)') }}
+                                </div>
+                                <div class="fw-bold text-success">
+                                    +{{ $his->amount }} {{ translate('USDT') }}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                @empty
+                    <li class="list-group-item text-center text-muted py-4">
+                        {{ translate('No Team History Found') }}
+                    </li>
+                @endforelse
+            </ul>
+            <!-- Pagination -->
+            @if ($history->isNotEmpty())
+                <div class="d-flex justify-content-center mt-3">
+                    <div class="aiz-pagination">
+                        {{ $history->links() }}
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
+    
+    
     <!-- <div class="row gutters-16 mt-2">
 
         <div class="col-xl-4 col-md-6 mb-4">

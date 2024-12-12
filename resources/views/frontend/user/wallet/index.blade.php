@@ -1,5 +1,20 @@
 @extends('frontend.layouts.user_panel')
+<style>
+   .card-header h6 {
+    font-size: 16px;
+    font-weight: 700;
+}
+.card-body .d-flex {
+    padding: 5px 0;
+}
+.badge {
+    border-radius: 12px;
+    min-width: 80px;
+    text-align: center;
+}
 
+
+</style>
 @section('panel_content')
     <div class="aiz-titlebar mb-4">
         <div class="row align-items-center">
@@ -37,7 +52,7 @@
     </div>
 
     <!-- Wallet Recharge History -->
-    <div class="card rounded-0 shadow-none border">
+    {{-- <div class="card rounded-0 shadow-none border">
         <div class="card-header border-bottom-0">
             <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('History (Wallet/Pending)') }}</h5>
         </div>
@@ -80,7 +95,60 @@
                 {{ $wallets->links() }}
             </div>
         </div>
+    </div> --}}
+
+
+    
+
+    <div class="card rounded-0 shadow-none border">
+        <div class="card-header border-bottom-0">
+            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">
+                {{ translate('History (Wallet/Pending)') }}
+            </h5>
+        </div>
+        <div class="card-body py-0">
+            @foreach ($wallets->groupBy(function($wallet) { 
+                return date('d-m-Y', strtotime($wallet->created_at)); 
+            }) as $date => $transactions)
+                <!-- Grouped Transactions by Date -->
+                <div class="card my-3 shadow-sm">
+                    <div class="card-header bg-light py-2">
+                        <h6 class="mb-0 fs-16 fw-700 text-dark">
+                            {{ $date }}
+                        </h6>
+                    </div>
+                    <div class="card-body py-2">
+                        @foreach ($transactions as $key => $wallet)
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div>
+                                    <h6 class="mb-1 fs-14 fw-700">
+                                        {{ $wallet->comments }}
+                                    </h6>
+                                    <p class="mb-0 text-muted fs-12">
+                                        {{ translate('Approved Date') }}: {{ date('d-m-Y', strtotime($wallet->approved_date)) }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <h6 class="mb-1 fs-14 fw-700 {{ $wallet->trn_status == 'approved' ? 'text-success' : 'text-info' }}">
+                                        {{ single_price($wallet->coins_added) }}
+                                    </h6>
+                                    <span class="badge badge-{{ $wallet->trn_status == 'approved' ? 'success' : 'info' }} p-2 fs-12">
+                                        {{ $wallet->trn_status == 'approved' ? translate('Approved') : translate('Pending') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+            <!-- Pagination -->
+            <div class="aiz-pagination mb-4">
+                {{ $wallets->links() }}
+            </div>
+        </div>
     </div>
+    
 @endsection
 
 @section('modal')

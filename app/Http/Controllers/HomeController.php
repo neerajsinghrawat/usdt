@@ -16,6 +16,7 @@ use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\FlashDeal;
+use App\Models\UserCoinAudit;
 use App\Models\OrderDetail;
 use App\Models\TeamHistory;
 use Illuminate\Support\Str;
@@ -326,12 +327,15 @@ public function SaveTransactionRegister(Request $request)
             return redirect()->route('seller.dashboard');
         } elseif (Auth::user()->user_type == 'customer') {
 
+
+            $walletshis = UserCoinAudit::where('user_id', Auth::user()->id)->whereIn('type', ['coins_distributed', 'roi'])->latest()->paginate(50);
+            
             $wallets = WithdrawalRequest::where('user_id', Auth::user()->id)->latest()->paginate(10);
             $users_cart = Cart::where('user_id', auth()->user()->id)->first();
             if ($users_cart) {
                 flash(translate('You had placed your items in the shopping cart. Try to order before the product quantity runs out.'))->warning();
             }
-            return view('frontend.user.customer.dashboard', compact('wallets'));
+            return view('frontend.user.customer.dashboard', compact('wallets','walletshis'));
         } elseif (Auth::user()->user_type == 'delivery_boy') {
             return view('delivery_boys.dashboard');
         } else {

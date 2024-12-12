@@ -1,46 +1,203 @@
 @extends('frontend.layouts.user_panel')
 
+<style>
+    <style>
+   .card-header h6 {
+    font-size: 16px;
+    font-weight: 700;
+}
+.card-body .d-flex {
+    padding: 5px 0;
+}
+.badge {
+    border-radius: 12px;
+    min-width: 80px;
+    text-align: center;
+}
+
+</style>
+</style>
 @section('panel_content')
 
    
 
-    <div class="row gutters-16">
-        <div class="col-xl-8 col-md-6 mb-4">
-            <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
-                <div class="p-4 h-100 w-100 w-xl-50">
-                    <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
-                    <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->wallet_usdt) }}</h1>
-                    <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
-                    
-                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
-                                    <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
-                                    <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
-                                    <g id="Group_24786" data-name="Group 24786" transform="translate(701.466 93)">
-                                        <path id="Path_32311" data-name="Path 32311" d="M122.052,10V8.55a.727.727,0,1,0-1.455,0V10a2.909,2.909,0,0,0-2.909,2.909v.727A2.909,2.909,0,0,0,120.6,16.55h1.455A1.454,1.454,0,0,1,123.506,18v.727a1.454,1.454,0,0,1-1.455,1.455H120.6a1.454,1.454,0,0,1-1.455-1.455.727.727,0,1,0-1.455,0,2.909,2.909,0,0,0,2.909,2.909V23.1a.727.727,0,1,0,1.455,0V21.641a2.909,2.909,0,0,0,2.909-2.909V18a2.909,2.909,0,0,0-2.909-2.909H120.6a1.454,1.454,0,0,1-1.455-1.455v-.727a1.454,1.454,0,0,1,1.455-1.455h1.455a1.454,1.454,0,0,1,1.455,1.455.727.727,0,0,0,1.455,0A2.909,2.909,0,0,0,122.052,10" transform="translate(127.209 529.177)" fill="#fff"/>
-                                    </g>
-                                    </g>
-                                </svg> 
-                        {{ translate('Withdrawal') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-       
-
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
-                <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
-                <div class="py-2">
-                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->package_amount) }}</div>
-
-                    <div class="fs-14 fw-400 text-center">{{ translate('Package Activated IDs') }}</div>
-                </div>
+<div class="row gutters-16">
+    <!-- Wallet Balance Box -->
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
+            <div class="p-4 h-100 w-100 w-xl-50">
+                <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
+                <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->wallet_usdt) }}</h1>
+                <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
+                <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
+                        <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
+                            <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
+                            <g id="Group_24786" data-name="Group 24786" transform="translate(701.466 93)">
+                                <path id="Path_32311" data-name="Path 32311" d="M122.052,10V8.55a.727.727,0,1,0-1.455,0V10a2.909,2.909,0,0,0-2.909,2.909v.727A2.909,2.909,0,0,0,120.6,16.55h1.455A1.454,1.454,0,0,1,123.506,18v.727a1.454,1.454,0,0,1-1.455,1.455H120.6a1.454,1.454,0,0,1-1.455-1.455.727.727,0,1,0-1.455,0,2.909,2.909,0,0,0,2.909,2.909V23.1a.727.727,0,1,0,1.455,0V21.641a2.909,2.909,0,0,0,2.909-2.909V18a2.909,2.909,0,0,0-2.909-2.909H120.6a1.454,1.454,0,0,1-1.455-1.455v-.727a1.454,1.454,0,0,1,1.455-1.455h1.455a1.454,1.454,0,0,1,1.455,1.455.727.727,0,0,0,1.455,0A2.909,2.909,0,0,0,122.052,10" transform="translate(127.209 529.177)" fill="#fff"/>
+                            </g>
+                        </g>
+                    </svg>
+                    {{ translate('Withdrawal') }}
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- Pending USDT Box -->
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="bg-light text-dark overflow-hidden text-center p-4 h-100">
+            <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
+            <div class="py-2">
+                <div class="fs-14 fw-400 text-center">{{ translate('Pending USDT') }}</div>
+                <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->pending_usdt) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package Activated IDs Box -->
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
+            <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
+            <div class="py-2">
+                <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->package_amount) }}</div>
+                <div class="fs-14 fw-400 text-center">{{ translate('Package Activated IDs') }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Wallet Recharge History -->
-    <div class="card rounded-0 shadow-none border">
+        <div class="container mt-4">
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs" id="historyTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="withdrawal-tab" data-toggle="tab" href="#withdrawal" role="tab" aria-controls="withdrawal" aria-selected="true">
+                        {{ translate('Withdrawal History') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="false">
+                        {{ translate('Wallet') }}
+                    </a>
+                </li>
+            </ul>
+    
+            <!-- Tab Content -->
+            <div class="tab-content mt-3" id="historyTabsContent">
+        
+                <!-- Withdrawal History Tab -->
+                <div class="tab-pane fade show active" id="withdrawal" role="tabpanel" aria-labelledby="withdrawal-tab">
+                    <div class="card rounded-0 shadow-sm border">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">
+                                {{ translate('Withdrawal History') }}
+                            </h5>
+                        </div>
+                        <div class="card-body py-0">
+                            @foreach ($wallets->groupBy(function($wallet) { 
+                                return date('d-m-Y', strtotime($wallet->created_at)); 
+                            }) as $date => $transactions)
+                                <!-- Grouped Transactions by Date -->
+                                <div class="card my-3 shadow-sm">
+                                    <div class="card-header bg-light py-2">
+                                        <h6 class="mb-0 fs-16 fw-700 text-dark">
+                                            {{ $date }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        @foreach ($transactions as $key => $wallet)
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div >
+                                                    <h6 class="mb-1 fs-14 fw-700 text-dark">
+                                                        {{ sprintf('%02d', ($key + 1)) }}. {{ translate('Withdrawal') }}
+                                                    </h6>
+                                                    <p class="mb-0 text-muted fs-12">
+                                                        {{ translate('Status') }}: 
+                                                        <span class="badge badge-{{ $wallet->status == 'approved' ? 'success' : 'info' }} p-2 fs-12">
+                                                            {{ $wallet->status == 'approved' ? translate('Approved') : translate('Pending') }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <h6 class="mb-1 fs-14 fw-700 text-success">
+                                                        {{ single_price($wallet->amount) }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                            <hr class="my-1">
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+            
+                            <!-- Pagination -->
+                            @if ($wallets->isNotEmpty())
+                                <div class="aiz-pagination mb-4">
+                                    {{ $wallets->links() }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            
+    
+                <!-- Wallet Tab -->
+                <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                    <div class="card rounded-0 shadow-none border">
+                        <div class="card-header border-bottom-0">
+                            <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">
+                                {{ translate('History (Wallet/Pending)') }}
+                            </h5>
+                        </div>
+                        <div class="card-body py-0">
+                            @foreach ($walletshis->groupBy(function($walletshis) { 
+                                return date('d-m-Y', strtotime($walletshis->created_at)); 
+                            }) as $date => $transactions)
+                                <!-- Grouped Transactions by Date -->
+                                <div class="card my-3 shadow-sm">
+                                    <div class="card-header bg-light py-2">
+                                        <h6 class="mb-0 fs-16 fw-700 text-dark">
+                                            {{ $date }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        @foreach ($transactions as $key => $wallet)
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <h6 class="mb-1 fs-14 fw-700">
+                                                        {{ $wallet->comments }}
+                                                    </h6>
+                                                    <p class="mb-0 text-muted fs-12">
+                                                        {{ translate('Approved Date') }}: {{ date('d-m-Y', strtotime($wallet->approved_date)) }}
+                                                    </p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <h6 class="mb-1 fs-14 fw-700 {{ $wallet->trn_status == 'approved' ? 'text-success' : 'text-info' }}">
+                                                        {{ single_price($wallet->coins_added) }}
+                                                    </h6>
+                                                    <span class="badge badge-{{ $wallet->trn_status == 'approved' ? 'success' : 'info' }} p-2 fs-12">
+                                                        {{ $wallet->trn_status == 'approved' ? translate('Approved') : translate('Pending') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <hr class="my-1">
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                            <!-- Pagination -->
+                            <div class="aiz-pagination mb-4">
+                                {{ $wallets->links() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+     {{-- <div class="card rounded-0 shadow-none border">
         <div class="card-header border-bottom-0">
             <h5 class="mb-0 fs-20 fw-700 text-dark text-center text-md-left">{{ translate('Withdrawal History') }}</h5>
         </div>
@@ -78,7 +235,10 @@
                 {{ $wallets->links() }}
             </div>
         </div>
-    </div>
+    </div> --}}
+
+
+    
     <!-- <div class="row gutters-16 mt-2">
 
         <div class="col-xl-4 col-md-6 mb-4">

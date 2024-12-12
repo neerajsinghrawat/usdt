@@ -54,7 +54,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ static_asset('assets/usdt/assets/logo/favicon-16x16.png') }}">
     <link rel="icon" type="image/x-icon" href="{{ static_asset('assets/usdt/assets/logo/favicon.ico') }}">
     <link rel="manifest" href="{{ static_asset('assets/usdt/assets/logo/site.webmanifest') }}">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/glide/css/glide.core.min.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/aos/aos.css') }}">
@@ -300,7 +300,8 @@
     <script src="{{ static_asset('assets/usdt/assets/js/scripts.js') }}"></script>
     <script src="{{ static_asset('assets/usdt/assets/php/contact/script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     @yield('script')
 
     @php
