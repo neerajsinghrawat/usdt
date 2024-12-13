@@ -1,6 +1,34 @@
 @extends('backend.layouts.app')
 
+<style>
+   
+    #loader {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050; /* Ensure it stays above other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+
+</style>
 @section('content')
+
+<div id="loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1050;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="align-items-center">
@@ -108,6 +136,9 @@
                                     <span class="slider round"></span>
                                 </label>
                             </td>
+
+
+
                             <td class="text-right">
 
                                 {{-- View Members Button --}}
@@ -308,29 +339,43 @@
         }
 
 
-            function update_published(el){
+                function update_published(el) {
+            if ('{{ env("DEMO_MODE") }}' === 'On') {
+                AIZ.plugins.notify('info', '{{ translate("Data cannot be changed in demo mode.") }}');
+                return;
+            }
 
-                if('{{env('DEMO_MODE')}}' == 'On'){
-                    AIZ.plugins.notify('info', '{{ translate('Data can not change in demo mode.') }}');
-                    return;
-                }
+            const status = el.checked ? 1 : 0;
 
-                if(el.checked){
-                    var status = 1;
-                }
-                else{
-                    var status = 0;
-                }
-                $.post('{{ route('customers.published') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
-                    if(data == 1){
-                        AIZ.plugins.notify('success', '{{ translate('Published User updated successfully') }}');
-                    }
-                    else{
-                        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                    }
-                });
-                }
+            // Show the loader
+            $('#loader').show(); // Assuming you have an element with id="loader"
 
+            $.post('{{ route("customers.published") }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            })
+            .done(function(data) {
+                // Hide the loader once the request is done
+                $('#loader').hide();
+
+                if (data.success) {
+                    AIZ.plugins.notify('success', '{{ translate("Published User updated successfully") }}');
+                } else {
+                    AIZ.plugins.notify('danger', data.message || '{{ translate("Something went wrong") }}');
+                }
+            })
+            .fail(function(xhr) {
+                // Hide the loader in case of failure
+                $('#loader').hide();
+
+                const error = xhr.responseJSON?.message || '{{ translate("An error occurred.") }}';
+                AIZ.plugins.notify('danger', error);
+            });
+        }
+
+
+                
                 function viewImage(imageUrl) {
                 // Log the URL for debugging
                 console.log(imageUrl);

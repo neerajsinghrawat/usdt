@@ -53,7 +53,7 @@
                         <ul class="navbar-nav align-items-xl-center flex-grow-1 column-gap-4 row-gap-4 row-gap-xl-2">
                             <li class="nav-item ms-xl-auto">
                                 <a href="{{ asset('index.php') }}" class="px-3 text-body-emphasis bg-body-secondary-hover nav-link rounded-3 text-base leading-6 fw-semibold" aria-current="page">
-                                    HOME
+                                    Home
                                 </a>
                             </li>
                             

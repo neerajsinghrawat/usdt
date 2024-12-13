@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\UserCoinAudit;
 use App\Models\WithdrawalRequest;
 use App\Models\TeamHistory;
+// use Illuminate\Support\Facades\Mail;
+use App\Mail\SecondEmailVerifyMailManager;
+use Mail;
 
 class CustomerController extends Controller
 {
@@ -36,13 +39,14 @@ class CustomerController extends Controller
             });
         }
         $users = $users->paginate(15);
+        // session()->flash('success_message', translate('Customer has been activated'));
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
+
     public function userHistory($id)
     {
 
 
-       
         $userId = ($id); //  the user ID
     
         $history = UserCoinAudit::select(
@@ -289,7 +293,6 @@ private function getAllTeamMembers($parentId)
     }
     
     
-    
    
     public function updateTrnStatus(Request $request)
 {
@@ -365,44 +368,6 @@ public function Withdrawal_request(Request $request)
     return view('backend.customer.customers.Withdrawal', compact('users', 'sort_search'));
 }
 
-// public function updateWithStatus(Request $request)
-// {
-//     \Log::info('Request data:', $request->all());
-    
-//     $request->validate([
-//         'id' => 'required|exists:withdrawal_requests,id',
-//         'trn_status' => 'required|string|in:approved,rejected,pending',
-//         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
-//     ]);
-
-
-//     try {
-//         $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
-//         $withdrawalRequest->status = $request->trn_status;
-
-//         // Update approved_date only if status is 'approved'
-//         if ($request->trn_status == 'approved') {
-//             $withdrawalRequest->approved_date = now();
-//         } else {
-//             $withdrawalRequest->approved_date = null;
-//         }
-
-//         if ($withdrawalRequest->save()) {
-//             if ($request->trn_status == 'approved') {
-
-//                 $this->updateWallet($withdrawalRequest);
-//             }
-//             return response()->json(['success' => true, 'message' => 'Updated successfully.']);
-//         } else {
-//             return response()->json(['success' => false, 'message' => 'Failed to update .']);
-//         }
-        
-//     } catch (\Exception $e) {
-//         \Log::error('Error updating status:', ['message' => $e->getMessage()]);
-//         return response()->json(['success' => false, 'message' => 'An error occurred.']);
-//     }
-// }
-
 
 public function updateWithStatus(Request $request)
 {
@@ -431,8 +396,44 @@ public function updateWithStatus(Request $request)
                 $withdrawalRequest->image = $imagePath;
             }
             $withdrawalRequest->approved_date = now();
+
+            // Send approval email
+            $user = $withdrawalRequest->user; // Assuming the relationship is defined
+
+            $array = [
+                'view' => 'emails.verification.blade',
+                'from' => env('MAIL_FROM_ADDRESS'),
+                'subject' => 'Your Withdrawal Request Has Been Approved',
+                'amount' => $withdrawalRequest->amount,
+                'content' => sprintf(
+                    "Dear %s,\n\nWe are excited to inform you that your withdrawal request of ₹%s has been successfully approved.\n\nIf you have any questions or concerns, our support team is here to assist you at any time.\n\nThank you for choosing our platform. We look forward to serving you again.\n\nBest Regards,\nThe Team",
+                    $user->name,
+                    number_format($withdrawalRequest->amount, 2)
+                ),
+            ];
+
+            Mail::to($user->email)->queue(new SecondEmailVerifyMailManager($array));
         } else {
             $withdrawalRequest->approved_date = null;
+
+            // Send rejection or pending notification email
+            $user = $withdrawalRequest->user;
+            $statusMessage = $request->trn_status === 'rejected'
+                ? "Unfortunately, your withdrawal request has been declined. For more information, please contact our support team."
+                : "Your withdrawal request is currently under review. We will notify you once there is an update.";
+            
+            $array = [
+                'view' => 'emails.verification.blade',
+                'from' => env('MAIL_FROM_ADDRESS'),
+                'subject' => 'Update on Your Withdrawal Request',
+                'content' => sprintf(
+                    "Dear %s,\n\n%s\n\nThank you for your understanding. If you have any questions, feel free to contact our support team.\n\nBest Regards,\nThe Team",
+                    $user->name,
+                    $statusMessage
+                ),
+            ];
+
+            Mail::to($user->email)->queue(new SecondEmailVerifyMailManager($array));
         }
 
         // Save the withdrawal request
@@ -452,6 +453,57 @@ public function updateWithStatus(Request $request)
         return response()->json(['success' => false, 'message' => 'An error occurred.']);
     }
 }
+
+
+
+// public function updateWithStatus(Request $request)
+// {
+//     \Log::info('Request data:', $request->all());
+
+//     // Validate the incoming request
+//     $request->validate([
+//         'id' => 'required|exists:withdrawal_requests,id',
+//         'trn_status' => 'required|string|in:approved,rejected,pending',
+//         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Optional image validation
+//     ]);
+
+//     try {
+//         // Find the withdrawal request
+//         $withdrawalRequest = WithdrawalRequest::findOrFail($request->id);
+//         $withdrawalRequest->status = $request->trn_status;
+
+//         // Handle image upload if status is 'approved'
+//         if ($request->trn_status == 'approved') {
+//             if ($request->hasFile('image')) {
+//                 // Store the uploaded image
+//                 $image = $request->file('image');
+//                 $imagePath = $image->store('withdrawal_images', 'public'); // Store in the 'withdrawal_images' directory
+
+//                 // Save the image path to the withdrawal request
+//                 $withdrawalRequest->image = $imagePath;
+//             }
+//             $withdrawalRequest->approved_date = now();
+//         } else {
+//             $withdrawalRequest->approved_date = null;
+//         }
+
+//         // Save the withdrawal request
+//         if ($withdrawalRequest->save()) {
+//             if ($request->trn_status == 'approved') {
+//                 // Call the method to update the wallet or any other logic
+//                 $this->updateWallet($withdrawalRequest);
+//             }
+
+//             return response()->json(['success' => true, 'message' => 'Updated successfully.']);
+//         } else {
+//             return response()->json(['success' => false, 'message' => 'Failed to update.']);
+//         }
+
+//     } catch (\Exception $e) {
+//         \Log::error('Error updating status:', ['message' => $e->getMessage()]);
+//         return response()->json(['success' => false, 'message' => 'An error occurred.']);
+//     }
+// }
 
 
 
@@ -614,14 +666,60 @@ public function updateWallet($withdrawalRequest='')
 
         return back();
     }
+    // public function updatePublished(Request $request)
+    // {
+    //     $customer = User::findOrFail($request->id);
+    //     $customer->status = $request->status;
+    //     $customer->save();
+
+    //     // Artisan::call('view:clear');
+    //     // Artisan::call('cache:clear');
+    //     return 1;
+    // }
+
+
     public function updatePublished(Request $request)
     {
-        $customer = User::findOrFail($request->id);
-        $customer->status = $request->status;
-        $customer->save();
-
-        Artisan::call('view:clear');
-        Artisan::call('cache:clear');
-        return 1;
+        \Log::info('Update published request:', $request->all());
+    
+        $validated = $request->validate([
+            'id' => 'required|exists:users,id',
+            'status' => 'required|in:0,1',
+        ]);
+    
+        try {
+            $customer = User::findOrFail($validated['id']);
+            
+            // Only proceed to send email if the status is being changed to 1 (active)
+            if ($validated['status'] == 1 && $customer->status != 1) {
+                // Account activation message
+                $data = [
+                    'view' => 'emails.verification.blade',
+                    'from' => env('MAIL_FROM_ADDRESS'),
+                    'subject' => ' Dear ' . $customer->name . ' Account Has Been Activated',
+                    'content' => '
+                        Dear ' . $customer->name . ',
+                        We are pleased to inform you that your account has been successfully activated. You can now access all the features and services available for your user account.
+                        If you have any questions or need further assistance, please feel free to contact us. We are here to help!
+                        Best regards,Your Company Name
+                    ',
+                ];
+                // Send activation email
+                Mail::to($customer->email)->queue(new SecondEmailVerifyMailManager($data));
+                \Log::info("Activation email sent to {$customer->email}");
+            }
+    
+            // Update the user's status (no email sent for deactivation)
+            $customer->status = $validated['status'];
+            $customer->save();
+    
+            return response()->json(['success' => true, 'message' => __('Status updated and email sent successfully.')]);
+        } catch (\Exception $e) {
+            \Log::error('Error in updatePublished:', ['error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => __('An error occurred while updating the status.')]);
+        }
     }
+    
+    
+
 }

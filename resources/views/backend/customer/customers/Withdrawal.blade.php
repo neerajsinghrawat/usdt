@@ -2,6 +2,32 @@
 
 @section('content')
 
+<div id="loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1050;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<style>
+    #loader {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050; /* Ensure it stays above other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+</style>
+
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="align-items-center">
         <h1 class="h3">{{translate('All Withdrawal Request')}}</h1>
@@ -268,47 +294,49 @@
         }
 
 
-        function openUploadModal(el) {
-    const requestId = $(el).closest('tr').data('id');
-    $('#requestId').val(requestId);  // Set the request ID in the hidden field
-    $('#uploadModal').modal('show'); // Show the modal
-}
+       
+    function openUploadModal(el) {
+        const requestId = $(el).closest('tr').data('id');
+        $('#requestId').val(requestId);  // Set the request ID in the hidden field
+        $('#uploadModal').modal('show'); // Show the modal
+    }
 
+    function submitImageAndUpdate() {
+        const formData = new FormData($('#uploadImageForm')[0]);
 
-function submitImageAndUpdate() {
-    const formData = new FormData($('#uploadImageForm')[0]);
+        // Show loader before the AJAX request
+        $('#loader').show();  
 
-    $.ajax({
-        url: '{{ route('customers_updateWithStatus') }}',
-        type: 'POST',
-        data: formData,
-        processData: false,  // Prevent jQuery from processing the data
-        contentType: false,  // Prevent jQuery from setting contentType
-        success: function(response) {
-            if (response.success) {
-                AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
-                $('#uploadModal').modal('hide'); // Close the modal
-                location.reload();  // Reload the page to reflect the changes
-            } else {
-                AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+        $.ajax({
+            url: '{{ route('customers_updateWithStatus') }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#loader').hide();  // Hide the loader on successful response
+                if (response.success) {
+                    AIZ.plugins.notify('success', '{{ translate('Transaction status updated successfully') }}');
+                    $('#uploadModal').modal('hide');  // Close the modal
+                    location.reload();  // Reload the page to reflect the changes
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            },
+            error: function(xhr) {
+                $('#loader').hide();  // Hide the loader if an error occurs
+                AIZ.plugins.notify('danger', 'An error occurred while uploading the image.');
             }
-        },
-        error: function(xhr) {
-            AIZ.plugins.notify('danger', 'An error occurred while uploading the image.');
-        }
-    });
-}
-
+        });
+    }
 
     function updateWithStatus(el, status) {
-
         if (!status) {
             console.warn('No status selected.');
             return;
         }
 
         console.log('Update called with status:', status);
-        
 
         const requestId = $(el).closest('tr').data('id');
         if (!requestId) {
@@ -318,49 +346,34 @@ function submitImageAndUpdate() {
         // Disable the dropdown to prevent multiple submissions
         $(el).prop('disabled', true);
 
+        // Show loader before making the AJAX call
+        $('#loader').show();
+
         $.ajax({
             url: '{{ route('customers_updateWithStatus') }}',
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
                 id: requestId,
-                trn_status: status
+                status: status
             },
-            success: function (response) {
-                console.log('Server Response:', response);
-                //alert(response.success);
+            success: function(response) {
+                $('#loader').hide();  // Hide loader after response
                 if (response.success) {
-                    AIZ.plugins.notify('success', '{{ translate(' Transaction status updated successfully') }}');
-
-                    const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1);
-                    $(el).closest('tr').find('.action-text').text(statusCapitalized);
-
-                    // Update approved_date dynamically
-                    if (status === 'approved') {
-                        $(el).closest('tr').find('.approved-date-text').text(new Date().toLocaleString());
-                    } else {
-                        $(el).closest('tr').find('.approved-date-text').text('');
-                    }
+                    AIZ.plugins.notify('success', '{{ translate('Status updated successfully') }}');
+                    location.reload();  // Reload the page
                 } else {
-                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                    AIZ.plugins.notify('danger', '{{ translate('Failed to update status') }}');
                 }
-                location.reload();
             },
-            error: function (xhr) {
-                console.error('Request failed:', xhr.responseText);
-                AIZ.plugins.notify('danger', 'An error occurred while updating status.');
-            },
-            complete: function () {
-                // Re-enable the dropdown after processing
-                $(el).prop('disabled', false);
+            error: function(xhr) {
+                $('#loader').hide();  // Hide loader if error
+                AIZ.plugins.notify('danger', 'An error occurred while updating the status.');
             }
         });
-}
+    }
+</script>
 
-
-
-
-    </script>
 @endsection
 
 

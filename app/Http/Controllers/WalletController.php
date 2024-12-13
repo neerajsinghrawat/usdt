@@ -34,7 +34,7 @@ class WalletController extends Controller
     
             $data['wallet_url'] = $request->wallet_url;
             $data['amount'] = $request->amount+3;
-            //echo "<pre>";print_r($data);die;
+            // echo "<pre>";print_r($data);die;
             if (Auth::check()) {
                 $user = Auth::user();
     
