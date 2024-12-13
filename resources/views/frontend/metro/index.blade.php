@@ -6,7 +6,7 @@
 
     <!-- header body -->
     <div class="overflow-hidden position-relative">
-       <img src="{{ static_asset('assets/usdt/assets/img/bg/bg1.jpg') }}" class="position-absolute z-n1 top-0 h-100 w-100 object-fit-cover" alt="Meeting">
+       <img src="{{ static_asset('assets/usdt/assets/img/bg/bg1.webp') }}" class="position-absolute z-n1 top-0 h-100 w-100 object-fit-cover" alt="Meeting">
 
        <div class="overlay position-absolute z-n1 top-0 h-100 w-100 bg-dark"
             style="opacity: 0.85; mix-blend-mode: multiply; filter: contrast(1.15) brightness(0.85);">
@@ -82,10 +82,10 @@
                         Our services
                     </h2>
                     <p class="m-0 mt-2 text-body-emphasis text-4xl tracking-tight fw-bold">
-                        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
                     </p>
                     <p class="m-0 mt-4 text-body text-lg leading-8">
-                        " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                 </div>
             </div>
@@ -98,12 +98,12 @@
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </p>
                         </div>
                     </div>
@@ -111,16 +111,16 @@
                     <div class="col pt-5 pt-xl-4">
                         <div class="max-w-xl mx-auto mx-xl-0" data-aos-delay="100" data-aos="fade" data-aos-duration="1000">
                             <div class="ratio" style="--bs-aspect-ratio: 66.66%;">
-                                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg3.jpg') }}" class="object-fit-cover rounded-3" alt="Service image" loading="lazy">
+                                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg3.png') }}" class="object-fit-cover rounded-3" alt="Service image" loading="lazy">
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </p>
                         </div>
                     </div>
@@ -128,16 +128,16 @@
                     <div class="col pt-5 pt-xl-4">
                         <div class="max-w-xl mx-auto mx-xl-0" data-aos-delay="200" data-aos="fade" data-aos-duration="1000">
                             <div class="ratio" style="--bs-aspect-ratio: 66.66%;">
-                                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg4.jpg') }}" class="object-fit-cover rounded-3" alt="Service image" loading="lazy">
+                                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg4.png') }}" class="object-fit-cover rounded-3" alt="Service image" loading="lazy">
                             </div>
 
                             <h3 class="m-0 mt-4 text-body-emphasis text-lg leading-6 fw-semibold">
-                                " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </h3>
 
                             <!-- Remove line-clamp-2 if you need more lines or add line-clamp-3 -->
                             <p class="m-0 mt-3 text-body-secondary line-clamp-2 text-sm leading-6">
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
                             </p>
                         </div>
@@ -170,7 +170,7 @@
                 <div class="col-12 col-xl-6">
                     <div class="mx-auto max-w-2xl">
                         <div class="ratio ratio-4x3" data-aos-delay="0" data-aos="fade" data-aos-duration="3000">
-                            <img src="{{ static_asset('assets/usdt/assets/img/bg/bg5.jpg') }}" class="object-fit-cover rounded-3" alt="about us" loading="lazy">
+                            <img src="{{ static_asset('assets/usdt/assets/img/bg/bg5.webp') }}" class="object-fit-cover rounded-3" alt="about us" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
 
             <!-- big image -->
             <div class="ratio ratio-16x9 mt-7 mt-sm-8 mt-xl-9">
-                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg6.jpg') }}" class="object-fit-cover rounded-3" alt="presentation" loading="lazy">
+                <img src="{{ static_asset('assets/usdt/assets/img/bg/bg6.webp') }}" class="object-fit-cover rounded-3" alt="presentation" loading="lazy">
             </div>
         </div>
     </div>

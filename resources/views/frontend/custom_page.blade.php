@@ -31,7 +31,8 @@
 
 @section('content')
 <div class="overflow-hidden py-9 py-xl-10 position-relative">
-        <img src="./assets/img/bg/bg1.jpg" class="position-absolute z-n1 top-0 h-100 w-100 object-fit-cover" alt="Meeting">
+
+    <img src="{{ static_asset('assets/usdt/assets/img/bg/bg2.jpg') }}" class="position-absolute z-n1 top-0 h-100 w-100 object-fit-cover" alt="Meeting">
 
         <div class="position-absolute z-n1 top-0 h-100 w-100 bg-dark" style="opacity: 0.85; mix-blend-mode: multiply; filter: contrast(1.15) brightness(0.85);">
         </div>
