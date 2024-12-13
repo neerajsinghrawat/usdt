@@ -1,7 +1,12 @@
 @extends('auth.layouts.authentication')
 
 @section('content')
-
+<style type="text/css">
+    .new_mar_0{
+            background: #f0f9ff66;
+            border: var(--bs-border-width) var(--bs-border-style) #b2dff4 !important;
+        } 
+</style>
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column justify-content-md-center bg-white">
         <section class="bg-white overflow-hidden">
@@ -15,7 +20,7 @@
                             </div> 
 
                             <!-- Right Side -->
-                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content new_mar_25" style="height: auto;">
+                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content new_mar_0" style="height: auto;">
                                 <!-- Site Icon -->
                                 <!-- <div class="size-48px mb-3 mx-auto mx-lg-0">
                                     <img src="{{ uploaded_asset(get_setting('site_icon')) }}" alt="{{ translate('Site Icon')}}" class="img-fit h-100">
