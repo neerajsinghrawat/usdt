@@ -30,7 +30,23 @@
 @endsection
 
 @section('content')
-<section class="pt-4 mb-4">
+<div class="overflow-hidden py-9 py-xl-10 position-relative">
+        <img src="./assets/img/bg/bg1.jpg" class="position-absolute z-n1 top-0 h-100 w-100 object-fit-cover" alt="Meeting">
+
+        <div class="position-absolute z-n1 top-0 h-100 w-100 bg-dark" style="opacity: 0.85; mix-blend-mode: multiply; filter: contrast(1.15) brightness(0.85);">
+        </div>
+
+        <div class="position-absolute z-0 top-0 h-100 w-100">
+            <div class="container h-100 d-flex align-items-center">
+                <div class="max-w-2xl mx-auto mx-xl-0 text-center text-xl-start">
+                    <h1 class="m-0 mt-7 text-white tracking-tight text-6xl fw-bold aos-init aos-animate" data-aos-delay="0" data-aos="fade" data-aos-duration="3000">
+                        {{ $page->getTranslation('title') }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- <section class="pt-4 mb-4">
     <div class="container text-center">
         <div class="row">
             <div class="col-lg-6 text-center text-lg-left">
@@ -48,7 +64,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <section class="mb-4">
 	<div class="container">
         <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">

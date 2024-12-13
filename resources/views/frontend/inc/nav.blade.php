@@ -56,16 +56,16 @@
                                     HOME
                                 </a>
                             </li>
-                            {{-- <li class="nav-item ms-xl-auto">
-                                <a href="{{ asset('index.php') }}" class="px-3 text-body-emphasis bg-body-secondary-hover nav-link rounded-3 text-base leading-6 fw-semibold" aria-current="page">
-                                    PLAN
-                                </a>
-                            </li>
-                            <li class="nav-item ms-xl-auto">
-                                <a href="{{ asset('index.php') }}" class="px-3 text-body-emphasis bg-body-secondary-hover nav-link rounded-3 text-base leading-6 fw-semibold" aria-current="page">
-                                    CONTACT US
-                                </a>
-                            </li> --}}
+                            
+                            @if (get_setting('header_menu_labels') != null)
+                                    @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                                        <li class="nav-item">
+                                            <a href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}" class="px-3 text-body-emphasis bg-body-secondary-hover nav-link rounded-3 text-base leading-6 fw-semibold" aria-current="page">
+                                                {{ translate($value) }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @endif
 
                             <li class="nav-item ms-xl-auto">
                                 @auth

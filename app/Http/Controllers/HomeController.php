@@ -184,6 +184,8 @@ public function SaveTransactionRegister(Request $request)
         if (isset($request->user_id) && !empty($request->user_id)) {
             $user = User::find($request->user_id);
             if (!$user) {
+
+                flash(translate('Please log in to perform this action.'))->error();
                 return redirect()->route('login')->with('error', 'Please log in to perform this action.');
             }
 
@@ -205,6 +207,7 @@ public function SaveTransactionRegister(Request $request)
                 
                 $user->save();
 
+                flash(translate('Transaction details saved successfully.'))->success();
                 return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
             }
         }           
@@ -376,9 +379,9 @@ public function roiDistribution($id)
         if ($user != null) {
             if (Hash::check($request->password, $user->password)) {
                 if ($request->has('remember')) {
-                    auth()->login($user, true);
+                    //auth()->login($user, true);
                 } else {
-                    auth()->login($user, false);
+                    //auth()->login($user, false);
                 }
             } else {
                 flash(translate('Invalid email or password!'))->warning();
@@ -950,7 +953,7 @@ public function roiDistribution($id)
                 $user->new_email_verificiation_code = null;
                 $user->save();
 
-                auth()->login($user, true);
+                //auth()->login($user, true);
 
                 flash(translate('Email Changed successfully'))->success();
                 if ($user->user_type == 'seller') {
@@ -972,7 +975,7 @@ public function roiDistribution($id)
                 $user->email_verified_at = date('Y-m-d h:m:s');
                 $user->save();
                 event(new PasswordReset($user));
-                auth()->login($user, true);
+                //auth()->login($user, true);
 
                 flash(translate('Password updated successfully'))->success();
 

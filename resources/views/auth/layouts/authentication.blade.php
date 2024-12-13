@@ -103,6 +103,31 @@
     <script>
         var AIZ = AIZ || {};
     </script>
+    <style type="text/css">
+    .new_mar_25{
+        margin-left: 25%;
+        background: #f0f9ff66;
+        border: var(--bs-border-width) var(--bs-border-style) #b2dff4 !important;
+    }
+    </style>
+    <style type="text/css">
+        .new_mar_21{
+            margin-left: 21%;
+            margin-top: 7%;
+            background: #f0f9ff66;
+            border: var(--bs-border-width) var(--bs-border-style) #b2dff4 !important;
+        } 
+        @media screen and (max-width: 768px) { /* Adjust max-width as per your requirement */
+            .new_mar_25 {
+                margin-left: 0; /* Reset margin-left for mobile view */
+                margin-top: 20%;
+            }
+            .new_mar_21 {
+                margin-left: 0; /* Reset margin-left for mobile view */
+                margin-top: 20%;
+            }
+        }
+    </style>
 </head>
 <body>
 

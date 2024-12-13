@@ -1,6 +1,7 @@
 @extends('auth.layouts.authentication')
 
 @section('content')
+
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column justify-content-md-center bg-white">
         <section class="bg-white overflow-hidden">
@@ -9,16 +10,16 @@
                     <div class="card shadow-none rounded-0 border-0">
                         <div class="row no-gutters">
                             <!-- Left Side Image-->
-                            <div class="col-lg-6">
+                          <div class="col-lg-6">
                                 <img src="{{ uploaded_asset(get_setting('register_payment_image')) }}" alt="{{ translate('Customer Login Page Image') }}" class="img-fit h-100">
-                            </div>
+                            </div> 
 
                             <!-- Right Side -->
-                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content" style="height: auto;">
+                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content new_mar_25" style="height: auto;">
                                 <!-- Site Icon -->
-                                <div class="size-48px mb-3 mx-auto mx-lg-0">
+                                <!-- <div class="size-48px mb-3 mx-auto mx-lg-0">
                                     <img src="{{ uploaded_asset(get_setting('site_icon')) }}" alt="{{ translate('Site Icon')}}" class="img-fit h-100">
-                                </div>
+                                </div> -->
 
                                 <!-- Titles -->
                                 <div class="text-center text-lg-left">
@@ -69,7 +70,7 @@
                                             <!-- Submit Button -->
                                             <div class="mb-4 mt-4">
                                                 <input type="hidden" name="user_id" value="{{ $id; }}">
-                                                <button type="submit" class="btn btn-primary btn-block fw-700 fs-14 rounded-0">Submit</button>
+                                                <button type="submit" class="btn btn-lg btn-primary text-white text-sm fw-semibold btn-block">Submit</button>
                                                 {{-- <button type="submit">Submit</button> --}}
                                             </div>
                                         </form>
@@ -138,12 +139,12 @@
                             </div>
                         </div>
                         <!-- Go Back -->
-                        <div class="mt-3 mr-4 mr-md-0">
+                        <!-- <div class="mt-3 mr-4 mr-md-0">
                             <a href="{{ url()->previous() }}" class="ml-auto fs-14 fw-700 d-flex align-items-center text-primary" style="max-width: fit-content;">
                                 <i class="las la-arrow-left fs-20 mr-1"></i>
                                 {{ translate(' Back to Home  Page')}}
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

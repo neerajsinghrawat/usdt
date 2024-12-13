@@ -19,20 +19,19 @@
                         <div class="mt-4 pt-2">
                             <div class="text-center text-xl-start">
                                 <h1 class="m-0 text-white tracking-tight text-6xl fw-bold" data-aos-delay="0" data-aos="fade" data-aos-duration="3000">
-                                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                                   Returns on Investment
                                 </h1>
-                                <p class="m-0 mt-4 text-white text-lg leading-8" data-aos-delay="100" data-aos="fade" data-aos-duration="3000">
-                                    " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                                </p>
+                                <p class="m-0 mt-4 text-white text-lg leading-8" data-aos-delay="100" data-aos="fade" data-aos-duration="3000">Users receive 250% ROI in 25 months</p>
+                                <p class="m-0 mt-4 text-white text-lg leading-8" data-aos-delay="100" data-aos="fade" data-aos-duration="3000">All returns reflect in the wallet and can be withdrawn via the TRC20 channel</p>
                                 <div class="mt-4 pt-3 d-flex align-items-center justify-content-center justify-content-xl-start column-gap-3">
-                                    <a href="javascript:;" class="btn btn-lg btn-primary text-white text-sm fw-semibold" data-aos-delay="200" data-aos="fade" data-aos-duration="3000">
+                                    <!-- <a href="javascript:;" class="btn btn-lg btn-primary text-white text-sm fw-semibold" data-aos-delay="200" data-aos="fade" data-aos-duration="3000">
                                         Contact us
                                     </a>
                                     <a href="javascript:;" class="btn btn-lg text-white icon-link icon-link-hover bg-secondary-hover text-sm leading-6 fw-semibold" data-aos-delay="300" data-aos="fade" data-aos-duration="3000">
                                         Learn more 
                                         <span class="bi align-self-start left-to-right" aria-hidden="true">→</span>
                                         <span class="bi align-self-start right-to-left" aria-hidden="true">←</span>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </div>
                         </div>

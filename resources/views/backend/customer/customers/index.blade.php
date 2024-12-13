@@ -111,7 +111,7 @@
                             <td class="text-right">
 
                                 {{-- View Members Button --}}
-                                <a href="{{ route('users.member', $user->id )}}" 
+                                <a target="_blank" href="{{ route('users.member', $user->id )}}" 
                                     class="btn btn-soft-info btn-icon btn-circle btn-sm" 
                                     title="{{ 'Members' }}" 
                                     style="text-decoration: none;">
@@ -119,7 +119,7 @@
                                 </a>
 
                                 {{-- View Team Members Button --}}
-                                <a href="{{ route('users.team_member', $user->id) }}" 
+                                <a target="_blank" href="{{ route('users.team_member', $user->id) }}" 
                                     class="btn btn-soft-info btn-icon btn-circle btn-sm" 
                                     title="{{ 'Team Members' }}" 
                                     style="text-decoration: none;">
@@ -133,7 +133,7 @@
                                         </a>
                                     @endcan --}}
 
-                                    <a href="{{ route('users.history', $user->id) }}" 
+                                    <a target="_blank" href="{{ route('users.history', $user->id) }}" 
                                         class="btn btn-soft-info btn-icon btn-circle btn-sm" 
                                         title="{{ 'View History' }}" 
                                         style="text-decoration: none;">
@@ -141,7 +141,7 @@
                                     </a>
                                       {{-- User Tree Button --}}
 
-                                      <a href="{{ route('users.tree', $user->id) }}" 
+                                      <a target="_blank" href="{{ route('users.tree', $user->id) }}" 
                                         class="btn btn-soft-primary btn-icon btn-circle btn-sm" 
                                         title="{{ 'User Tree' }}" 
                                         style="text-decoration: none;">
