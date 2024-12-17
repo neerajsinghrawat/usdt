@@ -14,6 +14,8 @@
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
 
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+
 
     <!-- Include JavaScript for color modes -->
     <script src="{{ static_asset('assets/usdt/assets/js/color-modes.js') }}"></script>

@@ -119,26 +119,33 @@
                     </div>
                     <div class="card-body py-2">
                         @foreach ($transactions as $key => $wallet)
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div>
-                                    <h6 class="mb-1 fs-14 fw-700">
-                                        {{ $wallet->comments }}
-                                    </h6>
-                                    <p class="mb-0 text-muted fs-12">
-                                        {{ translate('Approved Date') }}: {{ date('d-m-Y', strtotime($wallet->approved_date)) }}
-                                    </p>
-                                </div>
-                                <div class="text-right">
-                                    <h6 class="mb-1 fs-14 fw-700 {{ $wallet->trn_status == 'approved' ? 'text-success' : 'text-info' }}">
-                                        {{ single_price($wallet->coins_added) }}
-                                    </h6>
-                                    <span class="badge badge-{{ $wallet->trn_status == 'approved' ? 'success' : 'info' }} p-2 fs-12">
-                                        {{ $wallet->trn_status == 'approved' ? translate('Approved') : translate('Pending') }}
-                                    </span>
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div>
+                                <h6 class="mb-1 fs-14 fw-700">
+                                    {{ $wallet->comments }}
+                                </h6>
+                                <p class="mb-0 text-muted fs-12">
+                                    {{ translate('Approved Date') }}:
+                                    
+                                    @if (!empty($wallet->approved_date))
+                                        {{ date('d-m-Y', strtotime($wallet->approved_date)) }}
+                                    @else
+                                        {{ translate('Not Approved') }}
+                                    @endif
+                                </p>
                             </div>
-                            <hr class="my-1">
-                        @endforeach
+                            <div class="text-right">
+                                <h6 class="mb-1 fs-14 fw-700 {{ $wallet->trn_status == 'approved' ? 'text-success' : 'text-info' }}">
+                                    {{ single_price($wallet->coins_added) }}
+                                </h6>
+                                <span class="badge badge-{{ $wallet->trn_status == 'approved' ? 'success' : 'info' }} p-2 fs-12">
+                                    {{ $wallet->trn_status == 'approved' ? translate('Approved') : translate('Pending') }}
+                                </span>
+                            </div>
+                        </div>
+                        <hr class="my-1">
+                    @endforeach
+                    
                     </div>
                 </div>
             @endforeach

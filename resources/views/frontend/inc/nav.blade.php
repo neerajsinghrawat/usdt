@@ -1,7 +1,7 @@
 
     <!-- header top -->
     <header class="navigation position-absolute w-100 bg-body-tertiary shadow border-bottom border-light border-opacity-10 rounded-bottom-3 rounded-bottom-sm-4">
-        <nav class="navbar navbar-expand-xl" aria-label="Offcanvas navbar large">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark-blue" aria-label="Offcanvas navbar large">
             <div class="container py-1">
                
                 <a class="navbar-brand" href="{{ route('home') }}">
@@ -35,16 +35,29 @@
                    
                 </div>
 
-                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+           
 
                 <div class="offcanvas offcanvas-end border-0 rounded-start-0 rounded-start-sm-4" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
                     <div class="offcanvas-header" style="padding: 2rem 2rem 1.5rem 2rem;">
                         <h5 class="offcanvas-title m-0" id="offcanvasNavbar2Label">
-                            <a class="navbar-brand" href="javascript:;">
-                                <img src="{{ static_asset('assets/usdt/assets/logo/logo.png') }}" height="32" alt="logo">
+
+                            <a class="navbar-brand" href="{{ route('home') }}">
+                                @php
+                                    $header_logo = get_setting('header_logo');
+                                @endphp
+                                @if ($header_logo != null)
+                                    <img src="{{ uploaded_asset($header_logo) }}" height="40" alt="{{ env('APP_NAME') }}">
+                                @else
+                                    <img src="{{ static_asset('assets/img/logo.png') }}" height="40" alt="{{ env('APP_NAME') }}">
+                                @endif
                             </a>
+                            {{-- <a class="navbar-brand" href="javascript:;">
+                                <img src="{{ static_asset('assets/usdt/assets/logo/logo.png') }}" height="32" alt="logo">
+                            </a> --}}
                         </h5>
                         <button type="button" class="btn-close text-body-emphasis" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>

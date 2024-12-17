@@ -47,6 +47,8 @@
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/libraries/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/main.min.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/usdt/assets/css/style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         :root{
             --blue: #3490f3;
@@ -91,11 +93,16 @@
                 border-radius: 24px;
                 min-height: 550px;
             }
+            .new_mar_25 {
+        margin-right: 2px !important; /* Ensure right margin is consistent */
+        margin-left: 2px !important;  /* Ensure left margin is consistent */
+    }
+
         }
         @media (min-width: 991px) {
             .right-content{
                 height: 100%;
-            }
+            } 
         }
     </style>
 
