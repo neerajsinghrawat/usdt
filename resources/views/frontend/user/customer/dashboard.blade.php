@@ -192,7 +192,7 @@
                                     </div>
                                 </div>
                             @endforeach
-                            <!-- Pagination -->
+                            <!-- Pagination --->
                             <div class="aiz-pagination mb-4">
                                 {{ $wallets->links() }}
                             </div>
