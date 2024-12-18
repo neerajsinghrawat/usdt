@@ -284,7 +284,7 @@ public function autodistributed()
 {
     try {
         // Fetch users who meet the conditions
-        $users = DB::table('users')
+        /*$users = DB::table('users')
             ->select('users.id', 'users.created_at', 'users.wallet_usdt', 'user_coin_audit.start_date', 'user_coin_audit.roi_month')
             ->join('user_coin_audit', 'users.id', '=', 'user_coin_audit.user_id') // Join with user_coin_audit table
             ->whereBetween('users.created_at', [Carbon::now()->subDays(30)->toDateString(), Carbon::now()->toDateString()]) // Users created in the last 30 days
@@ -294,8 +294,16 @@ public function autodistributed()
             })
             ->whereDate('user_coin_audit.start_date', '<=', Carbon::now()->subDays(30)->toDateString()) // 30 days or more ago in user_coin_audit
             ->groupBy('users.id')
+            ->get();*/
+        $users = DB::table('users')
+            ->select('users.id', 'users.created_at', 'users.wallet_usdt') // Only include pending transactions
+            ->where('users.created_at', '<=', date('Y-m-d'))
+            ->where(function ($query) {
+                $query->where('users.roi_month', '<', 25)
+                    ->orWhereNull('users.roi_month'); // Check if roi_month is NULL
+            })
+            ->groupBy('users.id')
             ->get();
-        
         $updatedUsers = [];
 
         // Process each user
