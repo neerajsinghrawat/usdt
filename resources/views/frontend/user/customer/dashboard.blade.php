@@ -453,7 +453,7 @@
         modal.setAttribute('aria-hidden', 'true');
     }
 
-    // Remove the backdrop if exists
+    // Remove the backdrop if exists  //
     const backdrop = document.querySelector('.modal-backdrop');
     if (backdrop) {
         backdrop.parentNode.removeChild(backdrop);
