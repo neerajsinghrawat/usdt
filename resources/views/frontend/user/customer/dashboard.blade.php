@@ -411,7 +411,8 @@
                 url: '{{ route('send-email-verify-withdrawal') }}',
                 data: id,
                 success: function(data) {
-                   alert(data.message);
+
+                   alert(data);
                    $('#wallet_modal').modal('show');
                 }
             });
