@@ -412,7 +412,7 @@
                 data: id,
                 success: function(data) {
 
-                   alert(data.message);
+                   alert(data.message); 
                    $('#wallet_modal').modal('show');
                 }
             });
