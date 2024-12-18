@@ -108,6 +108,7 @@
                         {{-- <th>{{translate('Transaction Type')}}</th> --}}
                         <th>{{translate('Status')}}</th>
                         <th>{{translate('Amount')}}</th>
+                        <th>{{translate('Transaction Charges')}}</th>
                         <th>{{translate('Approval')}}</th>
                     </tr>
                 </thead>
@@ -129,7 +130,8 @@
                                     <td>{{ $request->approved_date }}</td>
                                     {{-- <td>{{ $request->transaction_type }}</td> --}}
                                     <td class="action-text">{{ ucfirst($request->status) }}</td>
-                                    <td>{{ $request->amount }}</td>
+                                    <td>{{ $request->amount-$request->transaction_charges }}</td>
+                                    <td>{{ $request->transaction_charges }}</td>
                                     {{-- <td>
                                         @if($request->status == 'pending')
                                             <button class="btn btn-primary" onclick="if(confirm('Are you sure you want to approve?')) updateWithStatus(this, 'approved')">Approve</button>

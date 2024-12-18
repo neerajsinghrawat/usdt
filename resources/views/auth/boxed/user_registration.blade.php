@@ -179,7 +179,7 @@
                                         <div class="mb-3">
                                             <label class="aiz-checkbox">
                                                 <input type="checkbox" name="checkbox_example_1" required>
-                                                <span class="">{{ translate('By signing up you agree to our ')}} <a href="{{ route('terms') }}" class="fw-500">{{ translate('terms and conditions.') }}</a></span>
+                                                <span class="">{{ translate('By signing up you agree to our ')}} <a href="{{ route('terms') }}" class="fw-500">{{ translate(' Terms & Conditions.') }}</a></span>
                                                 <span class="aiz-square-check"></span>
                                             </label>
                                         </div>

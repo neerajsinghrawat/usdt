@@ -128,7 +128,7 @@ class RegisterController extends Controller
             ]);
 
             if (isset($user->id) && isset($user->parent_id) && isset($user->referred_by) && isset($user->package_no)) {
-                $this->coindivided($user->id, $user->parent_id, $user->referred_by, $user->package_no);
+                //$this->coindivided($user->id, $user->parent_id, $user->referred_by, $user->package_no);
             }
             
 
@@ -346,7 +346,7 @@ class RegisterController extends Controller
 
             $parent = User::find($currentUserId);
 
-            if ($parent) {
+            if ($parent && $level < 4) {
                 // Update the parent's team value
                 $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
                 $parent->save();

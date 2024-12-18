@@ -270,6 +270,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
+        Route::post('/send-email-verify-withdrawal', 'send_email_verify_withdrawal')->name('send-email-verify-withdrawal');
       
           
     });

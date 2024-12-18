@@ -248,7 +248,7 @@ class LoginController extends Controller
         if ($request->get('phone') != null) {
             return ['phone' => "+{$request['country_code']}{$request['phone']}", 'password' => $request->get('password')];
         } elseif ($request->get('email') != null) {
-            return/* $request->only($this->username(), 'password');*/array_merge($request->only($this->username(), 'password'), ['status' => 1]);
+            return $request->only($this->username(), 'password');/*array_merge($request->only($this->username(), 'password'), ['status' => 1]);*/
         }
     }
 

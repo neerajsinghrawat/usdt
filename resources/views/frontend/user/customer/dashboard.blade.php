@@ -23,13 +23,15 @@
 
 <div class="row gutters-16">
     <!-- Wallet Balance Box -->
-    <div class="col-lg-6 col-md-6 mb-4">
+    <div class="col-lg-7 col-md-6 mb-4">
         <div class="h-100" style="background-image: url('{{ static_asset("assets/img/wallet-bg.png") }}'); background-size: cover; background-position: center center;">
             <div class="p-4 h-100 w-100 w-xl-50">
                 <p class="fs-14 fw-400 text-gray mb-3">{{ translate('Wallet Balance') }}</p>
                 <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->wallet_usdt) }}</h1>
                 <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
+                @if(Auth::user()->status == 1 && Auth::user()->payment_status == 'completed')
                 <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
+
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
                         <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
                             <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
@@ -40,12 +42,26 @@
                     </svg>
                     {{ translate('Withdrawal') }}
                 </button>
+                @else
+                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);"  onclick="alert('Please Complete Your Payment First')">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
+                            <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
+                                <rect id="Rectangle_18646" data-name="Rectangle 18646" width="48" height="48" rx="24" transform="translate(926 614)" fill="rgba(255,255,255,0.5)"/>
+                                <g id="Group_24786" data-name="Group 24786" transform="translate(701.466 93)">
+                                    <path id="Path_32311" data-name="Path 32311" d="M122.052,10V8.55a.727.727,0,1,0-1.455,0V10a2.909,2.909,0,0,0-2.909,2.909v.727A2.909,2.909,0,0,0,120.6,16.55h1.455A1.454,1.454,0,0,1,123.506,18v.727a1.454,1.454,0,0,1-1.455,1.455H120.6a1.454,1.454,0,0,1-1.455-1.455.727.727,0,1,0-1.455,0,2.909,2.909,0,0,0,2.909,2.909V23.1a.727.727,0,1,0,1.455,0V21.641a2.909,2.909,0,0,0,2.909-2.909V18a2.909,2.909,0,0,0-2.909-2.909H120.6a1.454,1.454,0,0,1-1.455-1.455v-.727a1.454,1.454,0,0,1,1.455-1.455h1.455a1.454,1.454,0,0,1,1.455,1.455.727.727,0,0,0,1.455,0A2.909,2.909,0,0,0,122.052,10" transform="translate(127.209 529.177)" fill="#fff"/>
+                                </g>
+                            </g>
+                        </svg>
+                        {{ translate('Withdrawal') }}
+                    </button>
+                @endif
             </div>
         </div>
     </div>
 
     <!-- Pending USDT Box -->
-    <div class="col-lg-3 col-md-6 mb-4">
+    <!-- <div class="col-lg-3 col-md-6 mb-4">
         <div class="bg-light text-dark overflow-hidden text-center p-4 h-100">
             <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
             <div class="py-2">
@@ -53,14 +69,19 @@
                 <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->pending_usdt) }}</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Package Activated IDs Box -->
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-5 col-md-6 mb-4">
         <div class="bg-dark text-white overflow-hidden text-center p-4 h-100">
             <img src="{{ static_asset('assets/img/wallet-icon.png') }}" alt="">
             <div class="py-2">
-                <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->package_amount) }}</div>
+                @if(Auth::user()->status == 1 && Auth::user()->payment_status == 'completed')
+                    <div class="fs-30 fw-700 text-center">{{ single_price(Auth::user()->package_amount) }}</div>
+                @else
+                    <div class="fs-30 fw-700 text-center">{{ single_price(0) }}</div>
+
+                @endif
                 <div class="fs-14 fw-400 text-center">{{ translate('Package Activated IDs') }}</div>
             </div>
         </div>
@@ -323,8 +344,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body gry-bg px-3 pt-3" style="overflow-y: inherit;">
-                <form class="" action="{{ route('wallet.withdrawal') }}" method="post">
+                <form class="" action="{{ route('wallet.withdrawal') }}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>{{ translate('Code (Sent to your eamil )') }} <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" lang="en" class="form-control mb-3 rounded-0" name="code"
+                                placeholder="{{ translate('6 Digit code') }}" required>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <label>{{ translate('TRC20 USDT wallet URL') }} <span class="text-danger">*</span></label>
@@ -336,11 +366,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
+                            <label>{{ translate('TRC20 wallet QRCode(Image)') }} <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="file" name="image" class="form-control mb-3 rounded-0" accept="image/*" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <label>{{ translate('Amount') }} <span class="text-danger">*</span></label>
                         </div>
                         <div class="col-md-8">
                             <input type="number" lang="en" class="form-control mb-3 rounded-0" name="amount"
-                                placeholder="{{ translate('Amount') }}" required>
+                                placeholder="{{ translate('Amount') }}" required min="10">
                         </div>
                     </div>
                     <div class="form-group text-right">
@@ -364,7 +402,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         function show_wallet_modal(){
-            $('#wallet_modal').modal('show');
+            var id = '<?php echo Auth::user()->id;?>';
+            $.ajax({
+                headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                type: "POST",
+                url: '{{ route('send-email-verify-withdrawal') }}',
+                data: id,
+                success: function(data) {
+                   alert(data);
+                   $('#wallet_modal').modal('show');
+                }
+            });
+
+            
         }
     </script>
     @include('frontend.partials.address.address_js')

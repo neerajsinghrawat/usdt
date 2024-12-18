@@ -361,7 +361,8 @@ public function Withdrawal_request(Request $request)
             'transaction_type',
             'status',
             'amount',
-            'wallet_url'
+            'wallet_url',
+            'transaction_charges'
         );
     }])->paginate(15);
 
@@ -406,9 +407,11 @@ public function updateWithStatus(Request $request)
                 'subject' => 'Your Withdrawal Request Has Been Approved',
                 'amount' => $withdrawalRequest->amount,
                 'content' => sprintf(
-                    "Dear %s,\n\nWe are excited to inform you that your withdrawal request of ₹%s has been successfully approved.\n\nIf you have any questions or concerns, our support team is here to assist you at any time.\n\nThank you for choosing our platform. We look forward to serving you again.\n\nBest Regards,\nThe Team",
+                    "Dear %s,\n\nWe are excited to inform you that your withdrawal request of %s USDT has been successfully approved.\n\n %s USDT Transaction Charges Applied. You receive %s USDT within 3 working days.\n\nIf you have any questions or concerns, our support team is here to assist you at any time.\n\nThank you for choosing our platform. We look forward to serving you again.",
                     $user->name,
-                    number_format($withdrawalRequest->amount, 2)
+                    number_format($withdrawalRequest->amount, 2),
+                    number_format($withdrawalRequest->transaction_charges, 2),
+                    number_format($withdrawalRequest->amount-$withdrawalRequest->transaction_charges,2),
                 ),
             ];
 

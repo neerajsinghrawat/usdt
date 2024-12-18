@@ -31,27 +31,51 @@ class WalletController extends Controller
     
         public function withdrawal(Request $request)
         {
-    
+            $charge = 3;
+            $min_withdrawal_amount = 10;
             $data['wallet_url'] = $request->wallet_url;
-            $data['amount'] = $request->amount+3;
-            // echo "<pre>";print_r($data);die;
+            $data['amount'] = $request->amount;
+            $data['withdrawal_code'] = $request->code;
             if (Auth::check()) {
-                $user = Auth::user();
-    
-                if ($user->wallet_usdt > $request->amount){
-                    $withdrawalRequest = WithdrawalRequest::create([
-                        'user_id' =>  $user->id,
-                        'comments' => 'Withdrawal request for manual transaction',
-                        'start_date' => now(),
-                        'status' => 'pending',
-                        'wallet_url' => $data['wallet_url'],
-                        'amount' => $data['amount'],
-    
-                    ]);
-                    flash(translate('Withdrawal Request sent successfully'))->success();
+                if (Auth::user()->status == 1 && Auth::user()->payment_status == 'completed') {
+                    $user = Auth::user();
+
+                    if ($user->withdrawal_code == $request->code) {
+                        if ($user->wallet_usdt >= $request->amount && $min_withdrawal_amount >= $request->amount){
+                            $wallet_image='';
+                            if ($request->hasFile('image')) {
+                                $file = $request->file('image');
+                                $filename = time() . '_' . $file->getClientOriginalName();
+                                $filePath = 'uploads/transactions/withdrawal/';                                
+                                // Move the file to the desired location
+                                $file->move(public_path($filePath), $filename);
+                                $wallet_image = $filePath . $filename;
+
+                            }
+                            //$user->wallet_usdt -= $request->amount;
+                            $withdrawalRequest = WithdrawalRequest::create([
+                                'user_id' =>  $user->id,
+                                'comments' => 'Withdrawal request for manual transaction',
+                                'start_date' => now(),
+                                'status' => 'pending',
+                                'wallet_url' => $data['wallet_url'],
+                                'amount' => $request->amount,            
+                                'transaction_charges' => $charge,            
+                                'wallet_image' => $wallet_image,            
+                            ]);
+                            //$user->save();
+                            flash(translate('Withdrawal Request sent successfully'))->success();
+                        }else{
+                            flash(translate('Withdrawal Request failed. Insufficient wallet balance.'))->error();
+                        }
+                    }else{
+                        flash(translate('Your code is wrong please enter code from email.'))->error(); 
+                    } 
+                    
                 }else{
-                    flash(translate('Withdrawal Request failed. Insufficient wallet balance.'))->error();
+                   flash(translate('Your not active user and your package payment is pending'))->error(); 
                 }
+                
             }else{
                 flash(translate('Please Login First!'))->error();
             }

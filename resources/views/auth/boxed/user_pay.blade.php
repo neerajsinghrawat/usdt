@@ -140,6 +140,10 @@
                                         {{ translate('Dont have an account?')}}
                                         <a href="{{ route('user.registration') }}" class="ml-2 fs-14 fw-700 animate-underline-primary">{{ translate('Register Now')}}</a>
                                     </p>
+                                    <p class="fs-12 text-gray mb-0">
+                                        {{ translate('Choose to')}}
+                                        <a href="{{ route('user.login') }}" class="ml-2 fs-14 fw-700 animate-underline-primary">{{ translate('Pay Later')}}</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>

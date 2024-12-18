@@ -332,12 +332,82 @@ public function autodistributed()
 
         
 
+    public function coindivided($id, $parent_id, $referred_by, $total_amount)
+    {
+        // Base total coins
+        $baseCoins = 1000;
+
+        $totalCoins = $total_amount;
+
+        $percentForParent = 5; // 5% for the first parent
+        $percentForAncestor2 = 3; // 3% for second ancestor
+        $percentForAncestor3 = 2; // 2% for third ancestor
+
+        // Fetch the user who is receiving the coins (this will be the newly created user)
+        $user = User::find($id);
+
+        if ($user) {
+            // Step 1: Start distributing coins to parent(s) and ancestors
+            $currentUser = $user;
+            $remainingCoins = $totalCoins;
+
+            // Loop to distribute coins to parents and ancestors
+            $i = 1; // This counter will help us determine the percentage for each parent
+
+            // While there is a parent and coins to distribute
+            while ($currentUser->parent_id && $remainingCoins > 0) {
+                // Fetch the parent user
+                $parent = User::find($currentUser->parent_id);
+
+                if ($parent) {
+                    // Determine the percentage based on the parent level
+                    if ($i == 1) {
+                        // 5% for the first parent
+                        $coinsToParent = ($remainingCoins * $percentForParent) / 100;
+                    } elseif ($i == 2) {
+                        // 3% for the second ancestor
+                        $coinsToParent = ($remainingCoins * $percentForAncestor2) / 100;
+                    } elseif ($i == 3) {
+                        // 2% for the third ancestor
+                        $coinsToParent = ($remainingCoins * $percentForAncestor3) / 100;
+                    } else {
+                        break; // Stop if there are more than 3 ancestors
+                    }
+
+                    // Update the parent's total coins
+                    $parent->wallet_usdt = $parent->wallet_usdt + $coinsToParent;
+                    $parent->save();
+
+                    // Add an entry in the coin audit for the parent's coin addition
+                    \DB::table('user_coin_audit')->insert([
+                        'user_id' => $parent->id,
+                        'coins_added' => $coinsToParent,
+                        'action' => 'Parent Coin Distribution',
+                        'created_at' => now(),
+                        'parent_id' => $currentUser->parent_id, // Store the parent ID
+                        'transaction_type' => 'credit', // Example transaction type
+                        'comments' => 'coins distributed',
+                        'type' => 'coins_distributed',
+                        'referral_code' => $referred_by, // Store referral code if available
+                        'trn_status' => 'approved', // Add relevant comments
+                        'start_date' => date('Y-m-d H:m:s'), // Add relevant comments
+                    ]);
+
+                    // Move to the next parent in the chain
+                    $currentUser = $parent;
+                    $i++; // Increment the level counter
+                }
+            }
+        }
+    }
+
 public function roiDistribution($id)
     {
         
         $user = User::find($id);
 
-        if ($user) {            
+        if ($user) {   
+
             $package_amount = $user->package_amount;
             $roi_per_month = 10/100;
             $month = 25;
@@ -355,12 +425,13 @@ public function roiDistribution($id)
                         'transaction_type' => 'credit', // Example transaction type
                         'comments' => 'Returns on Investment',
                         'type' => 'roi',
-                        'trn_status' => 'pending',
+                        'trn_status' => 'approved',
                         'start_date' => date('Y-m-d H:m:s'),
                     ]);
+                $this->coindivided($user->id, $user->parent_id, $user->referred_by, $total_amount);
             }
 
-            $user->pending_usdt = $user->pending_usdt + $total_amount;
+            $user->wallet_usdt = $user->wallet_usdt + $total_amount;
             $user->save();
             
         }
@@ -437,12 +508,13 @@ public function roiDistribution($id)
      */
     public function team()
     {
-        
+        $history = array();
+        $teamValue = 0;
+        if (Auth::user()->status == 1) {
+            $history = TeamHistory::with('referreduser')->where('user_id', Auth::user()->id)->latest()->paginate(10);
+            $teamValue = Auth::user()->team_value;
 
-        $history = TeamHistory::with('referreduser')->where('user_id', Auth::user()->id)->latest()->paginate(10);
-        //echo "<pre>";print_r($history);die;
-       
-        $teamValue = Auth::user()->team_value;
+        }       
     
         return view('frontend.user.customer.team', compact('history','teamValue'));
        
@@ -893,6 +965,12 @@ public function roiDistribution($id)
         $response = $this->send_email_change_verification_mail($request, $email);
         return json_encode($response);
     }
+    public function send_email_verify_withdrawal(Request $request)
+    {
+        $email = Auth::user()->email; 
+        $response = $this->send_email_verify_withdrawal_email($email);
+        return json_encode($response);
+    }
 
 
     // Form request
@@ -932,6 +1010,37 @@ public function roiDistribution($id)
 
             $response['status'] = 1;
             $response['message'] = translate("Your verification mail has been Sent to your email.");
+        } catch (\Exception $e) {
+            // return $e->getMessage();
+            $response['status'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+
+        return $response;
+    }
+    public function send_email_verify_withdrawal_email($email)
+    {
+        $response['status'] = 0;
+        $response['message'] = 'Unknown';
+
+        $verification_code = random_int(100000, 999999);
+
+        $array['subject'] = translate('Withdrawal Email Verification');
+        $array['from'] = env('MAIL_FROM_ADDRESS');
+        $array['content'] = "This is your code for withdrawal:- ".$verification_code;
+        //$array['link'] = $verification_code;
+        $array['sender'] = Auth::user()->name;
+        $array['details'] = translate("Email Second");
+
+        $user = Auth::user();
+        $user->withdrawal_code = $verification_code;
+        $user->save();
+
+        try {
+            Mail::to($email)->queue(new SecondEmailVerifyMailManager($array));
+
+            $response['status'] = 1;
+            $response['message'] = translate("Your code has been Sent to your email.");
         } catch (\Exception $e) {
             // return $e->getMessage();
             $response['status'] = 0;
