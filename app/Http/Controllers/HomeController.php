@@ -968,7 +968,7 @@ public function roiDistribution($id)
     {
         $email = Auth::user()->email; 
         $response = $this->send_email_verify_withdrawal_email($email);
-        return json_encode($response);
+        echo json_encode($response);die;
     }
 
 
@@ -1046,7 +1046,7 @@ public function roiDistribution($id)
             $response['message'] = $e->getMessage();
         }
 
-        echo json_encode($response);die;
+        return $response;
     }
 
     public function email_change_callback(Request $request)
