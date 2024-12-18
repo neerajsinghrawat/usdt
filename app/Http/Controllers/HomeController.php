@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use ZipArchive;
 use Carbon\Carbon;  // Import Carbon class
+
 class HomeController extends Controller
 {
     /**
@@ -278,27 +279,33 @@ public function SaveTransactionRegister(Request $request)
     return view('auth.' . get_setting('authentication_layout_select') . '.user_registration');
 }
 
+
 public function autodistributed()
 {
     try {
-        
-
-        // Get users who registered 1 month ago or more and have 'pending' trn_status
+        // Fetch users who meet the conditions
         $users = DB::table('users')
-            ->select('users.id', 'users.created_at', 'users.wallet_usdt') // Only include pending transactions
-            ->where('users.created_at', '<=', date('Y-m-d'))
+            ->select('users.id', 'users.created_at', 'users.wallet_usdt', 'user_coin_audit.start_date', 'user_coin_audit.roi_month')
+            ->join('user_coin_audit', 'users.id', '=', 'user_coin_audit.user_id') // Join with user_coin_audit table
+            ->whereBetween('users.created_at', [Carbon::now()->subDays(30)->toDateString(), Carbon::now()->toDateString()]) // Users created in the last 30 days
             ->where(function ($query) {
                 $query->where('users.roi_month', '<', 25)
-                    ->orWhereNull('users.roi_month'); // Check if roi_month is NULL
+                      ->orWhereNull('users.roi_month'); // Check if roi_month is NULL in the users table
             })
+            ->whereDate('user_coin_audit.start_date', '<=', Carbon::now()->subDays(30)->toDateString()) // 30 days or more ago in user_coin_audit
             ->groupBy('users.id')
             ->get();
-
+        
         $updatedUsers = [];
-            
+
+        // Process each user
         foreach ($users as $user) {
-            $this->roiDistribution($user->id);
-            $updatedUsers[] = $user->id;
+            try {
+                $this->roiDistribution($user->id);  // Call the ROI distribution function
+                $updatedUsers[] = $user->id;        // Add the updated user ID to the list
+            } catch (\Exception $e) {
+                \Log::error("Error in roiDistribution for user ID {$user->id}: " . $e->getMessage());
+            }
         }
 
         // Prepare the response message
