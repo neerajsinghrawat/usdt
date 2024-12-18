@@ -1,5 +1,14 @@
 @extends('frontend.layouts.user_panel')
 
+<!-- Blur and Loader -->
+<!-- Full-screen Loader -->
+<div id="loader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="font-size: 20px; font-weight: bold; color: #000;">Loading...</div>
+</div>
+
+
+
+
 <style>
     <style>
    .card-header h6 {
@@ -14,6 +23,37 @@
     min-width: 80px;
     text-align: center;
 }
+
+/* Blur effect for the screen content */
+/* Blur effect for the main content */
+.blur {
+    filter: blur(8px); /* Adjust blur intensity */
+    pointer-events: none; /* Disable interactions */
+}
+
+/* Loader styling */
+#loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loader div {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff; /* White text for the loader */
+}
+
+
+
 
 </style>
 </style>
@@ -30,7 +70,7 @@
                 <h1 class="fs-30 fw-700 text-white ">{{ single_price(Auth::user()->wallet_usdt) }}</h1>
                 <hr class="border border-dashed border-white opacity-40 ml-0 mt-4 mb-4">
                 @if(Auth::user()->status == 1 && Auth::user()->payment_status == 'completed')
-                <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" onclick="show_wallet_modal()" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
+                <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1"  onclick="startLoader(); show_wallet_modal();" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
                         <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
@@ -341,7 +381,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ translate(' Withdrawal Wallet') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button"  onclick="closeModal('wallet_modal')" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body gry-bg px-3 pt-3" style="overflow-y: inherit;">
                 <form class="" action="{{ route('wallet.withdrawal') }}" method="post" enctype="multipart/form-data">
@@ -401,26 +441,67 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        function show_wallet_modal(){
-            var id = '<?php echo Auth::user()->id;?>';
-            $.ajax({
-                headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                type: "POST",
-                url: '{{ route('send-email-verify-withdrawal') }}',
-                data: id,
-                dataType:'json',
-                success: function(data) {
+  
+  function closeModal(modalId) {
+    // Get the modal element
+    const modal = document.getElementById(modalId);
 
-                   alert(data.message); 
-                   $('#wallet_modal').modal('show');
-                }
-            });
+    if (modal) {
+        // Remove the 'show' class
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    }
 
-            
+    // Remove the backdrop if exists
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.parentNode.removeChild(backdrop);
+    }
+}
+
+
+
+  function startLoader() {
+    // Show the loader on button click
+    document.getElementById('loader').style.display = 'flex';
+    // ocument.getElementById('loader').style.display = 'none';
+}
+
+function stopLoader() {
+    // Hide the loader after the process completes
+    document.getElementById('loader').style.display = 'none';
+}
+
+function show_wallet_modal() {
+    var id = '<?php echo Auth::user()->id; ?>'; // Get the user's ID
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url: '{{ route('send-email-verify-withdrawal') }}',
+        data: { id: id },
+        dataType: 'json',
+        success: function (data) {
+            alert(data.message); // Show success message
+            $('#wallet_modal').modal('show'); // Show modal
+        },
+        error: function (xhr, status, error) {
+            alert('Error: ' + error); // Show error message
+        },
+        complete: function () {
+            stopLoader(); // Always hide the loader
         }
+    });
+}
+
+
+
     </script>
+
+
     @include('frontend.partials.address.address_js')
 
     @if (get_setting('google_map') == 1)
