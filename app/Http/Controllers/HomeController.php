@@ -294,30 +294,10 @@ public function autodistributed()
             ->groupBy('users.id')
             ->get();
 
-           
-        // Initialize an array to store user IDs of the updated records
         $updatedUsers = [];
-            // echo '<pre>';
-            // print_r($updatedUsers);
-            // die();
-        // Loop through each user and update their data
+            
         foreach ($users as $user) {
-            // Add the total accumulated coins to the user's wallet_usdt
-            $newWalletAmount = $user->wallet_usdt + $user->total_coins_added;
-
-            // Update the user's wallet_usdt in the users table
-            User::where('id', $user->id)->update(['wallet_usdt' => $newWalletAmount]);
-
-            // Update the trn_status to 'completed' for all related entries in user_coin_audit
-            UserCoinAudit::where('user_id', $user->id)
-                ->whereIn('type', ['roi', 'coins_distributed'])
-                ->where('trn_status', 'pending') // Only update pending transactions
-                ->update(['trn_status' => 'completed']);
-
-            // Call the roiDistribution function for each user
             $this->roiDistribution($user->id);
-
-            // Add this user ID to the updated users list
             $updatedUsers[] = $user->id;
         }
 
