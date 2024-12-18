@@ -1046,7 +1046,7 @@ public function roiDistribution($id)
             $response['message'] = $e->getMessage();
         }
 
-        return $response;
+        echo json_encode($response);die;
     }
 
     public function email_change_callback(Request $request)
