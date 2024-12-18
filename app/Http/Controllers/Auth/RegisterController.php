@@ -329,48 +329,84 @@ class RegisterController extends Controller
     }
 
 
-    public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
-    {
-        $level = 1;
-        $currentUserId = $userId;
+    // public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
+    // {
+    //     $level = 1;
+    //     $currentUserId = $userId;
       
-        // Traverse up the hierarchy and insert records for ancestors
-        while ($currentUserId > 0) {
+    //     // Traverse up the hierarchy and insert records for ancestors
+    //     while ($currentUserId > 0) {
+                    
+    //         $parent = User::find($currentUserId);
 
-            // // Fetch the parent user
-            // $parent = \DB::table('users')->where('id', $currentUserId)->first();
-            // $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
-            // $parent->save();
-            // if ($parent) {
-               
+    //         if ($parent && $level < 4) {
+    //             // Update the parent's team value
+    //             $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
+    //             $parent->save();
+    
 
-            $parent = User::find($currentUserId);
+    //             \DB::table('team_history')->insert([
+    //                 'user_id' => $parent->id,
+    //                 'parent_id' => $parent->parent_id ?? 0, // Move to the next ancestor
+    //                 'referred_by' => $userId,
+    //                 'level' => $level,
+    //                 'amount' => $totalCoins,
+    //                 'created_at' => now(),
+    //                 'updated_at' => now(),
+    //                 'deleted_at' => null
+    //             ]);
+    //             // Move to the next ancestor
+    //             $currentUserId = $parent->parent_id;
+    //             $level++;
+    //         } else {
+    //             break; // No more parents in the hierarchy
+    //         }
+    //     }
+    // }
 
-            if ($parent && $level < 4) {
-                // Update the parent's team value
+   public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
+{
+    $currentUserId = $userId;
+
+        $user = User::find($currentUserId);
+
+        if ($user) {
+            // Update the parent's team value
+            $user->team_value = ($user->team_value ?? 0) + $totalCoins;
+            $user->save();
+
+            \DB::table('team_history')->insert([
+                'user_id' => $user->id,
+                'parent_id' => $user->parent_id ?? 0, // Move to the next ancestor
+                'referred_by' => $userId,
+                'amount' => $totalCoins,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null
+            ]);
+            if($user->parent_id){
+                $parent = User::find($user->parent_id);
                 $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
                 $parent->save();
-    
 
                 \DB::table('team_history')->insert([
                     'user_id' => $parent->id,
                     'parent_id' => $parent->parent_id ?? 0, // Move to the next ancestor
-                    'referred_by' => $userId,
-                    'level' => $level,
+                    'referred_by' => $user->id,
                     'amount' => $totalCoins,
                     'created_at' => now(),
                     'updated_at' => now(),
                     'deleted_at' => null
                 ]);
-                // Move to the next ancestor
-                $currentUserId = $parent->parent_id;
-                $level++;
-            } else {
-                break; // No more parents in the hierarchy
             }
-        }
-    }
+            
+            
+            // Move to the next ancestor
+        } 
+   
+}
 
+    
 
 
     public function register(Request $request)

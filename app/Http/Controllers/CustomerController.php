@@ -362,9 +362,13 @@ public function Withdrawal_request(Request $request)
             'status',
             'amount',
             'wallet_url',
+            'wallet_image',
             'transaction_charges'
         );
     }])->paginate(15);
+// echo '<pre>';
+// print_r($users);
+// die("sdfa");
 
     return view('backend.customer.customers.Withdrawal', compact('users', 'sort_search'));
 }

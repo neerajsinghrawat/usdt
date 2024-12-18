@@ -281,22 +281,25 @@ public function SaveTransactionRegister(Request $request)
 public function autodistributed()
 {
     try {
-        // Get the current date
-        $currentDate = Carbon::now();
+        
 
         // Get users who registered 1 month ago or more and have 'pending' trn_status
         $users = DB::table('users')
-            ->join('user_coin_audit', 'users.id', '=', 'user_coin_audit.user_id')
-            ->select('users.id', 'users.created_at', 'users.wallet_usdt', DB::raw('SUM(user_coin_audit.coins_added) as total_coins_added'))
-            ->whereIn('user_coin_audit.type', ['roi', 'coins_distributed'])
-            ->where('user_coin_audit.trn_status', '=', 'pending')  // Only include pending transactions
-            ->where('users.created_at', '<=', $currentDate->subMonth()->toDateString())
+            ->select('users.id', 'users.created_at', 'users.wallet_usdt') // Only include pending transactions
+            ->where('users.created_at', '<=', date('Y-m-d'))
+            ->where(function ($query) {
+                $query->where('users.roi_month', '<', 25)
+                    ->orWhereNull('users.roi_month'); // Check if roi_month is NULL
+            })
             ->groupBy('users.id')
             ->get();
 
+           
         // Initialize an array to store user IDs of the updated records
         $updatedUsers = [];
-
+            // echo '<pre>';
+            // print_r($updatedUsers);
+            // die();
         // Loop through each user and update their data
         foreach ($users as $user) {
             // Add the total accumulated coins to the user's wallet_usdt
@@ -429,6 +432,7 @@ public function roiDistribution($id)
                         'start_date' => date('Y-m-d H:m:s'),
                     ]);
                 $this->coindivided($user->id, $user->parent_id, $user->referred_by, $total_amount);
+                $user->roi_month=$roiCount;
             }
 
             $user->wallet_usdt = $user->wallet_usdt + $total_amount;

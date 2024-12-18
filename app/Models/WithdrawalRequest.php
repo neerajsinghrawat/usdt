@@ -23,9 +23,14 @@ class WithdrawalRequest extends Model
     }
 
 
-    public function withdrawalRequests()
+//     public function withdrawalRequests()
+// {
+//     return $this->hasMany(WithdrawalRequest::class);
+// }
+
+public function withdrawalRequests()
 {
-    return $this->hasMany(WithdrawalRequest::class);
+    return $this->hasMany(WithdrawalRequest::class, 'user_id', 'id');
 }
 
 }

@@ -105,6 +105,8 @@
                         <th>{{translate('Wallet Url')}}</th>
                         <th>{{translate('Start Date')}}</th>
                         <th>{{translate('Approved Date')}}</th>
+                        <th data-breakpoints="lg">{{translate('wallet image')}}</th>
+
                         {{-- <th>{{translate('Transaction Type')}}</th> --}}
                         <th>{{translate('Status')}}</th>
                         <th>{{translate('Amount')}}</th>
@@ -128,6 +130,21 @@
                                     
                                     <td>{{ $request->start_date }}</td>
                                     <td>{{ $request->approved_date }}</td>
+
+                                   <!-- Table Cell -->
+                                    <td>
+                                        @if($request->wallet_image)
+                                            <button 
+                                                class="btn btn-primary" type="button"
+                                                onclick="viewImage('{{ asset('public/' . $request->wallet_image) }}')"
+                                            >
+                                                View Image
+                                            </button>
+                                        @else
+                                            {{ translate('No image available') }}
+                                        @endif
+                                    </td>
+
                                     {{-- <td>{{ $request->transaction_type }}</td> --}}
                                     <td class="action-text">{{ ucfirst($request->status) }}</td>
                                     <td>{{ $request->amount-$request->transaction_charges }}</td>
@@ -223,6 +240,20 @@
     </div>
 </div>
 
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Wallet Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Wallet Image" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -374,6 +405,18 @@
             }
         });
     }
+
+
+
+    
+    function viewImage(imageUrl) {
+    console.log(imageUrl); // Log the URL for debugging
+    document.getElementById('modalImage').src = imageUrl; // Set the image URL in the modal
+    $('#imageModal').modal('show'); // Show the modal
+}
+
+
+
 </script>
 
 @endsection
