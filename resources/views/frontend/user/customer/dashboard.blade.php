@@ -410,6 +410,7 @@
                 type: "POST",
                 url: '{{ route('send-email-verify-withdrawal') }}',
                 data: id,
+                dataType:'json',
                 success: function(data) {
 
                    alert(data.message); 
