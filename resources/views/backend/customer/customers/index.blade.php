@@ -339,7 +339,7 @@
         }
 
 
-                function update_published(el) {
+        function update_published(el) {
             if ('{{ env("DEMO_MODE") }}' === 'On') {
                 AIZ.plugins.notify('info', '{{ translate("Data cannot be changed in demo mode.") }}');
                 return;

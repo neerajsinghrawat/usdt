@@ -88,7 +88,7 @@ class RegisterController extends Controller
     {
 
         $parentId = null;
-        
+
         if (isset($data['referral_by']) && !empty($data['referral_by'])) {
             $parentUser = User::where('referral_code', $data['referral_by'])->first();
             if ($parentUser) {
@@ -130,11 +130,11 @@ class RegisterController extends Controller
             if (isset($user->id) && isset($user->parent_id) && isset($user->referred_by) && isset($user->package_no)) {
                 //$this->coindivided($user->id, $user->parent_id, $user->referred_by, $user->package_no);
             }
-            
 
-             if (isset($user->id) && isset($user->package_no)) {
-                $this->coinpack($user->id, $user->parent_id ?? null, $user->referred_by ?? null, $user->package_no);
-            //     $this->roiDistribution($user->id);
+
+            if (isset($user->id) && isset($user->package_no)) {
+                // $this->coinpack($user->id, $user->parent_id ?? null, $user->referred_by ?? null, $user->package_no);
+                //     $this->roiDistribution($user->id);
             }
         } else {
             if (addon_is_activated('otp_system')) {
@@ -178,172 +178,171 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function coindivided($id, $parent_id, $referred_by, $package_no)
-    {
-        // Base total coins
-        $baseCoins = 1000;
+    // public function coindivided($id, $parent_id, $referred_by, $package_no)
+    // {
+    //     // Base total coins
+    //     $baseCoins = 1000;
 
-        $totalCoins = $baseCoins * $package_no;
+    //     $totalCoins = $baseCoins * $package_no;
 
-        $percentForParent = 5; // 5% for the first parent
-        $percentForAncestor2 = 3; // 3% for second ancestor
-        $percentForAncestor3 = 2; // 2% for third ancestor
+    //     $percentForParent = 5; // 5% for the first parent
+    //     $percentForAncestor2 = 3; // 3% for second ancestor
+    //     $percentForAncestor3 = 2; // 2% for third ancestor
 
-        // Fetch the user who is receiving the coins (this will be the newly created user)
-        $user = User::find($id);
+    //     // Fetch the user who is receiving the coins (this will be the newly created user)
+    //     $user = User::find($id);
 
-        if ($user) {
-            // Step 1: Start distributing coins to parent(s) and ancestors
-            $currentUser = $user;
-            $remainingCoins = $totalCoins;
+    //     if ($user) {
+    //         // Step 1: Start distributing coins to parent(s) and ancestors
+    //         $currentUser = $user;
+    //         $remainingCoins = $totalCoins;
 
-            // Loop to distribute coins to parents and ancestors
-            $i = 1; // This counter will help us determine the percentage for each parent
+    //         // Loop to distribute coins to parents and ancestors
+    //         $i = 1; // This counter will help us determine the percentage for each parent
 
-            // While there is a parent and coins to distribute
-            while ($currentUser->parent_id && $remainingCoins > 0) {
-                // Fetch the parent user
-                $parent = User::find($currentUser->parent_id);
+    //         // While there is a parent and coins to distribute
+    //         while ($currentUser->parent_id && $remainingCoins > 0) {
+    //             // Fetch the parent user
+    //             $parent = User::find($currentUser->parent_id);
 
-                if ($parent) {
-                    // Determine the percentage based on the parent level
-                    if ($i == 1) {
-                        // 5% for the first parent
-                        $coinsToParent = ($remainingCoins * $percentForParent) / 100;
-                    } elseif ($i == 2) {
-                        // 3% for the second ancestor
-                        $coinsToParent = ($remainingCoins * $percentForAncestor2) / 100;
-                    } elseif ($i == 3) {
-                        // 2% for the third ancestor
-                        $coinsToParent = ($remainingCoins * $percentForAncestor3) / 100;
-                    } else {
-                        break; // Stop if there are more than 3 ancestors
-                    }
+    //             if ($parent) {
+    //                 // Determine the percentage based on the parent level
+    //                 if ($i == 1) {
+    //                     // 5% for the first parent
+    //                     $coinsToParent = ($remainingCoins * $percentForParent) / 100;
+    //                 } elseif ($i == 2) {
+    //                     // 3% for the second ancestor
+    //                     $coinsToParent = ($remainingCoins * $percentForAncestor2) / 100;
+    //                 } elseif ($i == 3) {
+    //                     // 2% for the third ancestor
+    //                     $coinsToParent = ($remainingCoins * $percentForAncestor3) / 100;
+    //                 } else {
+    //                     break; // Stop if there are more than 3 ancestors
+    //                 }
 
-                    // Update the parent's total coins
-                    $parent->pending_usdt = $parent->pending_usdt + $coinsToParent;
-                    $parent->save();
+    //                 // Update the parent's total coins
+    //                 $parent->pending_usdt = $parent->pending_usdt + $coinsToParent;
+    //                 $parent->save();
 
-                    // Add an entry in the coin audit for the parent's coin addition
-                    \DB::table('user_coin_audit')->insert([
-                        'user_id' => $parent->id,
-                        'coins_added' => $coinsToParent,
-                        'action' => 'Parent Coin Distribution',
-                        'created_at' => now(),
-                        'parent_id' => $currentUser->parent_id, // Store the parent ID
-                        'transaction_type' => 'credit', // Example transaction type
-                        'comments' => 'coins distributed',
-                        'type' => 'coins_distributed',
-                        'referral_code' => $referred_by, // Store referral code if available
-                        'trn_status' => 'pending', // Add relevant comments
-                        'start_date' => date('Y-m-d H:m:s'), // Add relevant comments
-                    ]);
+    //                 // Add an entry in the coin audit for the parent's coin addition
+    //                 \DB::table('user_coin_audit')->insert([
+    //                     'user_id' => $parent->id,
+    //                     'coins_added' => $coinsToParent,
+    //                     'action' => 'Parent Coin Distribution',
+    //                     'created_at' => now(),
+    //                     'parent_id' => $currentUser->parent_id, // Store the parent ID
+    //                     'transaction_type' => 'credit', // Example transaction type
+    //                     'comments' => 'coins distributed',
+    //                     'type' => 'coins_distributed',
+    //                     'referral_code' => $referred_by, // Store referral code if available
+    //                     'trn_status' => 'pending', // Add relevant comments
+    //                     'start_date' => date('Y-m-d H:m:s'), // Add relevant comments
+    //                 ]);
 
-                    // Move to the next parent in the chain
-                    $currentUser = $parent;
-                    $i++; // Increment the level counter
-                }
-            }
-        }
-    }
+    //                 // Move to the next parent in the chain
+    //                 $currentUser = $parent;
+    //                 $i++; // Increment the level counter
+    //             }
+    //         }
+    //     }
+    // }
 
-    public function roiDistribution($id)
-    {
-        
-        $user = User::find($id);
+    // public function roiDistribution($id)
+    // {
 
-        if ($user) {            
-            $package_amount = $user->package_amount;
-            $roi_per_month = 10/100;
-            $month = 25;
-            $total_amount = $package_amount*$roi_per_month;
+    //     $user = User::find($id);
 
-            $roiCount = UserCoinAudit::where('user_id', $id)->where('type', 'roi')->count();
+    //     if ($user) {
+    //         $package_amount = $user->package_amount;
+    //         $roi_per_month = 10 / 100;
+    //         $month = 25;
+    //         $total_amount = $package_amount * $roi_per_month;
 
-            if ($roiCount < $month) {
-                \DB::table('user_coin_audit')->insert([
-                        'user_id' => $id,
-                        'coins_added' => $total_amount,
-                        'action' => 'Returns on Investment',
-                        'created_at' => now(),
-                        'parent_id' => $user->parent_id, // Store the parent ID
-                        'transaction_type' => 'credit', // Example transaction type
-                        'comments' => 'Returns on Investment',
-                        'type' => 'roi',
-                        'trn_status' => 'pending',
-                        'start_date' => date('Y-m-d H:m:s'),
-                    ]);
-            }
+    //         $roiCount = UserCoinAudit::where('user_id', $id)->where('type', 'roi')->count();
 
-            $user->pending_usdt = $user->pending_usdt + $total_amount;
-            $user->save();
-            
-        }
-    }
+    //         if ($roiCount < $month) {
+    //             \DB::table('user_coin_audit')->insert([
+    //                 'user_id' => $id,
+    //                 'coins_added' => $total_amount,
+    //                 'action' => 'Returns on Investment',
+    //                 'created_at' => now(),
+    //                 'parent_id' => $user->parent_id, // Store the parent ID
+    //                 'transaction_type' => 'credit', // Example transaction type
+    //                 'comments' => 'Returns on Investment',
+    //                 'type' => 'roi',
+    //                 'trn_status' => 'pending',
+    //                 'start_date' => date('Y-m-d H:m:s'),
+    //             ]);
+    //         }
+
+    //         $user->pending_usdt = $user->pending_usdt + $total_amount;
+    //         $user->save();
+    //     }
+    // }
 
 
-  
-    public function coinpack($id, $parent_id, $referred_by, $package_no)
-    {
-        // Base total coins
-        $baseCoins = 1000;
-        $package_amount = $baseCoins * $package_no;
 
-        // Fetch the user
-        $user = User::find($id);
+    // public function coinpack($id, $parent_id, $referred_by, $package_no)
+    // {
+    //     // Base total coins
+    //     $baseCoins = 1000;
+    //     $package_amount = $baseCoins * $package_no;
 
-        if ($user) {
-            \DB::transaction(function () use ($user, $id, $parent_id, $referred_by, $package_amount) {
-                // Update package_amount and team_value
-                $user->package_amount = ($user->package_amount ?? 0) + $package_amount;
-                
+    //     // Fetch the user
+    //     $user = User::find($id);
 
-                if (!$user->save()) {
-                    throw new \Exception("Failed to update user coins for user ID: {$id}");
-                }
+    //     if ($user) {
+    //         \DB::transaction(function () use ($user, $id, $parent_id, $referred_by, $package_amount) {
+    //             // Update package_amount and team_value
+    //             $user->package_amount = ($user->package_amount ?? 0) + $package_amount;
 
-                // Log the coin addition in the audit table
-                $coinAuditData = [
-                    'user_id' => $id,
-                    'coins_added' => $package_amount,
-                    'action' => 'User Registration Coin Allocation',
-                    'created_at' => now(),
-                    'transaction_type' => 'credit',
-                    'type' => 'registration_USDT',
-                    'referral_code' => $referred_by,
-                    'trn_status' => 'pending',
-                    'comments' => 'USDT registration',
-                    'start_date' => date('Y-m-d H:m:s'),
-                ];
 
-                if ($parent_id) {
-                    $coinAuditData['parent_id'] = $parent_id;
-                }
+    //             if (!$user->save()) {
+    //                 throw new \Exception("Failed to update user coins for user ID: {$id}");
+    //             }
 
-                \DB::table('user_coin_audit')->insert($coinAuditData);
+    //             // Log the coin addition in the audit table
+    //             $coinAuditData = [
+    //                 'user_id' => $id,
+    //                 'coins_added' => $package_amount,
+    //                 'action' => 'User Registration Coin Allocation',
+    //                 'created_at' => now(),
+    //                 'transaction_type' => 'credit',
+    //                 'type' => 'registration_USDT',
+    //                 'referral_code' => $referred_by,
+    //                 'trn_status' => 'pending',
+    //                 'comments' => 'USDT registration',
+    //                 'start_date' => date('Y-m-d H:m:s'),
+    //             ];
 
-                // Insert into team_history
-                $this->insertTeamHistory($id, $parent_id, $referred_by, $package_amount);
-            });
-        }
-    }
+    //             if ($parent_id) {
+    //                 $coinAuditData['parent_id'] = $parent_id;
+    //             }
+
+    //             \DB::table('user_coin_audit')->insert($coinAuditData);
+
+    //             // Insert into team_history
+    //             $this->insertTeamHistory($id, $parent_id, $referred_by, $package_amount);
+    //         });
+    //     }
+    // }
 
 
     // public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
     // {
     //     $level = 1;
     //     $currentUserId = $userId;
-      
+
     //     // Traverse up the hierarchy and insert records for ancestors
     //     while ($currentUserId > 0) {
-                    
+
     //         $parent = User::find($currentUserId);
 
     //         if ($parent && $level < 4) {
     //             // Update the parent's team value
     //             $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
     //             $parent->save();
-    
+
 
     //             \DB::table('team_history')->insert([
     //                 'user_id' => $parent->id,
@@ -364,49 +363,7 @@ class RegisterController extends Controller
     //     }
     // }
 
-   public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
-{
-    $currentUserId = $userId;
-
-        $user = User::find($currentUserId);
-
-        if ($user) {
-            // Update the parent's team value
-            $user->team_value = ($user->team_value ?? 0) + $totalCoins;
-            $user->save();
-
-            \DB::table('team_history')->insert([
-                'user_id' => $user->id,
-                'parent_id' => $user->parent_id ?? 0, // Move to the next ancestor
-                'referred_by' => $userId,
-                'amount' => $totalCoins,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'deleted_at' => null
-            ]);
-            if($user->parent_id){
-                $parent = User::find($user->parent_id);
-                $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
-                $parent->save();
-
-                \DB::table('team_history')->insert([
-                    'user_id' => $parent->id,
-                    'parent_id' => $parent->parent_id ?? 0, // Move to the next ancestor
-                    'referred_by' => $user->id,
-                    'amount' => $totalCoins,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'deleted_at' => null
-                ]);
-            }
-            
-            
-            // Move to the next ancestor
-        } 
    
-}
-
-    
 
 
     public function register(Request $request)
@@ -446,7 +403,7 @@ class RegisterController extends Controller
 
         // return $this->registered($request, $user)
         //     ?: redirect($this->redirectPath());
-        
+
         return redirect()->route('user.login_pay', ['id' => $user->id]);
     }
 

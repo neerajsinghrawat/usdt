@@ -685,48 +685,191 @@ public function updateWallet($withdrawalRequest='')
     // }
 
 
-    public function updatePublished(Request $request)
-    {
-        \Log::info('Update published request:', $request->all());
+    // public function updatePublished(Request $request)
+    // {
+    //     \Log::info('Update published request:', $request->all());
     
-        $validated = $request->validate([
-            'id' => 'required|exists:users,id',
-            'status' => 'required|in:0,1',
-        ]);
+    //     $validated = $request->validate([
+    //         'id' => 'required|exists:users,id',
+    //         'status' => 'required|in:0,1',
+    //     ]);
     
-        try {
-            $customer = User::findOrFail($validated['id']);
+    //     try {
+    //         $customer = User::findOrFail($validated['id']);
             
-            // Only proceed to send email if the status is being changed to 1 (active)
-            if ($validated['status'] == 1 && $customer->status != 1) {
-                // Account activation message
-                $data = [
-                    'view' => 'emails.verification.blade',
-                    'from' => env('MAIL_FROM_ADDRESS'),
-                    'subject' => ' Dear ' . $customer->name . ' Account Has Been Activated',
-                    'content' => '
-                        Dear ' . $customer->name . ',
-                        We are pleased to inform you that your account has been successfully activated. You can now access all the features and services available for your user account.
-                        If you have any questions or need further assistance, please feel free to contact us. We are here to help!
-                        Best regards,Your Company Name
-                    ',
-                ];
-                // Send activation email
-                Mail::to($customer->email)->queue(new SecondEmailVerifyMailManager($data));
-                \Log::info("Activation email sent to {$customer->email}");
+    //         // Only proceed to send email if the status is being changed to 1 (active)
+    //         if ($validated['status'] == 1 && $customer->status != 1) {
+    //             // Account activation message
+    //             $data = [
+    //                 'view' => 'emails.verification.blade',
+    //                 'from' => env('MAIL_FROM_ADDRESS'),
+    //                 'subject' => ' Dear ' . $customer->name . ' Account Has Been Activated',
+    //                 'content' => '
+    //                     Dear ' . $customer->name . ',
+    //                     We are pleased to inform you that your account has been successfully activated. You can now access all the features and services available for your user account.
+    //                     If you have any questions or need further assistance, please feel free to contact us. We are here to help!
+    //                     Best regards,Your Company Name
+    //                 ',
+    //             ];
+    //             // Send activation email
+    //             Mail::to($customer->email)->queue(new SecondEmailVerifyMailManager($data));
+    //             \Log::info("Activation email sent to {$customer->email}");
+    //         }
+    
+    //         // Update the user's status (no email sent for deactivation)
+    //         $customer->status = $validated['status'];
+    //         $customer->save();
+    
+    //         return response()->json(['success' => true, 'message' => __('Status updated and email sent successfully.')]);
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error in updatePublished:', ['error' => $e->getMessage()]);
+    //         return response()->json(['success' => false, 'message' => __('An error occurred while updating the status.')]);
+    //     }
+    // }
+    
+    public function updatePublished(Request $request)
+{
+    \Log::info('Update published request:', $request->all());
+
+    $validated = $request->validate([
+        'id' => 'required|exists:users,id',
+        'status' => 'required|in:0,1',
+    ]);
+
+    try {
+        $customer = User::findOrFail($validated['id']);
+// print_r($customer->status);
+// die();
+        // Only proceed to send email if the status is being changed to 1 (active)
+        if ($validated['status'] == 1 && $customer->status != 1) {
+            // Call coinpack function after activation
+            if (isset($customer->id) && isset($customer->package_no)) {
+                $this->coinpack(
+                    $customer->id,
+                    $customer->parent_id ?? null,
+                    $customer->referred_by ?? null,
+                    $customer->package_no
+                );
             }
-    
-            // Update the user's status (no email sent for deactivation)
-            $customer->status = $validated['status'];
-            $customer->save();
-    
-            return response()->json(['success' => true, 'message' => __('Status updated and email sent successfully.')]);
-        } catch (\Exception $e) {
-            \Log::error('Error in updatePublished:', ['error' => $e->getMessage()]);
-            return response()->json(['success' => false, 'message' => __('An error occurred while updating the status.')]);
+
+            // Account activation message
+            $data = [
+                'view' => 'emails.verification.blade',
+                'from' => env('MAIL_FROM_ADDRESS'),
+                'subject' => ' Dear ' . $customer->name . ' Account Has Been Activated',
+                'content' => '
+                    Dear ' . $customer->name . ',
+                    We are pleased to inform you that your account has been successfully activated. You can now access all the features and services available for your user account.
+                    If you have any questions or need further assistance, please feel free to contact us. We are here to help!
+                    Best regards, Your Company Name
+                ',
+            ];
+
+            // Send activation email
+            Mail::to($customer->email)->queue(new SecondEmailVerifyMailManager($data));
+            \Log::info("Activation email sent to {$customer->email}");
+        }
+
+        // Update the user's status (no email sent for deactivation)
+        $customer->status = $validated['status'];
+        $customer->save();
+
+        return response()->json(['success' => true, 'message' => __('Status updated and email sent successfully.')]);
+    } catch (\Exception $e) {
+        \Log::error('Error in updatePublished:', ['error' => $e->getMessage()]);
+        return response()->json(['success' => false, 'message' => __('An error occurred while updating the status.')]);
+    }
+}
+
+
+    public function coinpack($id, $parent_id, $referred_by, $package_no)
+    {
+        // Base total coins
+        $baseCoins = 1000;
+        $package_amount = $baseCoins * $package_no;
+
+        // Fetch the user
+        $user = User::find($id);
+
+        if ($user) {
+            \DB::transaction(function () use ($user, $id, $parent_id, $referred_by, $package_amount) {
+                // Update package_amount and team_value
+                $user->package_amount = ($user->package_amount ?? 0) + $package_amount;
+
+
+                if (!$user->save()) {
+                    throw new \Exception("Failed to update user coins for user ID: {$id}");
+                }
+
+                // Log the coin addition in the audit table
+                $coinAuditData = [
+                    'user_id' => $id,
+                    'coins_added' => $package_amount,
+                    'action' => 'User Registration Coin Allocation',
+                    'created_at' => now(),
+                    'transaction_type' => 'credit',
+                    'type' => 'registration_USDT',
+                    'referral_code' => $referred_by,
+                    'trn_status' => 'pending',
+                    'comments' => 'USDT registration',
+                    'start_date' => date('Y-m-d H:m:s'),
+                ];
+
+                if ($parent_id) {
+                    $coinAuditData['parent_id'] = $parent_id;
+                }
+
+                \DB::table('user_coin_audit')->insert($coinAuditData);
+
+                // Insert into team_history
+                $this->insertTeamHistory($id, $parent_id, $referred_by, $package_amount);
+            });
         }
     }
     
-    
+
+
+    public function insertTeamHistory($userId, $parentId, $referredBy, $totalCoins)
+    {
+        $currentUserId = $userId;
+
+        $user = User::find($currentUserId);
+
+        if ($user) {
+            // Update the parent's team value
+            $user->team_value = ($user->team_value ?? 0) + $totalCoins;
+            $user->save();
+
+            \DB::table('team_history')->insert([
+                'user_id' => $user->id,
+                'parent_id' => $user->parent_id ?? 0, // Move to the next ancestor
+                'referred_by' => $userId,
+                'amount' => $totalCoins,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null
+            ]);
+            if ($user->parent_id) {
+                $parent = User::find($user->parent_id);
+                $parent->team_value = ($parent->team_value ?? 0) + $totalCoins;
+                $parent->save();
+
+                \DB::table('team_history')->insert([
+                    'user_id' => $parent->id,
+                    'parent_id' => $parent->parent_id ?? 0, // Move to the next ancestor
+                    'referred_by' => $user->id,
+                    'amount' => $totalCoins,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'deleted_at' => null
+                ]);
+            }
+
+
+            // Move to the next ancestor
+        }
+    }
+
+
 
 }
