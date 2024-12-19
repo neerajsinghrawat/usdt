@@ -536,7 +536,7 @@
 
                 <!-- Customers -->
                 @canany(['view_all_customers','view_classified_products','view_classified_packages'])
-                    <li class="aiz-side-nav-item">
+                    <li class="aiz-side-nav-item mm-active">
                         <a href="#" class="aiz-side-nav-link">
                             <div class="aiz-side-nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -555,11 +555,11 @@
                                 </li> 
                             @endcan
                             @can('view_all_payrequest')
-                            <li class="aiz-side-nav-item">
+                            <!-- <li class="aiz-side-nav-item">
                                 <a href="{{ route('pay-request') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ ('All Requests ROI') }}</span>
                                 </a>
-                            </li>
+                            </li> -->
                             @endcan
                             @can('view_all_Withdrawal')
                             <li class="aiz-side-nav-item">
@@ -1274,7 +1274,7 @@
 
                 <!-- Website Setup -->
                 @canany(['header_setup','footer_setup','view_all_website_pages','website_appearance','authentication_layout_settings'])
-                    <li class="aiz-side-nav-item">
+                    <li class="aiz-side-nav-item mm-active">
                         <a href="#" class="aiz-side-nav-link {{ areActiveRoutes(['website.footer', 'website.header'])}}" >
                             <div class="aiz-side-nav-icon">
                                 <svg id="Group_28315" data-name="Group 28315" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -1303,11 +1303,11 @@
                                 </li>
                             @endcan--}}
                             @can('authentication_layout_settings')
-                                <li class="aiz-side-nav-item">
+                                <!-- <li class="aiz-side-nav-item">
                                     <a href="{{ route('website.authentication-layout-settings') }}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{translate('Authentication Layout & Settings')}}</span>
                                     </a>
-                                </li>
+                                </li> -->
                             @endcan
                             @can('header_setup')
                                 <li class="aiz-side-nav-item">

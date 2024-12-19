@@ -116,28 +116,35 @@
 					<form action="{{ route('business_settings.update') }}" method="POST">
 						@csrf
 						
-						<div class="row">
 							
-							
-							<div class="form-group col-lg-6">
-								<label class="from-label fs-13">{{ translate('Pay to your account') }}</label>
-								<div class="input-group " data-toggle="aizuploader" data-type="image">
-									<div class="input-group-prepend">
-										<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
-									</div>
-									<div class="form-control file-amount">{{ translate('Choose File') }}</div>
-									<input type="hidden" name="types[]" value="register_payment_image">
-									<input type="hidden" name="register_payment_image" value="{{ get_setting('register_payment_image') }}" class="selected-files">
-								</div>
-								<div class="file-preview box"></div>
-							</div>
+							<div class="form-group row">
+                                <label class="col-md-3 col-from-label">{{ translate('Pay to your account (Wallet QR Code)') }}</label>
+                                <div class="col-md-8">
+                                    <div class="input-group " data-toggle="aizuploader" data-type="image">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+                                        </div>
+                                        <div class="form-control file-amount">{{ translate('Choose File') }}</div>
+                                        <input type="hidden" name="types[]" value="register_payment_image">
+                                        <input type="hidden" name="register_payment_image" value="{{ get_setting('register_payment_image') }}" class="selected-files">
+                                    </div>
+                                    <div class="file-preview box"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">{{ translate('Meta Title') }}</label>
+                                <div class="col-md-8">
+                                    <input type="hidden" name="types[]" value="wallet_url">
+                                    <input type="text" class="form-control" placeholder="{{translate('Wallet URL TRC20 ')}}" name="wallet_url" value="{{ get_setting('wallet_url') }}">
+                                </div>
+                            </div>
 
-						</div>
 			
 						<!-- Update Button -->
-						<div class="mt-4 text-right">
-							<button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
-						</div>
+						
+                        <div class="mt-4 text-right">
+                            <button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
+                        </div>
 					</form>
 				</div>
 			</div>
