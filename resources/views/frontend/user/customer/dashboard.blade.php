@@ -469,7 +469,7 @@ function startLoader() {
 }
 
 function alert_withdrawal() {
-    AIZ.plugins.notify('error', 'Please Complete Your Payment First');
+    AIZ.plugins.notify('warning', 'Please Complete Your Payment First');
 }
 
 function stopLoader() {
