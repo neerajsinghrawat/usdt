@@ -212,6 +212,7 @@
                             </h5>
                         </div>
                         <div class="card-body py-0">
+                            <?php echo "<pre>";print_r($walletshis);die; ?>
                             @foreach ($walletshis->groupBy(function($walletshis) { 
                                 return date('d-m-Y', strtotime($walletshis->created_at)); 
                             }) as $date => $transactions)
