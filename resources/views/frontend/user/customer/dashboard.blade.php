@@ -83,7 +83,7 @@
                     {{ translate('Withdrawal') }}
                 </button>
                 @else
-                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);"  onclick="alert('Please Complete Your Payment First')">
+                    <button class="btn btn-block border border-soft-light hov-bg-dark text-white mt-4 py-1" style="border-radius: 30px; background: rgba(255, 255, 255, 0.1);"  onclick="alert_withdrawal();">
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48">
                             <g id="Group_25000" data-name="Group 25000" transform="translate(-926 -614)">
@@ -462,10 +462,14 @@
 
 
 
-  function startLoader() {
+function startLoader() {
     // Show the loader on button click
     document.getElementById('loader').style.display = 'flex';
     // ocument.getElementById('loader').style.display = 'none';
+}
+
+function alert_withdrawal() {
+    AIZ.plugins.notify('error', 'Please Complete Your Payment First');
 }
 
 function stopLoader() {
