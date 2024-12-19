@@ -109,7 +109,7 @@
                                 <td>{{$user->team_value}}</td>
                                 <td>{{$user->package_amount}}</td>
                                 
-                                <td>{{single_price($user->balance)}}</td>
+                                <td>{{single_price($user->wallet_usdt)}}</td>
                                 {{-- <td>{{$userfsadf->transaction_image}}</td>
                                  --}}
                               

@@ -29,59 +29,120 @@ class WalletController extends Controller
     }
 
     
-        public function withdrawal(Request $request)
-        {
-            $charge = 3;
-            $min_withdrawal_amount = 10;
-            $data['wallet_url'] = $request->wallet_url;
-            $data['amount'] = $request->amount;
-            $data['withdrawal_code'] = $request->code;
-            if (Auth::check()) {
-                if (Auth::user()->status == 1 && Auth::user()->payment_status == 'completed') {
-                    $user = Auth::user();
+        // public function withdrawal(Request $request)
+        // {
+        //     $charge = 3;
+        //     $min_withdrawal_amount = 10;
+        //     $data['wallet_url'] = $request->wallet_url;
+        //     $data['amount'] = $request->amount;
+        //     $data['withdrawal_code'] = $request->code;
+        //     if (Auth::check()) {
+        //         if (Auth::user()->status == 1 && Auth::user()->payment_status == 'completed') {
+        //             $user = Auth::user();
 
-                    if ($user->withdrawal_code == $request->code) {
-                        if ($user->wallet_usdt >= $request->amount && $min_withdrawal_amount >= $request->amount){
-                            $wallet_image='';
-                            if ($request->hasFile('image')) {
-                                $file = $request->file('image');
-                                $filename = time() . '_' . $file->getClientOriginalName();
-                                $filePath = 'uploads/transactions/withdrawal/';                                
-                                // Move the file to the desired location
-                                $file->move(public_path($filePath), $filename);
-                                $wallet_image = $filePath . $filename;
+        //             if ($user->withdrawal_code == $request->code) {
+        //                 if ($user->wallet_usdt >= $request->amount && $min_withdrawal_amount <= $request->amount){
+        //                     $wallet_image='';
+        //                     if ($request->hasFile('image')) {
+        //                         $file = $request->file('image');
+        //                         $filename = time() . '_' . $file->getClientOriginalName();
+        //                         $filePath = 'uploads/transactions/withdrawal/';                                
+        //                         // Move the file to the desired location
+        //                         $file->move(public_path($filePath), $filename);
+        //                         $wallet_image = $filePath . $filename;
 
-                            }
-                            //$user->wallet_usdt -= $request->amount;
-                            $withdrawalRequest = WithdrawalRequest::create([
-                                'user_id' =>  $user->id,
-                                'comments' => 'Withdrawal request for manual transaction',
-                                'start_date' => now(),
-                                'status' => 'pending',
-                                'wallet_url' => $data['wallet_url'],
-                                'amount' => $request->amount,            
-                                'transaction_charges' => $charge,            
-                                'wallet_image' => $wallet_image,            
-                            ]);
-                            //$user->save();
-                            flash(translate('Withdrawal Request sent successfully'))->success();
-                        }else{
-                            flash(translate('Withdrawal Request failed. Insufficient wallet balance.'))->error();
-                        }
-                    }else{
-                        flash(translate('Your code is wrong please enter code from email.'))->error(); 
-                    } 
+        //                     }
+        //                     //$user->wallet_usdt -= $request->amount;
+        //                     $withdrawalRequest = WithdrawalRequest::create([
+        //                         'user_id' =>  $user->id,
+        //                         'comments' => 'Withdrawal request for manual transaction',
+        //                         'start_date' => now(),
+        //                         'status' => 'pending',
+        //                         'wallet_url' => $data['wallet_url'],
+        //                         'amount' => $request->amount,            
+        //                         'transaction_charges' => $charge,            
+        //                         'wallet_image' => $wallet_image,            
+        //                     ]);
+        //                     //$user->save();
+        //                     flash(translate('Withdrawal Request sent successfully'))->success();
+        //                 }else{
+        //                     flash(translate('Withdrawal Request failed. Insufficient wallet balance.'))->error();
+        //                 }
+        //             }else{
+        //                 flash(translate('Your code is wrong please enter code from email.'))->error(); 
+        //             } 
                     
-                }else{
-                   flash(translate('Your not active user and your package payment is pending'))->error(); 
-                }
+        //         }else{
+        //            flash(translate('Your not active user and your package payment is pending'))->error(); 
+        //         }
                 
-            }else{
-                flash(translate('Please Login First!'))->error();
-            }
-            return redirect()->route('dashboard');
+        //     }else{
+        //         flash(translate('Please Login First!'))->error();
+        //     }
+        //     return redirect()->route('dashboard');
     
+        // }
+
+
+        public function withdrawal(Request $request)
+{
+    $charge = 3;
+    $min_withdrawal_amount = 10;
+    $data['wallet_url'] = $request->wallet_url;
+    $data['amount'] = $request->amount;
+    $data['withdrawal_code'] = $request->code;
+
+    if (Auth::check()) {
+        if (Auth::user()->status == 1 && Auth::user()->payment_status == 'completed') {
+            $user = Auth::user();
+
+            if ($user->withdrawal_code == $request->code) {
+                // Calculate the total of all pending withdrawal requests by the user
+                $totalPendingAmount = WithdrawalRequest::where('user_id', $user->id)
+                    ->where('status', 'pending')
+                    ->sum('amount');
+
+                // Check if the requested amount plus pending requests exceeds wallet balance
+                if ($user->wallet_usdt >= ($totalPendingAmount + $request->amount) && $min_withdrawal_amount <= $request->amount) {
+                    $wallet_image = '';
+                    if ($request->hasFile('image')) {
+                        $file = $request->file('image');
+                        $filename = time() . '_' . $file->getClientOriginalName();
+                        $filePath = 'uploads/transactions/withdrawal/';
+                        $file->move(public_path($filePath), $filename);
+                        $wallet_image = $filePath . $filename;
+                    }
+
+                    // Create the withdrawal request
+                    WithdrawalRequest::create([
+                        'user_id' => $user->id,
+                        'comments' => 'Withdrawal request for manual transaction',
+                        'start_date' => now(),
+                        'status' => 'pending',
+                        'wallet_url' => $data['wallet_url'],
+                        'amount' => $request->amount,
+                        'transaction_charges' => $charge,
+                        'wallet_image' => $wallet_image,
+                    ]);
+
+                    flash(translate('Withdrawal Request sent successfully'))->success();
+                } else {
+                    flash(translate('Withdrawal Request failed. Insufficient wallet balance or total requested amount exceeds wallet balance.'))->error();
+                }
+            } else {
+                flash(translate('Your code is wrong, please enter the code from email.'))->error();
+            }
+        } else {
+            flash(translate('You are not an active user, and your package payment is pending.'))->error();
         }
+    } else {
+        flash(translate('Please login first!'))->error();
+    }
+
+    return redirect()->route('dashboard');
+}
+
+
     public function recharge(Request $request)
     {
         $data['amount'] = $request->amount;

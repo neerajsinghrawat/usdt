@@ -382,6 +382,7 @@ public function autodistributed()
                         'coins_added' => $coinsToParent,
                         'action' => 'Parent Coin Distribution',
                         'created_at' => now(),
+                        'approved_date' => now(),
                         'parent_id' => $id, // Store the parent ID
                         'transaction_type' => 'credit', // Example transaction type
                         'comments' => 'coins distributed',
@@ -419,6 +420,7 @@ public function roiDistribution($id)
                         'coins_added' => $total_amount,
                         'action' => 'Returns on Investment',
                         'created_at' => now(),
+                        'approved_date' => now(),
                         'parent_id' => $user->parent_id, // Store the parent ID
                         'transaction_type' => 'credit', // Example transaction type
                         'comments' => 'Returns on Investment',

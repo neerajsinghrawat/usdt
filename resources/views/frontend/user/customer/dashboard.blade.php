@@ -232,10 +232,11 @@
                                             {{ $wallet->comments }}
                                         </h6>
                                         <p class="mb-0 text-muted fs-12">
-                                            {{ translate('Approved Date') }}: 
+                                            {{ translate('Received Date') }}: 
                                             @if (!empty($wallet->approved_date))
                                                 {{ date('d-m-Y', strtotime($wallet->approved_date)) }}
                                             @else
+
                                                 {{ translate('Not Approved') }}
                                             @endif
                                         </p>
@@ -393,6 +394,8 @@
                 <h5 class="modal-title" id="exampleModalLabel">{{ translate(' Withdrawal Wallet') }}</h5>
                 <button type="button"  onclick="closeModal('wallet_modal')" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
+
+          
             <div class="modal-body gry-bg px-3 pt-3" style="overflow-y: inherit;">
                 <form class="" action="{{ route('wallet.withdrawal') }}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -431,10 +434,19 @@
                                 placeholder="{{ translate('Amount') }}" required min="10">
                         </div>
                     </div>
-                    <div class="form-group text-right">
-                        <button type="submit"
-                            class="btn btn-sm btn-primary rounded-0 transition-3d-hover mr-1">{{ translate('Confirm') }}</button>
+                    <div class="form-group d-flex justify-content-between align-items-center">
+                        <!-- Red Notification Banner (Left-Aligned) -->
+                        <div style="color: red; font-weight: bold;">
+                            {{ translate('3 USDT charge will be deducted') }}
+                        </div>
+                        
+                        <!-- Button (Right-Aligned) -->
+                        <button type="submit" onclick="startLoader();" 
+                            class="btn btn-sm btn-primary rounded-0 transition-3d-hover">
+                            {{ translate('Confirm') }}
+                        </button>
                     </div>
+                    
                 </form>
             </div>
         </div>
