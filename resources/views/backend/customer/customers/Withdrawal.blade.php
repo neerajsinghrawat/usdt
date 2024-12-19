@@ -122,8 +122,8 @@
                                     <td>{{ $loop->parent->iteration + $loop->index + ($users->currentPage() - 1) * $users->perPage() }}</td>
                                     <td>{{ $request->user->name }}</td>
                                     <td>{{ $request->user->email }}</td>
-                                    <td>{{ $request->user->wallet_usdt }}</td>
-                                    <td>{{ $request->user->package_amount }}</td>
+                                    <td>{{ single_price( $request->user->wallet_usdt) }}</td>
+                                    <td>{{  single_price( $request->user->package_amount) }}</td>
                                     {{-- <td>{{ $request->type }}</td> --}}
                                     <td>{{ $request->comments }}</td>
                                     <td>{{ $request->wallet_url ?? 'No URL' }}</td>
@@ -147,8 +147,8 @@
 
                                     {{-- <td>{{ $request->transaction_type }}</td> --}}
                                     <td class="action-text">{{ ucfirst($request->status) }}</td>
-                                    <td>{{ $request->amount-$request->transaction_charges }}</td>
-                                    <td>{{ $request->transaction_charges }}</td>
+                                    <td>{{  single_price( $request->amount-$request->transaction_charges )}}</td>
+                                    <td>{{  single_price( $request->transaction_charges ) }}</td>
                                     {{-- <td>
                                         @if($request->status == 'pending')
                                             <button class="btn btn-primary" onclick="if(confirm('Are you sure you want to approve?')) updateWithStatus(this, 'approved')">Approve</button>
@@ -224,6 +224,17 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div class="modal-body">
+                <div class="wallet-display">
+                    <p style="font-size: 1.2rem; color: #4caf50; text-align: center; margin-bottom: 1rem;">
+                        <strong>User Withdrawal Request TRC 20: 
+                            <span>{{ single_price( $request->amount - $request->transaction_charges) }}</span>
+                        </strong>
+                    </p>
+                </div>
+            </div>
+            
+
             <div class="modal-body">
                 <form id="uploadImageForm" enctype="multipart/form-data">
                     @csrf

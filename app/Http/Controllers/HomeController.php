@@ -208,8 +208,8 @@ public function SaveTransactionRegister(Request $request)
                 
                 $user->save();
 
-                flash(translate('Transaction details saved successfully.'))->success();
-                return redirect()->route('home')->with('success', 'Transaction details saved successfully.');
+                flash(translate('Registration Successful Please Wait Admin Approval.'))->success();
+                return redirect()->route('home')->with('success', 'Registration Successful Please Wait Admin Approval.');
             }
         }           
 
