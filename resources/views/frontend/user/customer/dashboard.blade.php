@@ -446,8 +446,8 @@
     // Get the modal element
     const modal = document.getElementById(modalId);
 
-    if (modal) {
-        // Remove the 'show' class
+    if (modal) { 
+        // Remove the 'show' class   //
         modal.classList.remove('show');
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
