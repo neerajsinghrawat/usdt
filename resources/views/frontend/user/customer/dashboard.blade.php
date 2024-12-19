@@ -212,7 +212,7 @@
                             </h5>
                         </div>
                         <div class="card-body py-0">
-                            <?php echo "<pre>";print_r($walletshis);die; ?>
+                            <?php //echo "<pre>";print_r($walletshis);die; ?>
                             @foreach ($walletshis->groupBy(function($walletshis) { 
                                 return date('d-m-Y', strtotime($walletshis->created_at)); 
                             }) as $date => $transactions)
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="card-body py-2">
                                         @foreach ($transactions as $key => $wallet)
-                                        <?php echo "<pre>";print_r($wallet);die; ?>
+                                        <?php //echo "<pre>";print_r($wallet);die; ?>
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div>
                                         <h6 class="mb-1 fs-14 fw-700">
