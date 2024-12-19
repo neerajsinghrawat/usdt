@@ -382,7 +382,7 @@ public function autodistributed()
                         'coins_added' => $coinsToParent,
                         'action' => 'Parent Coin Distribution',
                         'created_at' => now(),
-                        'parent_id' => $currentUser->id, // Store the parent ID
+                        'parent_id' => $id, // Store the parent ID
                         'transaction_type' => 'credit', // Example transaction type
                         'comments' => 'coins distributed',
                         'type' => 'coins_distributed',
