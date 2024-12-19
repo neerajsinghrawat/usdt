@@ -224,6 +224,7 @@
                                     </div>
                                     <div class="card-body py-2">
                                         @foreach ($transactions as $key => $wallet)
+                                        <?php echo "<pre>";print_r($wallet);die; ?>
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div>
                                         <h6 class="mb-1 fs-14 fw-700">
