@@ -48,13 +48,15 @@
     -->
         @php
         $site_icon = uploaded_asset(get_setting('site_icon'));
+        $system_logo_black = uploaded_asset(get_setting('system_logo_black'));
     @endphp
     <link rel="icon" href="{{ $site_icon }}">
-    <link rel="apple-touch-icon" href="{{ $site_icon }}">
+    <link rel="apple-touch-icon" href="{{ $system_logo_black }}">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ static_asset('assets/usdt/assets/logo/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ static_asset('assets/usdt/assets/logo/favicon-16x16.png') }}">
-    <link rel="icon" type="image/x-icon" href="{{ static_asset('assets/usdt/assets/logo/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ $system_logo_black }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ $system_logo_black }}">
+    <link rel="icon" type="image/x-icon" href="{{ $system_logo_black }}">
+    
     <link rel="manifest" href="{{ static_asset('assets/usdt/assets/logo/site.webmanifest') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Stylesheets -->

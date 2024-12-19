@@ -70,7 +70,7 @@
                         </div>
 						<!-- System Logo - Black -->
                         <div class="form-group row">
-                            <label class="col-sm-3 col-from-label">{{translate('System Logo - Black')}}</label>
+                            <label class="col-sm-3 col-from-label">{{translate('Favicon Icon')}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group" data-toggle="aizuploader" data-type="image">
                                     <div class="input-group-prepend">
@@ -105,6 +105,43 @@
                     </form>
                 </div>
             </div>
+
+			<div class="card">
+
+				<div class="card-header">
+    				<h6 class="fw-600 mb-0">{{ translate('Admin Wallet Pay USDT') }}</h6>
+    			</div>
+
+				<div class="card-body">
+					<form action="{{ route('business_settings.update') }}" method="POST">
+						@csrf
+						
+						<div class="row">
+							
+							
+							<div class="form-group col-lg-6">
+								<label class="from-label fs-13">{{ translate('Pay to your account') }}</label>
+								<div class="input-group " data-toggle="aizuploader" data-type="image">
+									<div class="input-group-prepend">
+										<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+									</div>
+									<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+									<input type="hidden" name="types[]" value="register_payment_image">
+									<input type="hidden" name="register_payment_image" value="{{ get_setting('register_payment_image') }}" class="selected-files">
+								</div>
+								<div class="file-preview box"></div>
+							</div>
+
+						</div>
+			
+						<!-- Update Button -->
+						<div class="mt-4 text-right">
+							<button type="submit" class="btn btn-success w-230px btn-md rounded-2 fs-14 fw-700 shadow-success">{{ translate('Update') }}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
 
 			<!-- General Settings -->
     		{{-- <div class="card">
