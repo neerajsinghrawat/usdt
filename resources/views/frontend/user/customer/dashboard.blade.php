@@ -236,6 +236,7 @@
                                             @else
                                                 {{ translate('Not Approved') }}
                                             @endif
+                                            (FROM:{{ $wallet['parent_user']->name}})
                                         </p>
                                     </div>
                                     <div class="text-right">
