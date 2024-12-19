@@ -31,6 +31,14 @@ class UserCoinAudit extends Model
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
+	/**
+	 * Define the inverse of the relationship with User.
+	 */
+	public function parent_user()
+	{
+		return $this->belongsTo(User::class, 'parent_id');
+	}
+
 
     protected $casts = [
         'approved_date' => 'datetime',
