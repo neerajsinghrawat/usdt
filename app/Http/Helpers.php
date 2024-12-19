@@ -1260,7 +1260,7 @@ if (!function_exists('getuser')) {
      * @param bool|null $secure
      * @return string
      */
-    function getuser($id)
+    function getuser($id) 
     {
         $user = \App\Models\User::select('name')->where('id', $id)->first();
 
