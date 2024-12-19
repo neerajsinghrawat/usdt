@@ -485,7 +485,12 @@ function show_wallet_modal() {
         data: { id: id },
         dataType: 'json',
         success: function (data) {
-            alert(data.message); // Show success message
+            if (AIZ && AIZ.plugins && typeof AIZ.plugins.notify === 'function') {
+                AIZ.plugins.notify('success', data.message); // Success notification
+            } else {
+                console.error('AIZ.plugins.notify is not defined.');
+                alert(data.message); // Fallback to alert
+            }
             $('#wallet_modal').modal('show'); // Show modal
         },
         error: function (xhr, status, error) {
