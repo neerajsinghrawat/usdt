@@ -1252,6 +1252,22 @@ if (!function_exists('isUnique')) {
         }
     }
 }
+if (!function_exists('getuser')) {
+    /**
+     * Generate an asset path for the application.
+     *
+     * @param string $path
+     * @param bool|null $secure
+     * @return string
+     */
+    function getuser($id)
+    {
+        $user = \App\Models\User::select('name')->where('id', $id)->first();
+
+        return $user;
+        
+    }
+}
 
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null, $lang = false)
