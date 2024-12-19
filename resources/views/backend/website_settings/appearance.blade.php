@@ -244,7 +244,7 @@
         						<input type="text" class="form-control" placeholder="{{translate('Title')}}" name="meta_title" value="{{ get_setting('meta_title') }}">
                             </div>
     					</div>
-						<!-- Meta description -->
+						<!-- Meta description ---->
     					<div class="form-group row">
     						<label class="col-md-3 col-from-label">{{ translate('Meta description') }}</label>
                             <div class="col-md-8">
