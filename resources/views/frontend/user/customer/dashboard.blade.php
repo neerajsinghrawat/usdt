@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="card-body py-2">
                                         @foreach ($transactions as $key => $wallet)
-                                        <?php //echo "<pre>";print_r($wallet);die; ?>
+                                        <?php //echo "<pre>";print_r(getuser($wallet->parent_id));die; ?>
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div>
                                         <h6 class="mb-1 fs-14 fw-700">
@@ -238,7 +238,7 @@
                                             @else
                                                 {{ translate('Not Approved') }}
                                             @endif
-                                            
+                                            (FROM:{{ getuser($wallet->parent_id) }})
                                         </p>
                                     </div>
                                     <div class="text-right">
