@@ -238,7 +238,10 @@
                                             @else
                                                 {{ translate('Not Approved') }}
                                             @endif
-                                            (FROM:{{ getuser($wallet->parent_id) }})
+                                        </p>
+                                        <p class="mb-0 text-muted fs-12">  
+                                        <?php $datauser = getuser($wallet->parent_id); ?>                                          
+                                            (FROM:{{ $datauser->name; }})
                                         </p>
                                     </div>
                                     <div class="text-right">
