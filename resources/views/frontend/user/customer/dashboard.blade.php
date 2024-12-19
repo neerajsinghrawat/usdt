@@ -241,7 +241,7 @@
                                         </p>
                                         <p class="mb-0 text-muted fs-12">  
                                         <?php $datauser = getuser($wallet->parent_id); ?>                                          
-                                            From: <b>{{ ucfirst($datauser->name); }}</b>
+                                            From: <b>{{ ucfirst($datauser->name); }}</b> 
                                         </p>
                                     </div>
                                     <div class="text-right">
