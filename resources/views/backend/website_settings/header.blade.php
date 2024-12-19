@@ -125,7 +125,7 @@
 																		</div>
 																	</div>
 																</div>
-															</div> --}}
+															</div> --}} 
                     <div class="border-top pt-3">
 						<!-- Help line number -->
                         <div class="form-group row">
