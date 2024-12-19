@@ -32,11 +32,9 @@
             <h4 class="h5 fs-14 mb-1 fw-700 text-dark">{{ $user->name }}</h4>
             <!-- Phone, Email, or Referral Code -->
                 <div class="text-truncate opacity-60 fs-12">
-                    @if ($user->phone != null)
+                   
                         {{ $user->email }}
-                    @elseif ($user->email != null)
-                    {{ $user->phone }}
-                    @endif
+                    
                 <br>
 
                 <!-- Always show the referral code if it's available -->
