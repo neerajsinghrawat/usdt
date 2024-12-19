@@ -484,7 +484,7 @@ public function roiDistribution($id)
         } elseif (Auth::user()->user_type == 'customer') {
 
 
-            $walletshis = UserCoinAudit::with('parent_user')->where('user_id', Auth::user()->id)->whereIn('type', ['coins_distributed', 'roi'])->latest()->paginate(50); 
+            $walletshis = UserCoinAudit::with('parent_user')->where('user_id', Auth::user()->id)->whereIn('type', ['coins_distributed', 'roi'])->latest()->paginate(50);  
             
             $wallets = WithdrawalRequest::where('user_id', Auth::user()->id)->latest()->paginate(10);
             $users_cart = Cart::where('user_id', auth()->user()->id)->first();
