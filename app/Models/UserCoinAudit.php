@@ -36,7 +36,7 @@ class UserCoinAudit extends Model
 	 */
 	public function parent_user()
 	{
-		return $this->belongsTo(User::class, 'parent_id'); 
+		return $this->belongsTo(User::class, 'parent_id');  
 	}
 
 
