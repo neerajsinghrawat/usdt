@@ -66,7 +66,7 @@
 							</label>
 						</div>
 					</div> --}}
-					{{-- <div class="border-top pt-3">
+					<div class="border-top pt-3">
 						<!-- Topbar Banner Large -->
 						<div class="form-group row">
 		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner Large') }}</label>
@@ -125,7 +125,7 @@
 								</div>
 							</div>
 						</div>
-					</div> --}}
+					</div>
                     <div class="border-top pt-3">
 						<!-- Help line number -->
                         <div class="form-group row">
