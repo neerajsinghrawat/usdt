@@ -5,7 +5,18 @@
 @section('meta_description'){{ $page->meta_description }}@stop
 
 @section('meta_keywords'){{ $page->tags }}@stop
+<style>
+    .container {
+    max-width: 900px;
+}
+h3 {
+    margin-top: 20px;
+}
+ul {
+    padding-left: 20px;
+}
 
+</style>
 @section('meta')
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="{{ $page->meta_title }}">
@@ -51,11 +62,12 @@
 </section>
 <section class="mb-4">
     <div class="container">
-        <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">
+        <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left" data-aos="fade-up">
             @php
                 echo $page->getTranslation('content');
             @endphp
-        </div>
+           
     </div>
 </section>
+
 @endsection
