@@ -94,7 +94,7 @@
                 min-height: 550px;
             }
             .new_mar_25 {
-        margin-right: 2px !important; /* Ensure right margin is consistent */
+        margin-right: 2px !important; /* Ensure right margin is consistent @ */
         margin-left: 2px !important;  /* Ensure left margin is consistent */
        }
 
