@@ -7,6 +7,7 @@
         background: #f0f9ff66;
         border: var(--bs-border-width) var(--bs-border-style) #b2dff4 !important;
     }
+  
 </style>
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column justify-content-md-center bg-white">
@@ -14,14 +15,15 @@
             <div class="row">
                 <div class="col-xxl-6 col-xl-9 col-lg-10 col-md-7 mx-auto py-lg-4">
                     <div class="card shadow-none rounded-0 border-0">
-                        <div class="row no-gutters">
+                        <div class="row no-gutters" style="padding-top: 60px !important;">
+                        
                             <!-- Left Side Image-->
                             <!-- <div class="col-lg-6">
                                 <img src="{{ uploaded_asset(get_setting('customer_login_page_image')) }}" alt="{{ translate('Customer Login Page Image') }}" class="img-fit h-100">
                             </div> -->
 
                             <!-- Right Side -->
-                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content new_mar_25" style="height: auto;">
+                            <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center border right-content new_mar_25" style="height: auto; ">
                                 <!-- Site Icon -->
                                 <!-- <div class="size-48px mb-3 mx-auto mx-lg-0">
                                     <img src="{{ uploaded_asset(get_setting('site_icon')) }}" alt="{{ translate('Site Icon')}}" class="img-fit h-100">

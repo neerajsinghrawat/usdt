@@ -96,7 +96,7 @@
             .new_mar_25 {
         margin-right: 2px !important; /* Ensure right margin is consistent */
         margin-left: 2px !important;  /* Ensure left margin is consistent */
-    }
+       }
 
         }
         @media (min-width: 991px) {
